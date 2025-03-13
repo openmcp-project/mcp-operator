@@ -11,7 +11,7 @@ import (
 	restclient "k8s.io/client-go/rest"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.tools.sap/CoLa/controller-utils/pkg/testing"
+	"github.com/openmcp-project/controller-utils/pkg/testing"
 
 	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
 	"github.tools.sap/CoLa/mcp-operator/test/utils"

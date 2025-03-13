@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 
 	cconst "github.tools.sap/CoLa/mcp-operator/api/constants"
 	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"

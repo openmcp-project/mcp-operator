@@ -9,7 +9,7 @@ import (
 	"reflect"
 	"strings"
 
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 

@@ -20,10 +20,10 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/cluster"
 
 	laasinstall "github.com/gardener/landscaper-service/pkg/apis/core/install"
+	"github.com/openmcp-project/controller-utils/pkg/init/webhooks"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 	"github.com/spf13/cobra"
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
 	cocorev1beta1 "github.tools.sap/cloud-orchestration/control-plane-operator/api/v1beta1"
-	"github.tools.sap/cloud-orchestration/controller-utils/init/webhooks"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"

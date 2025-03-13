@@ -17,13 +17,13 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 	"sigs.k8s.io/controller-runtime/pkg/source"
 
-	"github.tools.sap/cloud-orchestration/controller-utils/api"
+	"github.com/openmcp-project/controller-utils/pkg/api"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/yaml"
 
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 	corev1beta1 "github.tools.sap/cloud-orchestration/control-plane-operator/api/v1beta1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	condApi "k8s.io/apimachinery/pkg/api/meta"

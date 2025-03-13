@@ -7,7 +7,7 @@ import (
 	"github.tools.sap/CoLa/mcp-operator/internal/utils/apiserver"
 
 	laasinstall "github.com/gardener/landscaper-service/pkg/apis/core/install"
-	"github.tools.sap/CoLa/controller-utils/pkg/testing"
+	"github.com/openmcp-project/controller-utils/pkg/testing"
 	cocorev1beta1 "github.tools.sap/cloud-orchestration/control-plane-operator/api/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"

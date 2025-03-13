@@ -3,7 +3,7 @@ package releasechannel
 import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"github.tools.sap/CoLa/controller-utils/pkg/testing"
+	"github.com/openmcp-project/controller-utils/pkg/testing"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 

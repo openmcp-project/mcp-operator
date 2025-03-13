@@ -22,7 +22,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	openmcptesting "github.tools.sap/CoLa/controller-utils/pkg/testing"
+	openmcptesting "github.com/openmcp-project/controller-utils/pkg/testing"
 
 	. "github.tools.sap/CoLa/mcp-operator/test/matchers"
 

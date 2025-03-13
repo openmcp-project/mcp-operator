@@ -8,7 +8,7 @@ import (
 	"time"
 
 	"github.com/alitto/pond/v2"
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/tools/clientcmd"

@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"time"
 
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"

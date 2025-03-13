@@ -14,12 +14,12 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	colactrlutil "github.tools.sap/CoLa/controller-utils/pkg/controller"
+	colactrlutil "github.com/openmcp-project/controller-utils/pkg/controller"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/client/interceptor"
 
-	openmcptesting "github.tools.sap/CoLa/controller-utils/pkg/testing"
+	openmcptesting "github.com/openmcp-project/controller-utils/pkg/testing"
 
 	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
 	authenticationv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/authentication/v1alpha1"

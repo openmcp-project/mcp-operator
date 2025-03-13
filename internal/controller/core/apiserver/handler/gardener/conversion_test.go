@@ -19,7 +19,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
 
-	"github.tools.sap/CoLa/controller-utils/pkg/testing"
+	"github.com/openmcp-project/controller-utils/pkg/testing"
 
 	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
 	gardenawsv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener-extension-provider-aws/pkg/apis/aws/v1alpha1"

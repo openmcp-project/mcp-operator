@@ -6,7 +6,7 @@ import (
 
 	"math/rand"
 
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 	"sigs.k8s.io/yaml"
 
 	"github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"

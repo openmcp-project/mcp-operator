@@ -9,8 +9,8 @@ import (
 	"time"
 
 	"github.com/Masterminds/semver/v3"
-	"github.tools.sap/CoLa/controller-utils/pkg/collections/maps"
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/collections/maps"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 	authenticationv1 "k8s.io/api/authentication/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	corev1 "k8s.io/api/core/v1"

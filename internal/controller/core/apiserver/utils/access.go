@@ -7,7 +7,7 @@ import (
 	"strings"
 	"time"
 
-	colactrlutil "github.tools.sap/CoLa/controller-utils/pkg/controller"
+	colactrlutil "github.com/openmcp-project/controller-utils/pkg/controller"
 	authenticationv1 "k8s.io/api/authentication/v1"
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"

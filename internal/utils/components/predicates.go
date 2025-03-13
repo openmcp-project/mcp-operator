@@ -8,7 +8,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/event"
 	"sigs.k8s.io/controller-runtime/pkg/predicate"
 
-	colactrlutil "github.tools.sap/CoLa/controller-utils/pkg/controller"
+	colactrlutil "github.com/openmcp-project/controller-utils/pkg/controller"
 
 	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
 )

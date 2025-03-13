@@ -9,7 +9,7 @@ import (
 
 	"github.tools.sap/CoLa/mcp-operator/internal/components"
 
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"

@@ -10,12 +10,12 @@ import (
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"github.tools.sap/CoLa/controller-utils/pkg/collections"
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/collections"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	openmcptesting "github.tools.sap/CoLa/controller-utils/pkg/testing"
+	openmcptesting "github.com/openmcp-project/controller-utils/pkg/testing"
 
 	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
 	"github.tools.sap/CoLa/mcp-operator/api/errors"

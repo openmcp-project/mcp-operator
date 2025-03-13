@@ -28,7 +28,7 @@ import (
 
 	// +kubebuilder:scaffold:imports
 
-	envtestutil "github.tools.sap/CoLa/controller-utils/pkg/envtest"
+	envtestutil "github.com/openmcp-project/controller-utils/pkg/envtest"
 	admissionv1 "k8s.io/api/admission/v1"
 	corev1 "k8s.io/api/core/v1"
 	apimachineryruntime "k8s.io/apimachinery/pkg/runtime"

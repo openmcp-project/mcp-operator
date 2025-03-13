@@ -9,7 +9,7 @@ import (
 
 	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
 
-	"github.tools.sap/CoLa/controller-utils/pkg/testing"
+	"github.com/openmcp-project/controller-utils/pkg/testing"
 
 	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization/clusteradmin"
 	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization/config"

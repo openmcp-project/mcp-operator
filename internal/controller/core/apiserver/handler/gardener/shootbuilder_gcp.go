@@ -3,7 +3,7 @@ package gardener
 import (
 	"encoding/json"
 
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 	"k8s.io/apimachinery/pkg/runtime"
 )
 

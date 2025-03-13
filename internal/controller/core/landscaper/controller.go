@@ -15,8 +15,8 @@ import (
 	lsutils "github.tools.sap/CoLa/mcp-operator/internal/controller/core/landscaper/utils"
 
 	laasv1alpha1 "github.com/gardener/landscaper-service/pkg/apis/core/v1alpha1"
-	"github.tools.sap/CoLa/controller-utils/pkg/collections/maps"
-	"github.tools.sap/CoLa/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/collections/maps"
+	"github.com/openmcp-project/controller-utils/pkg/logging"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
