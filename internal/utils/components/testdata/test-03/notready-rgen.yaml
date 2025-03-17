@@ -1,0 +1,25 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: Landscaper
+metadata:
+  generation: 2
+  labels:
+    openmcp.cloud/mcp-generation: "3"
+  name: notready-rgen
+  namespace: test
+spec:
+  deployers:
+  - helm
+  - manifest
+  - container
+status:
+  conditions:
+  - lastTransitionTime: "2024-05-16T11:50:14Z"
+    status: "False"
+    type: landscaperHealthy
+  landscaperDeployment:
+    name: notready-rgen
+    namespace: test
+  observedGenerations:
+    internalConfiguration: -1
+    managedControlPlane: 3
+    resource: 1

@@ -1,0 +1,57 @@
+#!/bin/bash
+
+set -euo pipefail
+PROJECT_ROOT="$(realpath $(dirname $0)/..)"
+
+if [[ -z ${LOCALBIN:-} ]]; then
+  LOCALBIN="$PROJECT_ROOT/bin"
+fi
+if [[ -z ${HELM:-} ]]; then
+  HELM="$LOCALBIN/helm"
+fi
+
+source "$PROJECT_ROOT/.ci/ensure-go"
+"$PROJECT_ROOT/.ci/ensure-make"
+"$PROJECT_ROOT/.ci/authenticate-git"
+
+(
+  cd "${PROJECT_ROOT}"
+
+  make revendor
+
+  echo "Run 'make helm' ..."
+  make helm
+
+  echo "Fetch registry credentials ..."
+  creds="$(cli.py config attribute --cfg-type container_registry --cfg-name laas-component-descriptor-pipeline --key password)"
+
+  echo "Authenticate helm against artifact registry ..."
+  "$HELM" registry login -u _json_key --password-stdin https://europe-docker.pkg.dev <<< "$creds"
+
+  echo "Run 'make chart' ..."
+  make chart
+
+  echo "Authenticate docker against artifact registry ..."
+  docker login -u _json_key --password-stdin https://europe-docker.pkg.dev <<< "$creds"
+
+  echo "Create OCM config ..."
+  cat << EOF > "$HOME/.ocmconfig"
+type: generic.config.ocm.software/v1
+configurations:
+  - type: credentials.config.ocm.software
+    repositories:
+      - repository:
+          type: DockerConfig/v1
+          dockerConfigFile: "~/.docker/config.json"
+          propagateConsumerIdentity: true
+EOF
+
+  echo "Run 'make component-build' ..."
+  make component-build
+  echo "Component successfully built."
+
+  echo "Run 'make component-push' ..."
+  export OVERWRITE_COMPONENTS="true"
+  make component-push
+  echo "Component successfully pushed."
+)

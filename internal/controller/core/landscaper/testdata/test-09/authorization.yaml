@@ -1,0 +1,20 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: Authorization
+metadata:
+  finalizers:
+    - dependency.openmcp.cloud/landscaper
+  generation: 1
+  labels:
+    openmcp.cloud/mcp-generation: "1"
+  name: test
+  namespace: test
+spec:
+  roleBindings:
+  - role: admin
+    subjects:
+    - apiGroup: rbac.authorization.k8s.io
+      kind: User
+      name: john.doe@example.com
+  - role: view
+    subjects: []
+    

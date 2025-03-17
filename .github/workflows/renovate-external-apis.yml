@@ -1,0 +1,38 @@
+name: "'make generate' after external apis change"
+on:
+  workflow_dispatch:
+  push:
+    branches:
+    - "renovate/gardener-*"
+    paths:
+    - hack/external-apis/apis.yaml
+
+jobs:
+  make-generate:
+    name: make generate
+
+    runs-on:
+    - self-hosted
+    - solinas
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
+      with:
+        submodules: recursive
+      
+    - name: Set up Go
+      uses: actions/setup-go@f111f3307d8850f501ac008e886eec1fd1932a34 # v5
+      with:
+        go-version-file: go.mod
+      
+    - name: Make Generate
+      run: make generate
+      
+    - uses: EndBug/add-and-commit@a94899bca583c204427a224a7af87c02f9b325d5 # v9 # You can change this to use a specific version.
+      with:
+        add: 'api/external/**'
+        author_name: Renovate Bot
+        author_email: '40221+ospo-renovate[bot]@users.noreply.github.tools.sap'
+        message: "run 'make generate' to update external apis"
+        push: true

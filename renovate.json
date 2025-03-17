@@ -1,0 +1,53 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "prHourlyLimit": 0,
+  "prConcurrentLimit": 0,
+  "timezone": "Europe/Berlin",
+  "extends": [
+    "config:best-practices",
+    "group:kubernetes",
+    "group:goOpenapi",
+    "security:openssf-scorecard",
+    ":dependencyDashboard"
+  ],
+  "packageRules": [
+    {
+      "description": "Combine all patch updates in GO in a single PR",
+      "groupName": "all patch dependencies",
+      "groupSlug": "all-patch",
+      "matchPackageNames": [
+        "*"
+      ],
+      "matchDatasources": [
+        "go"
+      ],
+      "matchUpdateTypes": [
+        "patch",
+        "digest"
+      ],
+       "rebaseWhen": "auto"
+    }
+  ],
+  "customManagers": [
+    {
+      "description": "Match in Makefile and Dockerfile",
+      "customType": "regex",
+      "fileMatch": [
+        "(^|/|\\.)([Dd]ocker|[Cc]ontainer)file$",
+        "(^|/)([Dd]ocker|[Cc]ontainer)file[^/]*$",
+        "(^|/)Makefile$"
+      ],
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-.]+?) depName=(?<depName>[^\\s]+?)(?: (lookupName|packageName)=(?<packageName>[^\\s]+?))?(?: versioning=(?<versioning>[^\\s]+?))?(?: extractVersion=(?<extractVersion>[^\\s]+?))?(?: registryUrl=(?<registryUrl>[^\\s]+?))?\\s(?:ENV |ARG )?.+?_VERSION ?(?:\\?=|=)\"? ?(?<currentValue>.+?)\"?\\s"
+      ]
+    },
+    {
+      "description": "Match for gardener in hack/external-apis/apis.yaml",
+      "customType": "regex",
+      "fileMatch": "hack/external-apis/apis.yaml",
+      "matchStrings": [
+        "# renovate: datasource=(?<datasource>[a-z-.]+?)\\s.*base: .*\\/(?<currentValue>.+?)\\s.*vendor: .+?\\/(?<packageName>.+?)\\s"
+      ]
+    }
+  ]
+}

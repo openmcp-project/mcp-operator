@@ -1,0 +1,29 @@
+apiVersion: core.gardener.cloud/v1beta1
+kind: Project
+metadata:
+  generation: 27
+  name: bar
+spec:
+  createdBy:
+    apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: john.doe@example.org
+  description: Test Project
+  members:
+  - apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: john.doe@example.org
+    role: admin
+    roles:
+    - uam
+    - serviceaccountmanager
+  namespace: garden-bar
+  owner:
+    apiGroup: rbac.authorization.k8s.io
+    kind: User
+    name: john.doe@example.org
+  purpose: Test Purpose
+status:
+  lastActivityTimestamp: "2024-06-06T14:56:01Z"
+  observedGeneration: 27
+  phase: Ready

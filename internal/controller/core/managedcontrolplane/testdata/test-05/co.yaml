@@ -1,0 +1,29 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: CloudOrchestrator
+metadata:
+  generation: 1
+  labels:
+    openmcp.cloud/mcp-generation: "5"
+    openmcp.cloud/mcp-name: test
+    openmcp.cloud/mcp-namespace: test
+  name: test
+  namespace: test
+  finalizers:
+    - test
+spec:
+  crossplane:
+    version: 1.17.0
+status:
+  conditions:
+  - lastTransitionTime: "2024-05-16T11:50:14Z"
+    message: "Crossplane is healthy."
+    reason: "Healthy"
+    status: "True"
+    type: CrossplaneReady
+  - lastTransitionTime: "2024-05-16T11:50:14Z"
+    status: "True"
+    type: additionalUnexportedCondition
+  observedGenerations:
+    internalConfiguration: -1
+    managedControlPlane: 5
+    resource: 1

@@ -1,0 +1,209 @@
+gardener:
+  defaultConfig: default/gcp
+  landscapes:
+  - name: default
+    kubeconfig: |
+      apiVersion: v1
+      kind: Config
+      clusters:
+      - cluster:
+          certificate-authority-data: ZHVtbXkK
+          server: https://127.0.0.1:55761
+        name: dummy
+      contexts:
+      - context:
+          cluster: dummy
+          user: dummy
+        name: dummy
+      current-context: dummy
+      users:
+      - name: dummy
+        user:
+          token: asdf
+    configs:
+    - name: gcp
+      cloudProfile: gcp
+      regions:
+        - name: europe-west1
+        - name: europe-west3
+        - name: us-central1
+        - name: asia-south1
+      defaultRegion: us-central1
+      shootTemplate:
+        metadata:
+          annotations:
+            test.openmcp.cloud/config: multi/default/gcp
+        spec:
+          networking:
+            type: "calico"
+            nodes: "10.180.0.0/16"
+          provider:
+            type: gcp
+            infrastructureConfig:
+              apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+              kind: InfrastructureConfig
+              networks:
+                workers: 10.180.0.0/16
+            controlPlaneConfig:
+              apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+              kind: ControlPlaneConfig
+              zone: ""
+            workers:
+              - name: worker-0
+                machine:
+                  type: n1-standard-2
+                  image:
+                    name: gardenlinux
+                    version: 1312.3.0
+                  architecture: amd64
+                maximum: 2
+                minimum: 1
+                volume:
+                  type: pd-balanced
+                  size: 50Gi
+          secretBindingName: test
+      project: test
+    - name: aws
+      cloudProfile: aws
+      regions:
+        - name: eu-central-1
+        - name: eu-west-1
+        - name: us-east-1
+        - name: ap-southeast-1
+      defaultRegion: eu-central-1
+      shootTemplate:
+        metadata:
+          annotations:
+            test.openmcp.cloud/config: multi/default/aws
+        spec:
+          networking:
+            type: "calico"
+            nodes: "10.180.0.0/16"
+          provider:
+            type: aws
+            infrastructureConfig:
+              apiVersion: aws.provider.extensions.gardener.cloud/v1alpha1
+              kind: InfrastructureConfig
+              networks:
+                vpc:
+                  cidr: 10.180.0.0/16
+            controlPlaneConfig:
+              apiVersion: aws.provider.extensions.gardener.cloud/v1alpha1
+              kind: ControlPlaneConfig
+              zone: ""
+            workers:
+              - name: worker-0
+                machine:
+                  type: m5.large
+                  image:
+                    name: gardenlinux
+                    version: 1592.1.0
+                  architecture: amd64
+                maximum: 2
+                minimum: 1
+                volume:
+                  type: gp3
+                  size: 50Gi
+          secretBindingName: test
+      project: test2
+  - name: extra
+    kubeconfig: |
+      apiVersion: v1
+      kind: Config
+      clusters:
+      - cluster:
+          certificate-authority-data: ZHVtbXkK
+          server: https://127.0.0.1:55761
+        name: dummy
+      contexts:
+      - context:
+          cluster: dummy
+          user: dummy
+        name: dummy
+      current-context: dummy
+      users:
+      - name: dummy
+        user:
+          token: asdf
+    configs:
+    - name: foo
+      cloudProfile: gcp
+      regions:
+        - name: europe-west1
+        - name: europe-west3
+        - name: us-central1
+        - name: asia-south1
+      defaultRegion: us-central1
+      shootTemplate:
+        metadata:
+          annotations:
+            test.openmcp.cloud/config: multi/extra/foo
+        spec:
+          networking:
+            type: "calico"
+            nodes: "10.180.0.0/16"
+          provider:
+            type: gcp
+            infrastructureConfig:
+              apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+              kind: InfrastructureConfig
+              networks:
+                workers: 10.180.0.0/16
+            controlPlaneConfig:
+              apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+              kind: ControlPlaneConfig
+              zone: ""
+            workers:
+              - name: worker-0
+                machine:
+                  type: n1-standard-2
+                  image:
+                    name: gardenlinux
+                    version: 1312.3.0
+                  architecture: amd64
+                maximum: 2
+                minimum: 1
+                volume:
+                  type: pd-balanced
+                  size: 50Gi
+          secretBindingName: test
+      project: foo
+    - name: bar
+      cloudProfile: gcp
+      regions:
+        - name: europe-west1
+      defaultRegion: europe-west1
+      shootTemplate:
+        metadata:
+          annotations:
+            test.openmcp.cloud/config: multi/extra/bar
+        spec:
+          networking:
+            type: "calico"
+            nodes: "10.180.0.0/16"
+          provider:
+            type: gcp
+            infrastructureConfig:
+              apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+              kind: InfrastructureConfig
+              networks:
+                workers: 10.180.0.0/16
+            controlPlaneConfig:
+              apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+              kind: ControlPlaneConfig
+              zone: ""
+            workers:
+              - name: worker-0
+                machine:
+                  type: n1-standard-2
+                  image:
+                    name: gardenlinux
+                    version: 1312.3.0
+                  architecture: amd64
+                maximum: 2
+                minimum: 1
+                volume:
+                  type: pd-balanced
+                  size: 50Gi
+          secretBindingName: test
+      project: bar

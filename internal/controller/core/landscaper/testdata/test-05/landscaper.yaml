@@ -1,0 +1,20 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: Landscaper
+metadata:
+  name: test
+  namespace: test
+  labels:
+    "openmcp.cloud/mcp-generation": "1"
+spec:
+  deployers:
+    - "helm"
+    - "manifest"
+status:
+  conditions:
+    - lastTransitionTime: "2024-05-27T08:45:03Z"
+      status: "True"
+      type: landscaperHealthy
+  landscaperDeployment:
+    name: test
+    namespace: test
+

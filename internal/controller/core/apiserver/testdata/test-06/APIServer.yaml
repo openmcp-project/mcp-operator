@@ -1,0 +1,18 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: APIServer
+metadata:
+  generation: 1
+  labels:
+    openmcp.cloud/mcp-generation: "1"
+    openmcp.cloud/mcp-name: "test"
+    openmcp.cloud/mcp-namespace: "test"
+  deletionTimestamp: "2024-06-17T13:54:12Z"
+  finalizers:
+  - apiserver.openmcp.cloud
+  name: test
+  namespace: test
+spec:
+  desiredRegion:
+    direction: central
+    name: europe
+  type: Fake

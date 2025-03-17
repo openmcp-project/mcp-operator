@@ -1,0 +1,42 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: Authentication
+metadata:
+  name: test
+  namespace: test
+  labels:
+    "openmcp.cloud/mcp-generation": "1"
+spec:
+  enableSystemIdentityProvider: true
+
+  identityProviders:
+    - name: customer
+      issuerURL: https://customer.local
+      clientID: xxx-yyy-zzz
+      usernameClaim: u_name
+      groupsClaim: grp
+      caBundle: |
+        -----BEGIN CERTIFICATE-----
+        Li4u
+        -----END CERTIFICATE-----
+      signingAlgs:
+        - RS256
+        - RS384
+        - RS512
+      requiredClaims:
+        myClaimKey: myClaimValue
+      clientConfig:
+        clientSecret:
+          name: client-secret
+          key: secret
+        extraConfig:
+          oidc-extra-scope:
+            values:
+              - scope1
+              - scope2
+          extra-param:
+           value: foo
+          extra-repeatable:
+            values:
+              - bar1
+              - bar2
+          no-value-param:

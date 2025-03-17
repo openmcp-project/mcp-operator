@@ -1,0 +1,65 @@
+admin:
+  additionalSubjects:
+    - kind: User
+      name: system-admin
+      apiGroup: rbac.authorization.k8s.io
+    - kind: Group
+      name: system:admins
+      apiGroup: rbac.authorization.k8s.io
+  namespaceScoped:
+    labels:
+      openmcp.cloud/aggregate-to-admin: "true"
+    clusterRoleSelectors:
+      - matchLabels:
+          openmcp.cloud/aggregate-to-admin: "true"
+    rules:
+    - apiGroups:
+      - ""
+      resources:
+      - pods
+      verbs:
+      - create
+      - update
+      - patch
+      - delete
+  clusterScoped:
+    rules:
+    - apiGroups:
+      - ""
+      resources:
+      - namespaces
+      verbs:
+      - create
+      - update
+      - patch
+      - delete
+view:
+  additionalSubjects:
+    - kind: ServiceAccount
+      name: manager
+      namespace: openmcp-system
+  namespaceScoped:
+    labels:
+      openmcp.cloud/aggregate-to-view: "true"
+    clusterRoleSelectors:
+      - matchLabels:
+          openmcp.cloud/aggregate-to-view: "true"
+    rules:
+    - apiGroups:
+      - ""
+      resources:
+      - pods
+      verbs:
+      - get
+      - list
+      - watch
+  clusterScoped:
+    rules:
+    - apiGroups:
+      - ""
+      resources:
+      - namespaces
+      verbs:
+      - get
+      - list
+      - watch

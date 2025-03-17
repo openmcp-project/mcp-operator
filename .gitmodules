@@ -1,0 +1,3 @@
+[submodule "hack/common"]
+	path = hack/common
+	url = https://github.tools.sap/CoLa/common-hack-scripts.git

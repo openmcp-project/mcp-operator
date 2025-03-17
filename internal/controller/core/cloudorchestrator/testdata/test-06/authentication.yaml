@@ -1,0 +1,10 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: Authentication
+metadata:
+  generation: 1
+  labels:
+    openmcp.cloud/mcp-generation: "1"
+  name: test
+  namespace: test
+spec:
+  enableSystemIdentityProvider: true

@@ -1,0 +1,11 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: APIServer
+metadata:
+  name: test2
+  namespace: test2
+spec:
+  desiredRegion:
+    direction: central
+    name: europe
+  gardener: {}
+  type: Gardener

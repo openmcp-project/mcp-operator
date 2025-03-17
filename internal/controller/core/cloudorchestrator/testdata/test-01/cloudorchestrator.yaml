@@ -1,0 +1,12 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: CloudOrchestrator
+metadata:
+  name: test
+  namespace: test
+  labels:
+    "openmcp.cloud/mcp-generation": "1"
+  annotations:
+    "openmcp.cloud/operation": "ignore"
+spec:
+  crossplane:
+    version: 1.17.0

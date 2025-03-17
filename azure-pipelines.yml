@@ -1,0 +1,16 @@
+# Using Piper general purpose pipeline for Azure
+
+trigger:
+  - main
+
+resources:
+  repositories:
+    - repository: piper-pipeline-azure
+      endpoint: github.tools.sap
+      type: githubenterprise
+      name: project-piper/piper-pipeline-azure
+
+extends:
+  template: sap-piper-pipeline.yml@piper-pipeline-azure
+  parameters:
+    manualConfirmationTimeoutMinutes: 240 # 4 hours

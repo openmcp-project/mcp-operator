@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -euo pipefail
+PROJECT_ROOT="$(realpath $(dirname $0)/..)"
+
+mode=$1
+
+VERSION=$("$PROJECT_ROOT/hack/get-version.sh")
+
+VERSION=${VERSION#v} # cut off 'v' prefix
+VERSION=${VERSION%%-dev*} # cut off -dev suffix and everything after it
+
+major=${VERSION%%.*}
+VERSION=${VERSION#*.}
+minor=${VERSION%%.*}
+VERSION=${VERSION#*.}
+patch=${VERSION}
+
+case $mode in
+  major)
+    major=$(( major + 1 ))
+    minor=0
+    patch=0
+    ;;
+  minor)
+    minor=$(( minor + 1 ))
+    patch=0
+    ;;
+  patch)
+    patch=$(( patch + 1 ))
+    ;;
+  *)
+    echo "invalid mode argument '$mode': only 'major', 'minor', and 'patch' are allowed" 1>&2
+    exit 1
+esac
+
+echo "v$major.$minor.$patch"

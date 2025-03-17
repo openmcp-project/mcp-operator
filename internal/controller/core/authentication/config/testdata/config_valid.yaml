@@ -1,0 +1,6 @@
+systemIdentityProvider:
+  name: "system"
+  issuerURL: "https://system.local"
+  clientID: "xxx-yyy-zzz"
+  usernameClaim: "email"
+  groupsClaim: "groups"

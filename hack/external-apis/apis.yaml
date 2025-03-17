@@ -1,0 +1,86 @@
+apis:
+  gardener:
+    # renovate: datasource=github-releases
+    base: https://raw.githubusercontent.com/gardener/gardener/v1.112.2
+    vendor: github.com/gardener/gardener
+    patches:
+    - replace: "github.com/gardener/gardener/pkg/apis/core"
+      with: "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core"
+    - replace: "github.com/gardener/gardener/pkg/apis/core/v1beta1/constants"
+      with: "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
+    - replace: "github.com/gardener/gardener/pkg/apis/extensions"
+      with: "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/extensions"
+    - replace: "github.com/gardener/gardener/pkg/apis/core/v1beta1"
+      with: "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
+    files:
+    - name: pkg/apis/core/types.go
+    - name: pkg/apis/core/v1beta1/register.go
+      patches:
+      - replace: ", addDefaultingFuncs, addConversionFuncs"
+        with: ""
+      - replace: "return RegisterDefaults(scheme)"
+        with: "return nil"
+    - name: pkg/apis/authentication/v1alpha1/register.go
+      patches:
+      - replace: ", addDefaultingFuncs"
+        with: ""
+    - name: pkg/apis/core/v1beta1/constants/types_constants.go
+    - name: pkg/apis/core/v1beta1/types_backupbucket.go
+    - name: pkg/apis/core/v1beta1/types_backupentry.go
+    - name: pkg/apis/core/v1beta1/types_cloudprofile.go
+    - name: pkg/apis/core/v1beta1/types_common.go
+    - name: pkg/apis/core/v1beta1/types_controllerdeployment.go
+    - name: pkg/apis/core/v1beta1/types_controllerinstallation.go
+    - name: pkg/apis/core/v1beta1/types_controllerregistration.go
+    - name: pkg/apis/core/v1beta1/types_exposureclass.go
+    - name: pkg/apis/core/v1beta1/types_internalsecret.go
+    - name: pkg/apis/core/v1beta1/types_namespacedcloudprofile.go
+    - name: pkg/apis/core/v1beta1/types_project.go
+    - name: pkg/apis/core/v1beta1/types_quota.go
+    - name: pkg/apis/core/v1beta1/types_secretbinding.go
+    - name: pkg/apis/core/v1beta1/types_seed.go
+    - name: pkg/apis/core/v1beta1/types_shoot.go
+    - name: pkg/apis/core/v1beta1/types_shootstate.go
+    - name: pkg/apis/core/v1beta1/types_utils.go
+    - name: pkg/apis/core/v1beta1/types.go
+    - name: pkg/apis/core/v1beta1/zz_generated.deepcopy.go
+    - name: pkg/apis/authentication/v1alpha1/types_adminkubeconfigrequest.go
+    - name: pkg/apis/authentication/v1alpha1/types_viewerkubeconfigrequest.go
+    - name: pkg/apis/authentication/v1alpha1/zz_generated.deepcopy.go
+    - name: pkg/apis/extensions/register.go
+    - name: pkg/apis/extensions/v1alpha1/register.go
+    - name: pkg/apis/extensions/v1alpha1/types.go
+    - name: pkg/apis/extensions/v1alpha1/types_backupbucket.go
+    - name: pkg/apis/extensions/v1alpha1/types_backupentry.go
+    - name: pkg/apis/extensions/v1alpha1/types_bastion.go
+    - name: pkg/apis/extensions/v1alpha1/types_cluster.go
+    - name: pkg/apis/extensions/v1alpha1/types_containerruntime.go
+    - name: pkg/apis/extensions/v1alpha1/types_controlplane.go
+    - name: pkg/apis/extensions/v1alpha1/types_defaults.go
+    - name: pkg/apis/extensions/v1alpha1/types_dnsrecord.go
+    - name: pkg/apis/extensions/v1alpha1/types_extension.go
+    - name: pkg/apis/extensions/v1alpha1/types_infrastructure.go
+    - name: pkg/apis/extensions/v1alpha1/types_network.go
+    - name: pkg/apis/extensions/v1alpha1/types_operatingsystemconfig.go
+    - name: pkg/apis/extensions/v1alpha1/types_worker.go
+    - name: pkg/apis/extensions/v1alpha1/zz_generated.deepcopy.go
+  gardener-extension-provider-aws:
+    # renovate: datasource=github-releases
+    base: https://raw.githubusercontent.com/gardener/gardener-extension-provider-aws/v1.60.0
+    vendor: github.com/gardener/gardener-extension-provider-aws
+    patches:
+    - replace: "github.com/gardener/gardener/pkg/apis/extensions/v1alpha1"
+      with: "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/extensions/v1alpha1"
+    files:
+    - name: pkg/apis/aws/v1alpha1/register.go
+      patches:
+      - replace: "addDefaultingFuncs, "
+        with: ""
+      - replace: "return RegisterDefaults(scheme)"
+        with: "return nil"
+    - name: pkg/apis/aws/v1alpha1/types_cloudprofile.go
+    - name: pkg/apis/aws/v1alpha1/types_controlplane.go
+    - name: pkg/apis/aws/v1alpha1/types_infrastructure.go
+    - name: pkg/apis/aws/v1alpha1/types_worker.go
+    - name: pkg/apis/aws/v1alpha1/zz_generated.deepcopy.go
+      

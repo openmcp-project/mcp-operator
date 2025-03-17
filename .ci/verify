@@ -1,0 +1,15 @@
+#!/bin/bash
+
+set -euo pipefail
+PROJECT_ROOT="$(realpath $(dirname $0)/..)"
+
+source "$PROJECT_ROOT/.ci/ensure-go"
+"$PROJECT_ROOT/.ci/ensure-make"
+"$PROJECT_ROOT/.ci/authenticate-git"
+
+(
+  cd "${PROJECT_ROOT}"
+
+  # skip checks for documentation index and formatting, as the format pipeline step will fix this anyway during the head-update job
+  SKIP_DOCS_INDEX_CHECK=true SKIP_FORMATTING_CHECK=true make revendor verify test
+)

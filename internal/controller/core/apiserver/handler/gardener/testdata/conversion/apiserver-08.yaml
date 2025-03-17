@@ -1,0 +1,19 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: APIServer
+metadata:
+  generation: 1
+  labels:
+    openmcp.cloud/mcp-generation: "1"
+    openmcp.cloud/mcp-name: test
+    openmcp.cloud/mcp-namespace: test
+  name: test
+  namespace: test
+spec:
+  desiredRegion:
+    direction: central
+    name: europe
+  type: Gardener
+  gardener:
+    region: europe-west3
+    highAvailability:
+      failureToleranceType: zone

@@ -1,0 +1,590 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.4
+  name: managedcontrolplanes.core.openmcp.cloud
+spec:
+  group: core.openmcp.cloud
+  names:
+    kind: ManagedControlPlane
+    listKind: ManagedControlPlaneList
+    plural: managedcontrolplanes
+    shortNames:
+    - mcp
+    singular: managedcontrolplane
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.status
+      name: Status
+      type: string
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ManagedControlPlane is the Schema for the ManagedControlPlane
+          API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ManagedControlPlaneSpec defines the desired state of ManagedControlPlane.
+            properties:
+              authentication:
+                description: Authentication contains the configuration for the enabled
+                  OpenID Connect identity providers
+                properties:
+                  enableSystemIdentityProvider:
+                    type: boolean
+                  identityProviders:
+                    items:
+                      description: IdentityProvider contains the configuration for
+                        an OpenID Connect identity provider
+                      properties:
+                        caBundle:
+                          description: |-
+                            CABundle: When set, the OpenID server's certificate will be verified by one of the authorities in the bundle.
+                            Otherwise, the host's root CA set will be used.
+                          type: string
+                        clientConfig:
+                          description: ClientAuthentication contains configuration
+                            for OIDC clients
+                          properties:
+                            clientSecret:
+                              description: |-
+                                ClientSecret is a references to a secret containing the client secret.
+                                The client secret will be added to the generated kubeconfig with the "--oidc-client-secret" flag.
+                              properties:
+                                key:
+                                  description: Key is the key inside the secret.
+                                  type: string
+                                name:
+                                  description: Name is the secret name.
+                                  type: string
+                              required:
+                              - key
+                              - name
+                              type: object
+                            extraConfig:
+                              additionalProperties:
+                                description: SingleOrMultiStringValue is a type that
+                                  can hold either a single string value or a list
+                                  of string values.
+                                properties:
+                                  value:
+                                    description: Value is a single string value.
+                                    type: string
+                                  values:
+                                    description: Values is a list of string values.
+                                    items:
+                                      type: string
+                                    type: array
+                                type: object
+                              description: |-
+                                ExtraConfig is added to the client configuration in the kubeconfig.
+                                Can either be a single string value, a list of string values or no value.
+                                Must not contain any of the following keys:
+                                - "client-id"
+                                - "client-secret"
+                                - "issuer-url"
+                              type: object
+                          type: object
+                        clientID:
+                          description: ClientID is the client ID of the identity provider.
+                          type: string
+                        groupsClaim:
+                          description: GroupsClaim is the claim that contains the
+                            groups.
+                          type: string
+                        issuerURL:
+                          description: IssuerURL is the issuer URL of the identity
+                            provider.
+                          type: string
+                        name:
+                          description: |-
+                            Name is the name of the identity provider.
+                            The name must be unique among all identity providers.
+                            The name must only contain lowercase letters.
+                            The length must not exceed 63 characters.
+                          maxLength: 63
+                          pattern: ^[a-z]+$
+                          type: string
+                        requiredClaims:
+                          additionalProperties:
+                            type: string
+                          description: RequiredClaims is a map of required claims.
+                            If set, the identity provider must provide these claims
+                            in the ID token.
+                          type: object
+                        signingAlgs:
+                          description: SigningAlgs is the list of allowed JOSE asymmetric
+                            signing algorithms.
+                          items:
+                            type: string
+                          type: array
+                        usernameClaim:
+                          description: UsernameClaim is the claim that contains the
+                            username.
+                          type: string
+                      required:
+                      - clientID
+                      - issuerURL
+                      - name
+                      - usernameClaim
+                      type: object
+                    type: array
+                type: object
+              authorization:
+                description: Authorization contains the configuration of the subjects
+                  assigned to control plane roles
+                properties:
+                  roleBindings:
+                    description: RoleBindings is a list of role bindings
+                    items:
+                      description: RoleBinding contains the role and the subjects
+                        assigned to the role
+                      properties:
+                        role:
+                          description: Role is the name of the role
+                          enum:
+                          - admin
+                          - view
+                          type: string
+                        subjects:
+                          description: Subjects is a list of subjects assigned to
+                            the role
+                          items:
+                            description: |-
+                              Subject describes an object that is assigned to a role and
+                              which can be used to authenticate against the control plane.
+                            properties:
+                              apiGroup:
+                                description: APIGroup is the API group of the subject
+                                type: string
+                              kind:
+                                description: Kind is the kind of the subject
+                                enum:
+                                - ServiceAccount
+                                - User
+                                - Group
+                                type: string
+                              name:
+                                description: Name is the name of the subject
+                                minLength: 1
+                                type: string
+                              namespace:
+                                description: Namespace is the namespace of the subject
+                                type: string
+                            required:
+                            - kind
+                            - name
+                            type: object
+                          type: array
+                      required:
+                      - role
+                      - subjects
+                      type: object
+                    type: array
+                required:
+                - roleBindings
+                type: object
+              components:
+                description: Components contains the configuration for Components
+                  like APIServer, Landscaper, CloudOrchestrator.
+                properties:
+                  apiServer:
+                    default:
+                      type: GardenerDedicated
+                    description: APIServerConfiguration contains the configuration
+                      which is required for setting up a k8s cluster to be used as
+                      APIServer.
+                    properties:
+                      gardener:
+                        description: |-
+                          GardenerConfig contains configuration for a Gardener APIServer.
+                          Must be set if type is 'Gardener', is ignored otherwise.
+                        properties:
+                          auditLog:
+                            description: AuditLogConfig defines the AuditLog configuration
+                              for the ManagedControlPlane cluster.
+                            properties:
+                              policyRef:
+                                description: PolicyRef is the reference to the policy
+                                  containing the configuration for the audit log service.
+                                properties:
+                                  name:
+                                    default: ""
+                                    description: |-
+                                      Name of the referent.
+                                      This field is effectively required, but due to backwards compatibility is
+                                      allowed to be empty. Instances of this type with an empty value here are
+                                      almost certainly wrong.
+                                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    type: string
+                                type: object
+                                x-kubernetes-map-type: atomic
+                              secretRef:
+                                description: SecretRef is the reference to the secret
+                                  containing the credentials for the audit log service.
+                                properties:
+                                  name:
+                                    default: ""
+                                    description: |-
+                                      Name of the referent.
+                                      This field is effectively required, but due to backwards compatibility is
+                                      allowed to be empty. Instances of this type with an empty value here are
+                                      almost certainly wrong.
+                                      More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                    type: string
+                                type: object
+                                x-kubernetes-map-type: atomic
+                              serviceURL:
+                                description: ServiceURL is the URL from the Service
+                                  Keys.
+                                type: string
+                              tenantID:
+                                description: TenantID is the tenant ID of the BTP
+                                  Subaccount. Can be seen in the BTP Cockpit dashboard.
+                                type: string
+                              type:
+                                description: Type is the type of the audit log.
+                                enum:
+                                - standard
+                                type: string
+                            required:
+                            - policyRef
+                            - secretRef
+                            - serviceURL
+                            - tenantID
+                            - type
+                            type: object
+                          encryptionConfig:
+                            description: EncryptionConfig contains customizable encryption
+                              configuration of the API server.
+                            properties:
+                              resources:
+                                description: |-
+                                  Resources contains the list of resources that shall be encrypted in addition to secrets.
+                                  Each item is a Kubernetes resource name in plural (resource or resource.group) that should be encrypted.
+                                  Example: ["configmaps", "statefulsets.apps", "flunders.emxample.com"]
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          highAvailability:
+                            description: HighAvailabilityConfig specifies the HA configuration
+                              for the API server.
+                            properties:
+                              failureToleranceType:
+                                description: |-
+                                  FailureToleranceType specifies failure tolerance mode for the API server.
+                                  Allowed values are: node, zone
+                                  node: The API server is tolerant to node failures within a single zone.
+                                  zone: The API server is tolerant to zone failures.
+                                enum:
+                                - node
+                                - zone
+                                type: string
+                                x-kubernetes-validations:
+                                - message: failureToleranceType is immutable
+                                  rule: self == oldSelf
+                            required:
+                            - failureToleranceType
+                            type: object
+                            x-kubernetes-validations:
+                            - message: highAvailability is immutable
+                              rule: self == oldSelf
+                          region:
+                            description: |-
+                              Region is the region to be used for the Shoot cluster.
+                              This is usually derived from the ManagedControlPlane's common configuration, but can be overwritten here.
+                            type: string
+                            x-kubernetes-validations:
+                            - message: region is immutable
+                              rule: self == oldSelf
+                        type: object
+                        x-kubernetes-validations:
+                        - message: highAvailability is required once set
+                          rule: has(self.highAvailability) == has(oldSelf.highAvailability)
+                            || has(self.highAvailability)
+                      type:
+                        default: GardenerDedicated
+                        description: |-
+                          Type is the type of APIServer. This determines which other configuration fields need to be specified.
+                          Valid values are:
+                          - Gardener
+                          - GardenerDedicated
+                        enum:
+                        - Gardener
+                        - GardenerDedicated
+                        type: string
+                        x-kubernetes-validations:
+                        - message: type is immutable
+                          rule: self == oldSelf
+                    required:
+                    - type
+                    type: object
+                  btpServiceOperator:
+                    description: BTPServiceOperator defines the configuration for
+                      setting up the BTPServiceOperator component in a ManagedControlPlane.
+                    properties:
+                      version:
+                        description: The Version of BTP Service Operator to install.
+                        type: string
+                    required:
+                    - version
+                    type: object
+                  crossplane:
+                    description: Crossplane defines the configuration for setting
+                      up the Crossplane component in a ManagedControlPlane.
+                    properties:
+                      providers:
+                        items:
+                          properties:
+                            name:
+                              description: |-
+                                Name of the provider.
+                                Using a well-known name will automatically configure the "package" field.
+                              type: string
+                            version:
+                              description: Version of the provider to install.
+                              type: string
+                          required:
+                          - name
+                          - version
+                          type: object
+                        type: array
+                      version:
+                        description: The Version of Crossplane to install.
+                        type: string
+                    required:
+                    - version
+                    type: object
+                  externalSecretsOperator:
+                    description: ExternalSecretsOperator defines the configuration
+                      for setting up the ExternalSecretsOperator component in a ManagedControlPlane.
+                    properties:
+                      version:
+                        description: The Version of External Secrets Operator to install.
+                        type: string
+                    required:
+                    - version
+                    type: object
+                  flux:
+                    description: Flux defines the configuration for setting up the
+                      Flux component in a ManagedControlPlane.
+                    properties:
+                      version:
+                        description: The Version of Flux to install.
+                        type: string
+                    required:
+                    - version
+                    type: object
+                  kyverno:
+                    description: Kyverno defines the configuration for setting up
+                      the Kyverno component in a ManagedControlPlane.
+                    properties:
+                      version:
+                        description: The Version of Kyverno to install.
+                        type: string
+                    required:
+                    - version
+                    type: object
+                  landscaper:
+                    description: LandscaperConfiguration contains the configuration
+                      which is required for setting up a LaaS instance.
+                    properties:
+                      deployers:
+                        description: Deployers is the list of deployers that should
+                          be installed.
+                        items:
+                          type: string
+                        type: array
+                    type: object
+                type: object
+                x-kubernetes-validations:
+                - message: apiServer is required once set
+                  rule: '!has(oldSelf.apiServer)|| has(self.apiServer)'
+              desiredRegion:
+                description: DesiredRegion allows customers to specify a desired region
+                  proximity.
+                properties:
+                  direction:
+                    description: Direction is the direction within the region.
+                    enum:
+                    - north
+                    - east
+                    - south
+                    - west
+                    - central
+                    type: string
+                  name:
+                    description: Name is the name of the region.
+                    enum:
+                    - northamerica
+                    - southamerica
+                    - europe
+                    - asia
+                    - africa
+                    - australia
+                    type: string
+                type: object
+                x-kubernetes-validations:
+                - message: RegionSpecification is immutable
+                  rule: self == oldSelf
+              disabledComponents:
+                description: |-
+                  DisabledComponents contains a list of component types.
+                  The resources for these components will still be generated, but they will get the ignore operation annotation, so they should not be processed by their respective controllers.
+                items:
+                  type: string
+                type: array
+            required:
+            - components
+            type: object
+            x-kubernetes-validations:
+            - message: desiredRegion is required once set
+              rule: '!has(oldSelf.desiredRegion)|| has(self.desiredRegion)'
+          status:
+            description: ManagedControlPlaneStatus defines the observed state of ManagedControlPlane.
+            properties:
+              components:
+                description: ManagedControlPlaneComponentsStatus contains the status
+                  of the components of a ManagedControlPlane.
+                properties:
+                  apiServer:
+                    description: |-
+                      ExternalAPIServerStatus contains the status of the API server / ManagedControlPlane cluster. The Kuberenetes can act as an OIDC
+                      compatible provider in a sense that they serve OIDC issuer endpoint URL so that other system can validate tokens that have been
+                      issued by the external party.
+                    properties:
+                      endpoint:
+                        description: Endpoint represents the Kubernetes API server
+                          endpoint
+                        type: string
+                      serviceAccountIssuer:
+                        description: ServiceAccountIssuer represents the OpenIDConnect
+                          issuer URL that can be used to verify service account tokens.
+                        type: string
+                    type: object
+                  authentication:
+                    description: ExternalAuthenticationStatus contains the status
+                      of the  authentication component.
+                    properties:
+                      access:
+                        description: |-
+                          UserAccess reference the secret containing the kubeconfig
+                          for the APIServer which is to be used by the customer.
+                        properties:
+                          key:
+                            description: Key is the key inside the secret.
+                            type: string
+                          name:
+                            description: Name is the object's name.
+                            type: string
+                          namespace:
+                            description: Namespace is the object's namespace.
+                            type: string
+                        required:
+                        - key
+                        - name
+                        - namespace
+                        type: object
+                    type: object
+                  authorization:
+                    description: ExternalAuthorizationStatus contains the status of
+                      the external authorization component
+                    type: object
+                  cloudOrchestrator:
+                    description: ExternalCloudOrchestratorStatus contains the status
+                      of the CloudOrchestrator component.
+                    type: object
+                  landscaper:
+                    description: ExternalLandscaperStatus contains the status of a
+                      LaaS instance.
+                    type: object
+                type: object
+              conditions:
+                description: Conditions collects the conditions of all components.
+                items:
+                  properties:
+                    lastTransitionTime:
+                      description: LastTransitionTime specifies the time when this
+                        condition's status last changed.
+                      format: date-time
+                      type: string
+                    managedBy:
+                      description: ManagedBy contains the information which component
+                        manages this condition.
+                      type: string
+                    message:
+                      description: |-
+                        Message contains further details regarding the condition.
+                        It is meant for human users, Reason should be used for programmatic evaluation instead.
+                        It is optional, but should be filled at least when Status is not "True".
+                      type: string
+                    reason:
+                      description: |-
+                        Reason is expected to contain a CamelCased string that provides further information regarding the condition.
+                        It should have a fixed value set (like an enum) to be machine-readable. The value set depends on the condition type.
+                        It is optional, but should be filled at least when Status is not "True".
+                      type: string
+                    status:
+                      description: Status is the status of the condition.
+                      type: string
+                    type:
+                      description: |-
+                        Type is the type of the condition.
+                        This is a unique identifier and each type of condition is expected to be managed by exactly one component controller.
+                      type: string
+                  required:
+                  - managedBy
+                  - status
+                  - type
+                  type: object
+                type: array
+              message:
+                description: Message contains an optional message.
+                type: string
+              observedGeneration:
+                description: ObservedGeneration is the last generation of this resource
+                  that has successfully been reconciled.
+                format: int64
+                type: integer
+              status:
+                description: |-
+                  Status is the current status of the ManagedControlPlane.
+                  It is "Deleting" if the ManagedControlPlane is being deleted.
+                  It is "Ready" if all conditions are true, and "Not Ready" otherwise.
+                type: string
+            required:
+            - observedGeneration
+            - status
+            type: object
+        type: object
+        x-kubernetes-validations:
+        - message: name must not be longer than 36 characters
+          rule: size(self.metadata.name) <= 36
+    served: true
+    storage: true
+    subresources:
+      status: {}

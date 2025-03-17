@@ -1,0 +1,19 @@
+#!/bin/bash
+
+set -euo pipefail
+PROJECT_ROOT="$(realpath $(dirname $0)/..)"
+
+source "$PROJECT_ROOT/.ci/ensure-go"
+"$PROJECT_ROOT/.ci/ensure-make"
+"$PROJECT_ROOT/.ci/authenticate-git"
+"$PROJECT_ROOT/.ci/prepare-docker"
+
+(
+  cd "${PROJECT_ROOT}"
+  if [[ "$EFFECTIVE_VERSION" == *dev* ]]; then
+    export ADDITIONAL_TAG="dev-$EFFECTIVE_VERSION"
+  else
+    export ADDITIONAL_TAG="latest"
+  fi
+  make revendor image
+)

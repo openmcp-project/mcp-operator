@@ -1,0 +1,28 @@
+---
+apiVersion: authentication.gardener.cloud/v1alpha1
+kind: OpenIDConnect
+metadata:
+  name: openmcp
+  labels:
+    openmcp.cloud/managed-by: authentication
+spec:
+  issuerURL: https://openmcp.local
+  clientID: aaa-bbb-ccc
+  usernameClaim: email
+  usernamePrefix: "openmcp:"
+  groupsClaim: groups
+  groupsPrefix: "openmcp:"
+---
+apiVersion: authentication.gardener.cloud/v1alpha1
+kind: OpenIDConnect
+metadata:
+  name: customer
+  labels:
+    openmcp.cloud/managed-by: authentication
+spec:
+  issuerURL: https://customer.local
+  clientID: xxx-yyy-zzz
+  usernameClaim: u_name
+  usernamePrefix: "customer:"
+  groupsClaim: grp
+  groupsPrefix: "customer:"

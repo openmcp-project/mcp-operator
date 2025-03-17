@@ -1,0 +1,184 @@
+apiVersion: landscaper.gardener.cloud/v1alpha1
+kind: Blueprint
+jsonSchemaVersion: "https://json-schema.org/draft/2019-09/schema"
+
+imports:
+- name: release-name
+  type: data
+  schema:
+    type: string
+  # helm release name
+
+- name: release-namespace
+  type: data
+  schema:
+    type: string
+  # release namespace
+
+- name: helm-values
+  type: data
+  required: false
+  schema: {}
+  # additional helm values
+  # will not overwrite the ones that can be specifically specified below
+
+- name: image-repo
+  type: data
+  required: false
+  schema:
+    type: string
+  # image repository
+
+- name: image-version
+  type: data
+  required: false
+  schema:
+    type: string
+  # image tag
+
+- name: image-pull-secret
+  type: data
+  required: false
+  schema:
+    type: string
+  # image pull secret (the actual secret, base64 encoded)
+
+- name: image-pull-secret-ref
+  type: data
+  required: false
+  schema:
+    type: string
+  # image pull secret (a reference to a secret in the cluster (in the release namespace) containing the pull secret)
+
+- name: mcp-controllers
+  type: data
+  required: false
+  schema:
+    type: array
+    items:
+      type: string
+  # a list of mcp controllers that should be active
+
+- name: apiserver-config
+  type: data
+  required: false
+  schema:
+    type: object
+  # the config for the APIServer (what would be put under 'apiserver.config' in the helm values otherwise)
+
+- name: authentication-config
+  type: data
+  required: false
+  schema:
+    type: object
+  # the config for the Authentication controller (what would be put under 'authentication.config' in the helm values otherwise)
+
+- name: authorization-config
+  type: data
+  required: false
+  schema:
+    type: object
+  # the config for the Authorization controller (what would be put under 'authorization.config' in the helm values otherwise)
+
+- name: mcp-system-cluster
+  type: target
+  targetType: landscaper.gardener.cloud/kubernetes-cluster
+  # kubeconfig for the cluster the MCPO should be deployed into
+
+- name: mcp-crate-cluster
+  type: target
+  required: false
+  targetType: landscaper.gardener.cloud/kubernetes-cluster # either kubeconfig or oidc trust config
+  # kubeconfig for the cluster that should be watched by the MCP operator
+  # MCPO watches host cluster if not specified
+
+- name: laas-core-cluster
+  type: target
+  required: false
+  targetType: landscaper.gardener.cloud/kubernetes-cluster # either kubeconfig or oidc trust config
+  # kubeconfig for the cluster where the LandscaperDeployments should be created
+  # host cluster is used if not specified
+
+- name: cloud-orchestrator-core-cluster
+  type: target
+  required: false
+  targetType: landscaper.gardener.cloud/kubernetes-cluster # either kubeconfig or oidc trust config
+  # kubeconfig for the cluster where the CO resources should be created
+  # host cluster is used if not specified
+
+deployExecutions:
+- name: default
+  type: Spiff
+  template:
+    constants:
+      <<<: (( &temporary ))
+      pull-secret-name: (( imports.release-name "-imagepull" ))
+    resources:
+      <<<: (( &temporary ))
+      chart: (( getResource(cd, "name", "mcp-operator-chart") ))
+      image: (( getResource(cd, "name", "mcp-operator-image") ))
+    deployItems:
+    - <<<: (( valid(imports.image-pull-secret) ? ~ :~~ )) # this line removes this entry if no pull secret is given
+      name: pull-secret
+      type: landscaper.gardener.cloud/kubernetes-manifest
+      target:
+        import: mcp-system-cluster
+      config:
+        apiVersion: manifest.deployer.landscaper.gardener.cloud/v1alpha2
+        kind: ProviderConfiguration
+        updateStrategy: update
+        manifests:
+        - policy: manage
+          manifest:
+            apiVersion: v1
+            kind: Secret
+            type: kubernetes.io/dockerconfigjson
+            metadata:
+              name: (( constants.pull-secret-name ))
+              namespace: (( imports.release-namespace ))
+            data:
+              .dockerconfigjson: (( imports.image-pull-secret ))
+    - name: controller
+      type: landscaper.gardener.cloud/helm
+      dependsOn:
+      - (( valid(imports.image-pull-secret) ? "pull-secret" :~~ ))
+      target:
+        import: mcp-system-cluster
+      config:
+        apiVersion: helm.deployer.landscaper.gardener.cloud/v1alpha1
+        kind: ProviderConfiguration
+        updateStrategy: update
+        name: (( imports.release-name ))
+        namespace: (( imports.release-namespace ))
+        helmDeployment: false
+        chart:
+          ref: (( resources.chart.access.imageReference ))
+        values:
+          <<<: (( imports.helm-values || ~ ))
+          image:
+            repository: (( imports.image-repo || ociRefRepo(resources.image.access.imageReference) ))
+            tag: (( imports.image-version || ociRefVersion(resources.image.access.imageReference) ))
+            pullSecrets:
+            - (( imports.image-pull-secret-ref || ~~ ))
+            - (( valid(imports.image-pull-secret) ? constants.pull-secret-name :~~ ))
+          clusters:
+            crate: (( valid(imports.mcp-crate-cluster) ? ( imports.mcp-crate-cluster.spec.config || imports.mcp-crate-cluster.spec ) :~~ ))
+          managedcontrolplane:
+            disabled: (( valid(imports.mcp-controllers) ? ! contains(imports.mcp-controllers, "managedcontrolplane") :~~ ))
+          apiserver:
+            disabled: (( valid(imports.mcp-controllers) ? ! contains(imports.mcp-controllers, "apiserver") :~~ ))
+            config: (( valid(imports.apiserver-config) ? imports.apiserver-config :~~ ))
+          authentication:
+            disabled: (( valid(imports.mcp-controllers) ? ! contains(imports.mcp-controllers, "authentication") :~~ ))
+            config: (( valid(imports.authentication-config) ? imports.authentication-config :~~ ))
+          authorization:
+            disabled: (( valid(imports.mcp-controllers) ? ! contains(imports.mcp-controllers, "authorization") :~~ ))
+            config: (( valid(imports.authorization-config) ? imports.authorization-config :~~ ))
+          landscaper:
+            disabled: (( valid(imports.mcp-controllers) ? ! contains(imports.mcp-controllers, "landscaper") :~~ ))
+            clusters:
+              core: (( valid(imports.laas-core-cluster) ? ( imports.laas-core-cluster.spec.config || imports.laas-core-cluster.spec ) :~~ ))
+          cloudOrchestrator:
+            disabled: (( valid(imports.mcp-controllers) ? ! ( contains(imports.mcp-controllers, "cloudOrchestrator") -or contains(imports.mcp-controllers, "cloudorchestrator") ) :~~ ))
+            clusters:
+              core: (( valid(imports.cloud-orchestrator-core-cluster) ? ( imports.cloud-orchestrator-core-cluster.spec.config || imports.cloud-orchestrator-core-cluster.spec ) :~~ ))

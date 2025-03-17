@@ -1,0 +1,15 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: Landscaper
+metadata:
+  generation: 1
+  name: with-dependencies
+  namespace: test
+  finalizers:
+  - dependency.openmcp.cloud/apiserver
+  - dependency.openmcp.cloud/authentication
+  - foo.bar.baz/foobar
+spec:
+  deployers:
+  - helm
+  - manifest
+  - container

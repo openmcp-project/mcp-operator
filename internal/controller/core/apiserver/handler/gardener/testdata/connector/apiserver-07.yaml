@@ -1,0 +1,27 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: APIServer
+metadata:
+  name: test
+  namespace: test
+spec:
+  desiredRegion:
+    direction: central
+    name: europe
+  gardener:
+    auditLog:
+      policyRef:
+        name: my-policy
+      secretRef:
+        name: my-credentials
+      serviceURL: https://auditlog.example.com:8081
+      tenantID: 83b3b3b3-3b3b-3b3b-3b3b-3b3b3b3b3b3b
+      type: standard
+  type: Gardener
+status:
+  gardener:
+    shoot:
+      apiVersion: core.gardener.cloud/v1beta1
+      kind: Shoot
+      metadata:
+        name: test-auditlog
+        namespace: garden-test
