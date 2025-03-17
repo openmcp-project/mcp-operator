@@ -1,8 +1,0 @@
-#!/bin/bash
-
-set -euo pipefail
-
-if ! which make 1>/dev/null; then
-  echo "> Installing make ..."
-  apk add make 1>/dev/null
-fi
