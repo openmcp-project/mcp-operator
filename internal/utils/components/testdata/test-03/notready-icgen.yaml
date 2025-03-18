@@ -4,7 +4,7 @@ metadata:
   generation: 1
   labels:
     openmcp.cloud/mcp-generation: "3"
-    cola-cloud.sap/ic-generation: "1"
+    openmcp.cloud/ic-generation: "1"
   name: notready-icgen
   namespace: test
 spec:
