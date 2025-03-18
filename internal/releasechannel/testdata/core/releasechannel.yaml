@@ -11,8 +11,8 @@ metadata:
   uid: a53b5f82-ee31-4175-8095-056fe8e1d8a6
 spec:
   interval: 15m
-  ocmRegistryUrl: openmcp.common.repositories.cloud.sap/ocm
-  prefixFilter: core.orchestrate.cloud.sap
+  ocmRegistryUrl: ghcr.io/openmcp-project/ocm
+  prefixFilter: ghcr.io/openmcp-project
   pullSecretRef:
     name: artifactory-readonly-ocm-openmcp
     namespace: co-system
@@ -111,35 +111,35 @@ status:
           version: 1.0.2
     - name: provider-btp-account
       versions:
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-btp-account:0.7.5
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-btp-account:0.7.5
           version: 0.7.5
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-btp-account:0.7.6
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-btp-account:0.7.6
           version: 0.7.6
     - name: provider-cloudfoundry
       versions:
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-cloudfoundry:2.2.3
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-cloudfoundry:2.2.3
           version: 2.2.3
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-cloudfoundry:2.2.4
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-cloudfoundry:2.2.4
           version: 2.2.4
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-cloudfoundry:2.2.5
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-cloudfoundry:2.2.5
           version: 2.2.5
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-cloudfoundry:2.3.0
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-cloudfoundry:2.3.0
           version: 2.3.0
     - name: provider-destinations
       versions:
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-destinations:1.0.3
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-destinations:1.0.3
           version: 1.0.3
     - name: provider-dynatrace
       versions:
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-dynatrace:1.1.2
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-dynatrace:1.1.2
           version: 1.1.2
     - name: provider-gardener-auth
       versions:
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-gardener-auth:0.0.4
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-gardener-auth:0.0.4
           version: 0.0.4
     - name: provider-hana
       versions:
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-hana:0.1.0
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-hana:0.1.0
           version: 0.1.0
     - name: provider-helm
       versions:
@@ -147,15 +147,15 @@ status:
           version: 0.19.0
     - name: provider-hyperscaler
       versions:
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-hyperscaler:0.0.1
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-hyperscaler:0.0.1
           version: 0.0.1
     - name: provider-ias
       versions:
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-ias:0.2.0
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-ias:0.2.0
           version: 0.2.0
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-ias:0.2.1
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-ias:0.2.1
           version: 0.2.1
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-ias:0.2.2
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-ias:0.2.2
           version: 0.2.2
     - name: provider-kubernetes
       versions:
@@ -167,7 +167,7 @@ status:
           version: 0.15.0
     - name: provider-message-queue
       versions:
-        - dockerRef: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/crossplane/provider-message-queue:1.0.1
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-message-queue:1.0.1
           version: 1.0.1
     - name: provider-terraform
       versions:
@@ -209,10 +209,10 @@ status:
     - name: syncer
       versions:
         - helmChart: co-syncer
-          helmRepo: https://common.repositories.cloud.sap/artifactory/api/helm/deploy-releases-hyperspace-helm
+          helmRepo: https://example.com/artifactory/api/helm/deploy-releases-hyperspace-helm
           version: 0.3.1
         - helmChart: co-syncer
-          helmRepo: https://common.repositories.cloud.sap/artifactory/api/helm/deploy-releases-hyperspace-helm
+          helmRepo: https://example.com/artifactory/api/helm/deploy-releases-hyperspace-helm
           version: 0.3.2
     - name: velero
       versions:

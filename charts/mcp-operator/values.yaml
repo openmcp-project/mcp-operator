@@ -133,8 +133,8 @@ authentication:
   disabled: false
   config:
     # systemIdentityProvider:
-    #   name: sap
-    #   issuerURL: https://accounts.sap.com
+    #   name: example
+    #   issuerURL: https://accounts.example.com
     #   clientID: foo
     #   groupsClaim: groups
     #   usernameClaim: email

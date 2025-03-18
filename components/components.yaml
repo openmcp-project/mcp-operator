@@ -12,9 +12,9 @@
 #   - Commit hash of the git commit used to generate this component descriptor.
 #   - Used for the source element pointing to this repo.
 # - CHART_REGISTRY
-#   - URL of the OCI registry used for the helm charts, e.g. "europe-docker.pkg.dev/sap-gcp-cp-k8s-stable-hub/cola/charts"
+#   - URL of the OCI registry used for the helm charts.
 # - IMG_REGISTRY
-#   - URL of the OCI registry used for the container images, e.g. "europe-docker.pkg.dev/sap-gcp-cp-k8s-stable-hub/cola"
+#   - URL of the OCI registry used for the container images.
 # - COMPONENTS
 #   - Comma-separated list of components for which resources should be added to the component descriptor, e.g. "apiserver-controller,managedcontrolplane-controller,landscaper-connector".
 #   - Not required if all of BP_COMPONENTS, CHART_COMPONENTS, and IMG_COMPONENTS are specified instead.
@@ -50,7 +50,7 @@
 name: github.com/openmcp-project/mcp-operator
 version: (( defaults.CD_VERSION ))
 provider:
-  name: sap.com
+  name: openmcp-project
 
 sources:
 - name: mcp-operator
