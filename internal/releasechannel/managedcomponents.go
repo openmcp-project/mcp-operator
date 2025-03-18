@@ -5,7 +5,7 @@ import (
 	"slices"
 	"time"
 
-	cpoev1beta1 "github.tools.sap/cloud-orchestration/control-plane-operator/api/v1beta1"
+	cpoev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/log"

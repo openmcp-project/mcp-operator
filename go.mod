@@ -15,12 +15,12 @@ require (
 	github.com/gardener/landscaper-service v0.122.0
 	github.com/onsi/ginkgo/v2 v2.22.2
 	github.com/onsi/gomega v1.36.2
+	github.com/openmcp-project/control-plane-operator v0.1.4
 	github.com/openmcp-project/controller-utils v0.4.2
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
 	github.com/stretchr/testify v1.10.0
 	github.tools.sap/CoLa/mcp-operator/api v0.26.0
-	github.tools.sap/cloud-orchestration/control-plane-operator v0.1.4-0.20250310155923-ab789124df15
 	gopkg.in/yaml.v3 v3.0.1
 	k8s.io/api v0.32.2
 	k8s.io/apiextensions-apiserver v0.32.2

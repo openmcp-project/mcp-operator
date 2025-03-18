@@ -3,8 +3,8 @@ package cloudorchestrator
 import (
 	"testing"
 
+	corev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
 	"github.com/stretchr/testify/assert"
-	corev1beta1 "github.tools.sap/cloud-orchestration/control-plane-operator/api/v1beta1"
 
 	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
 )

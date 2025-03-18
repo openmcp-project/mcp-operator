@@ -6,7 +6,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	corev1beta1 "github.tools.sap/cloud-orchestration/control-plane-operator/api/v1beta1"
+	corev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
 
 	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
 	componentutils "github.tools.sap/CoLa/mcp-operator/internal/utils/components"

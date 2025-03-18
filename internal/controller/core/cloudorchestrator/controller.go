@@ -23,8 +23,8 @@ import (
 
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 
+	corev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
 	"github.com/openmcp-project/controller-utils/pkg/logging"
-	corev1beta1 "github.tools.sap/cloud-orchestration/control-plane-operator/api/v1beta1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	condApi "k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

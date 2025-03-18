@@ -109,6 +109,8 @@ github.com/onsi/ginkgo/v2 v2.22.2 h1:/3X8Panh8/WwhU/3Ssa6rCKqPLuAkVY2I0RoyDLySlU
 github.com/onsi/ginkgo/v2 v2.22.2/go.mod h1:oeMosUL+8LtarXBHu/c0bx2D/K9zyQ6uX3cTyztHwsk=
 github.com/onsi/gomega v1.36.2 h1:koNYke6TVk6ZmnyHrCXba/T/MoLBXFjeC1PtvYgw0A8=
 github.com/onsi/gomega v1.36.2/go.mod h1:DdwyADRjrc825LhMEkD76cHR5+pUnjhUN8GlHlRPHzY=
+github.com/openmcp-project/control-plane-operator v0.1.4 h1:kwSfFYkH6VeqGU0MJi6a5b8cXocbzQSgWXSGR6Y0D5Q=
+github.com/openmcp-project/control-plane-operator v0.1.4/go.mod h1:F68trPQsXm54c1xrQor1yQEXqacNexEsTYomGjHFRD4=
 github.com/openmcp-project/controller-utils v0.4.2 h1:8viXmZZdBLanN1ummLr05ceCd7XaEBToflm1hU17ecQ=
 github.com/openmcp-project/controller-utils v0.4.2/go.mod h1:6BeRpSZK/FkJbelqGA4pv10FEtNerT2RvWb3Eg1Z9j0=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
@@ -153,8 +155,6 @@ github.com/xeipuuv/gojsonschema v1.2.0 h1:LhYJRs+L4fBtjZUfuSZIKGeVu0QRy8e5Xi7D17
 github.com/xeipuuv/gojsonschema v1.2.0/go.mod h1:anYRn/JVcOK2ZgGU+IjEV4nwlhoK5sQluxsYJ78Id3Y=
 github.com/yuin/goldmark v1.1.27/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
 github.com/yuin/goldmark v1.2.1/go.mod h1:3hX8gzYuyVAZsxl0MRgGTJEmQBFcNTphYh9decYSb74=
-github.tools.sap/cloud-orchestration/control-plane-operator v0.1.4-0.20250310155923-ab789124df15 h1:FDyWgzk/XTzWdxLSJUhLXHL9KSXcpCnGhsmmt3TW5lo=
-github.tools.sap/cloud-orchestration/control-plane-operator v0.1.4-0.20250310155923-ab789124df15/go.mod h1:aXPY3bTMAqdCot8KNhLazKlVPyh74HJC0y1IOoecSAs=
 go.uber.org/goleak v1.3.0 h1:2K3zAYmnTNqV73imy9J1T3WC+gmCePx2hEGkimedGto=
 go.uber.org/goleak v1.3.0/go.mod h1:CoHD4mav9JJNrW/WLlf7HGZPjdw8EucARQHekz1X6bE=
 go.uber.org/multierr v1.11.0 h1:blXXJkSxSSfBVBlC76pxqeO+LN3aDfLQo+309xJstO0=
