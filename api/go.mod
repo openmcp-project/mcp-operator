@@ -1,4 +1,4 @@
-module github.tools.sap/CoLa/mcp-operator/api
+module github.com/openmcp-project/mcp-operator/api
 
 go 1.23.0
 

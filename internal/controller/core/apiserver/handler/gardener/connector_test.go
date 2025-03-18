@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"time"
 
-	componentutils "github.tools.sap/CoLa/mcp-operator/internal/utils/components"
+	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -14,14 +14,14 @@ import (
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	. "github.tools.sap/CoLa/mcp-operator/test/matchers"
+	. "github.com/openmcp-project/mcp-operator/test/matchers"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	gardenv1beta1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
-	"github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/handler/gardener"
-	apiserverutils "github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/utils"
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
+	"github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/handler/gardener"
+	apiserverutils "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/utils"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 var (

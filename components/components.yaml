@@ -47,7 +47,7 @@
 #   - Each image's version defaults to IMG_VERSION if not specified.
 
 
-name: github.tools.sap/cola/mcp-operator
+name: github.com/openmcp-project/mcp-operator
 version: (( defaults.CD_VERSION ))
 provider:
   name: sap.com
@@ -58,7 +58,7 @@ sources:
   version: (( values.VERSION ))
   access:
     type: gitHub
-    repoUrl: https://github.tools.sap/CoLa/mcp-operator
+    repoUrl: https://github.com/openmcp-project/mcp-operator
     commit: (( values.COMMIT ))
     ref: (( contains(values.VERSION, "-dev") ? ~~ :"refs/tags/" values.VERSION ))
 resources:

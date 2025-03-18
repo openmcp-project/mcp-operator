@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.tools.sap/CoLa/mcp-operator/cmd/mcp-operator/app"
+	"github.com/openmcp-project/mcp-operator/cmd/mcp-operator/app"
 )
 
 func main() {

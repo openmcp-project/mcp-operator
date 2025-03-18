@@ -3,14 +3,14 @@ package config_test
 import (
 	"errors"
 
-	authzconfig "github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization/config"
+	authzconfig "github.com/openmcp-project/mcp-operator/internal/controller/core/authorization/config"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	rbacv1 "k8s.io/api/rbac/v1"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 var _ = Describe("Authorization Config", func() {

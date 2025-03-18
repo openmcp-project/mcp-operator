@@ -7,8 +7,8 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	"github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	"github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 func testEnvSetup(crateObjectsPath, coObjectsPath string, crDynamicObjects ...client.Object) *testing.ComplexEnvironment {

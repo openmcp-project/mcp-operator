@@ -13,7 +13,7 @@ import (
 
 	"github.com/openmcp-project/controller-utils/pkg/logging"
 
-	gardenawsv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener-extension-provider-aws/pkg/apis/aws/v1alpha1"
+	gardenawsv1alpha1 "github.com/openmcp-project/mcp-operator/api/external/gardener-extension-provider-aws/pkg/apis/aws/v1alpha1"
 )
 
 var _ shootBuilder = &shootBuilderAWS{}

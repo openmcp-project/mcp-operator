@@ -1,7 +1,7 @@
 package components
 
 import (
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 // ComponentRegistry can be used to fetch the known components.

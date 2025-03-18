@@ -10,7 +10,7 @@ import (
 
 	colactrlutil "github.com/openmcp-project/controller-utils/pkg/controller"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 // DefaultComponentControllerPredicates returns a predicate combination which should be useful for most - if not all - component controllers.

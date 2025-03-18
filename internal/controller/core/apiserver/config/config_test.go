@@ -6,15 +6,15 @@ import (
 	"path"
 	"testing"
 
-	apiserverconfig "github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/config"
+	apiserverconfig "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/config"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	openmcptesting "github.com/openmcp-project/controller-utils/pkg/testing"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 const (

@@ -9,7 +9,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 
-	"github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/extensions"
+	"github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/extensions"
 )
 
 // SchemeGroupVersion is group version used to register these objects

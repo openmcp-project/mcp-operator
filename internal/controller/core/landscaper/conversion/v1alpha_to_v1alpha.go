@@ -3,9 +3,9 @@ package conversion
 import (
 	laasv1alpha1 "github.com/gardener/landscaper-service/pkg/apis/core/v1alpha1"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/utils"
+	"github.com/openmcp-project/mcp-operator/internal/utils"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 // LandscaperDeployment_v1alpha1_from_Landscaper_v1alpha1 generates a LandscaperDeployment based on the given ManagedControlPlane resource.

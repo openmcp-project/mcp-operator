@@ -3,8 +3,8 @@ package components
 import (
 	"fmt"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	openmcperrors "github.tools.sap/CoLa/mcp-operator/api/errors"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	openmcperrors "github.com/openmcp-project/mcp-operator/api/errors"
 )
 
 type AuthenticationConverter struct{}

@@ -5,9 +5,9 @@ import (
 	. "github.com/onsi/gomega"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/components"
+	"github.com/openmcp-project/mcp-operator/internal/components"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 var _ = Describe("APIServerConverter", func() {

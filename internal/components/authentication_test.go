@@ -3,14 +3,14 @@ package components_test
 import (
 	"reflect"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/components"
+	"github.com/openmcp-project/mcp-operator/internal/components"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/ptr"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 var _ = Describe("AuthenticationConverter", func() {

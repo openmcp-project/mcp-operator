@@ -5,13 +5,13 @@ apis:
     vendor: github.com/gardener/gardener
     patches:
     - replace: "github.com/gardener/gardener/pkg/apis/core"
-      with: "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core"
+      with: "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core"
     - replace: "github.com/gardener/gardener/pkg/apis/core/v1beta1/constants"
-      with: "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
+      with: "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
     - replace: "github.com/gardener/gardener/pkg/apis/extensions"
-      with: "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/extensions"
+      with: "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/extensions"
     - replace: "github.com/gardener/gardener/pkg/apis/core/v1beta1"
-      with: "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
+      with: "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
     files:
     - name: pkg/apis/core/types.go
     - name: pkg/apis/core/v1beta1/register.go
@@ -70,7 +70,7 @@ apis:
     vendor: github.com/gardener/gardener-extension-provider-aws
     patches:
     - replace: "github.com/gardener/gardener/pkg/apis/extensions/v1alpha1"
-      with: "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/extensions/v1alpha1"
+      with: "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/extensions/v1alpha1"
     files:
     - name: pkg/apis/aws/v1alpha1/register.go
       patches:

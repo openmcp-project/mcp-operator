@@ -3,13 +3,13 @@ package config_test
 import (
 	"path"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization/config"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/authorization/config"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	rbacv1 "k8s.io/api/rbac/v1"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 var _ = Describe("Auth Config Utils", func() {

@@ -6,7 +6,7 @@ import (
 	corev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
 	"github.com/stretchr/testify/assert"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 func Test_convertToControlPlaneSpec(t *testing.T) {

@@ -20,9 +20,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	authzconfig "github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization/config"
-	apiserverutils "github.tools.sap/CoLa/mcp-operator/internal/utils/apiserver"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	authzconfig "github.com/openmcp-project/mcp-operator/internal/controller/core/authorization/config"
+	apiserverutils "github.com/openmcp-project/mcp-operator/internal/utils/apiserver"
 )
 
 const (

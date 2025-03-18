@@ -3,7 +3,7 @@ package config
 import (
 	"k8s.io/apimachinery/pkg/util/validation/field"
 
-	"github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	"github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 const (

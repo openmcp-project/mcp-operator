@@ -14,8 +14,8 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	cconst "github.tools.sap/CoLa/mcp-operator/api/constants"
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	cconst "github.com/openmcp-project/mcp-operator/api/constants"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 // Task is a function that is executed for each APIServer in the cluster

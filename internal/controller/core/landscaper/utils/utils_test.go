@@ -5,10 +5,10 @@ import (
 	. "github.com/onsi/gomega"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/landscaper/utils"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/landscaper/utils"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 var _ = Describe("GetCorrespondingLandscaperDeployment", func() {

@@ -7,7 +7,7 @@ import (
 	"strings"
 	"sync"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/components"
+	"github.com/openmcp-project/mcp-operator/internal/components"
 
 	"github.com/openmcp-project/controller-utils/pkg/logging"
 
@@ -15,8 +15,8 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	cconst "github.tools.sap/CoLa/mcp-operator/api/constants"
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	cconst "github.com/openmcp-project/mcp-operator/api/constants"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 var (

@@ -15,7 +15,7 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
-	v1beta1constants "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
+	v1beta1constants "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
 )
 
 // +genclient

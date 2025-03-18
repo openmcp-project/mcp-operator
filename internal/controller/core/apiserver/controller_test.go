@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver"
-	apiserverhandler "github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/handler"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver"
+	apiserverhandler "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/handler"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -16,14 +16,14 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	. "github.tools.sap/CoLa/mcp-operator/test/matchers"
+	. "github.com/openmcp-project/mcp-operator/test/matchers"
 
 	"github.com/openmcp-project/controller-utils/pkg/testing"
 
-	cconst "github.tools.sap/CoLa/mcp-operator/api/constants"
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	openmcperrors "github.tools.sap/CoLa/mcp-operator/api/errors"
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	cconst "github.com/openmcp-project/mcp-operator/api/constants"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	openmcperrors "github.com/openmcp-project/mcp-operator/api/errors"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 func getReconciler(c ...client.Client) reconcile.Reconciler {

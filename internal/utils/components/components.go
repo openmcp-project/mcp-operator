@@ -7,8 +7,8 @@ import (
 	"strconv"
 	"time"
 
-	components "github.tools.sap/CoLa/mcp-operator/internal/components"
-	"github.tools.sap/CoLa/mcp-operator/internal/utils"
+	components "github.com/openmcp-project/mcp-operator/internal/components"
+	"github.com/openmcp-project/mcp-operator/internal/utils"
 
 	ctrl "sigs.k8s.io/controller-runtime"
 
@@ -18,9 +18,9 @@ import (
 
 	"github.com/openmcp-project/controller-utils/pkg/logging"
 
-	cconst "github.tools.sap/CoLa/mcp-operator/api/constants"
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	openmcperrors "github.tools.sap/CoLa/mcp-operator/api/errors"
+	cconst "github.com/openmcp-project/mcp-operator/api/constants"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	openmcperrors "github.com/openmcp-project/mcp-operator/api/errors"
 )
 
 const (

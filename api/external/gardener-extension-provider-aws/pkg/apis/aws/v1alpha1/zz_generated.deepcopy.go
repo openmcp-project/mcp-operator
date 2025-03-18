@@ -10,7 +10,7 @@
 package v1alpha1
 
 import (
-	extensionsv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/extensions/v1alpha1"
+	extensionsv1alpha1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/extensions/v1alpha1"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 )
 

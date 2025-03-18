@@ -4,7 +4,7 @@ import (
 	"os"
 	"path"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/utils/apiserver"
+	"github.com/openmcp-project/mcp-operator/internal/utils/apiserver"
 
 	laasinstall "github.com/gardener/landscaper-service/pkg/apis/core/install"
 	cocorev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
@@ -13,9 +13,9 @@ import (
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 
-	gardenauthenticationv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/authentication/v1alpha1"
-	gardenv1beta1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
-	openmcpinstall "github.tools.sap/CoLa/mcp-operator/api/install"
+	gardenauthenticationv1alpha1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/authentication/v1alpha1"
+	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
+	openmcpinstall "github.com/openmcp-project/mcp-operator/api/install"
 )
 
 var (

@@ -3,7 +3,7 @@ package components_test
 import (
 	"fmt"
 
-	componentutils "github.tools.sap/CoLa/mcp-operator/internal/utils/components"
+	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -11,7 +11,7 @@ import (
 	corev1 "k8s.io/api/core/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 var _ = Describe("Patch", func() {

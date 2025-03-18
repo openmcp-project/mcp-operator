@@ -5,17 +5,17 @@ import (
 	"fmt"
 	"os"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/components"
-	"github.tools.sap/CoLa/mcp-operator/internal/releasechannel"
-	"github.tools.sap/CoLa/mcp-operator/internal/utils/apiserver"
+	"github.com/openmcp-project/mcp-operator/internal/components"
+	"github.com/openmcp-project/mcp-operator/internal/releasechannel"
+	"github.com/openmcp-project/mcp-operator/internal/utils/apiserver"
 
-	apiservercontroller "github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver"
-	authenticationcontroller "github.tools.sap/CoLa/mcp-operator/internal/controller/core/authentication"
-	authorizationcontroller "github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization"
-	clusteradmincontroller "github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization/clusteradmin"
-	cloudorchestratorcontroller "github.tools.sap/CoLa/mcp-operator/internal/controller/core/cloudorchestrator"
-	landscapercontroller "github.tools.sap/CoLa/mcp-operator/internal/controller/core/landscaper"
-	mcpcontroller "github.tools.sap/CoLa/mcp-operator/internal/controller/core/managedcontrolplane"
+	apiservercontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver"
+	authenticationcontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/authentication"
+	authorizationcontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/authorization"
+	clusteradmincontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/authorization/clusteradmin"
+	cloudorchestratorcontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/cloudorchestrator"
+	landscapercontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/landscaper"
+	mcpcontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/managedcontrolplane"
 
 	"sigs.k8s.io/controller-runtime/pkg/cluster"
 
@@ -29,7 +29,7 @@ import (
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/utils/ptr"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 
 	// Import all Kubernetes client auth plugins (e.g. Azure, GCP, OIDC, etc.)
 	// to ensure that exec-entrypoint and run can make use of them.
@@ -41,8 +41,8 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/healthz"
 	"sigs.k8s.io/controller-runtime/pkg/metrics/server"
 
-	crdinstall "github.tools.sap/CoLa/mcp-operator/api/crds"
-	openmcpinstall "github.tools.sap/CoLa/mcp-operator/api/install"
+	crdinstall "github.com/openmcp-project/mcp-operator/api/crds"
+	openmcpinstall "github.com/openmcp-project/mcp-operator/api/install"
 )
 
 func NewMCPOperatorCommand(ctx context.Context) *cobra.Command {

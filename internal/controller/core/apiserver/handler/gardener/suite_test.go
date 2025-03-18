@@ -8,9 +8,9 @@ import (
 	"testing"
 	"time"
 
-	apiserverconfig "github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/config"
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/handler/gardener"
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/schemes"
+	apiserverconfig "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/config"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/handler/gardener"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/schemes"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -21,10 +21,10 @@ import (
 
 	openmcptesting "github.com/openmcp-project/controller-utils/pkg/testing"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	authenticationv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/authentication/v1alpha1"
-	gardenv1beta1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	authenticationv1alpha1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/authentication/v1alpha1"
+	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 const (

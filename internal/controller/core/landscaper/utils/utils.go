@@ -8,7 +8,7 @@ import (
 	"github.com/openmcp-project/controller-utils/pkg/logging"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 // GetCorrespondingLandscaperDeployment fetches the LandscaperDeployment belonging to the given ManagedControlPlane.

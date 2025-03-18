@@ -6,12 +6,12 @@ import (
 	"strings"
 	"time"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/utils"
-	"github.tools.sap/CoLa/mcp-operator/internal/utils/apiserver"
-	"github.tools.sap/CoLa/mcp-operator/internal/utils/components"
+	"github.com/openmcp-project/mcp-operator/internal/utils"
+	"github.com/openmcp-project/mcp-operator/internal/utils/apiserver"
+	"github.com/openmcp-project/mcp-operator/internal/utils/components"
 
-	apiserverutils "github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/utils"
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/authentication/config"
+	apiserverutils "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/utils"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/authentication/config"
 
 	"github.com/openmcp-project/controller-utils/pkg/logging"
 	corev1 "k8s.io/api/core/v1"
@@ -27,9 +27,9 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/handler"
 
-	cconst "github.tools.sap/CoLa/mcp-operator/api/constants"
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	openmcperrors "github.tools.sap/CoLa/mcp-operator/api/errors"
+	cconst "github.com/openmcp-project/mcp-operator/api/constants"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	openmcperrors "github.com/openmcp-project/mcp-operator/api/errors"
 )
 
 // ControllerName is the name of the controller

@@ -5,7 +5,7 @@ import (
 	"sync"
 	"time"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/utils/apiserver"
+	"github.com/openmcp-project/mcp-operator/internal/utils/apiserver"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -16,8 +16,8 @@ import (
 
 	"github.com/openmcp-project/controller-utils/pkg/testing"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	"github.tools.sap/CoLa/mcp-operator/test/utils"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	"github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 var _ = Describe("APIServerWorker", func() {

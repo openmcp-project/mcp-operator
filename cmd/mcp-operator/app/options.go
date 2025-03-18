@@ -6,11 +6,11 @@ import (
 	"strings"
 	"time"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/components"
+	"github.com/openmcp-project/mcp-operator/internal/components"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/config"
-	configauthn "github.tools.sap/CoLa/mcp-operator/internal/controller/core/authentication/config"
-	configauthz "github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization/config"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/config"
+	configauthn "github.com/openmcp-project/mcp-operator/internal/controller/core/authentication/config"
+	configauthz "github.com/openmcp-project/mcp-operator/internal/controller/core/authorization/config"
 
 	colactrlutil "github.com/openmcp-project/controller-utils/pkg/controller"
 	"github.com/openmcp-project/controller-utils/pkg/init/crds"
@@ -22,7 +22,7 @@ import (
 	ctrlrun "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/yaml"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 const (

@@ -3,10 +3,10 @@ package landscaper_test
 import (
 	"path"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/components"
-	componentutils "github.tools.sap/CoLa/mcp-operator/internal/utils/components"
+	"github.com/openmcp-project/mcp-operator/internal/components"
+	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/landscaper"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/landscaper"
 
 	lssv1alpha1 "github.com/gardener/landscaper-service/pkg/apis/core/v1alpha1"
 	. "github.com/onsi/ginkgo/v2"
@@ -17,13 +17,13 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	. "github.tools.sap/CoLa/mcp-operator/test/matchers"
+	. "github.com/openmcp-project/mcp-operator/test/matchers"
 
 	"github.com/openmcp-project/controller-utils/pkg/testing"
 
-	cconst "github.tools.sap/CoLa/mcp-operator/api/constants"
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	cconst "github.com/openmcp-project/mcp-operator/api/constants"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 const (

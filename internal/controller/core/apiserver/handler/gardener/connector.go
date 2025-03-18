@@ -6,11 +6,11 @@ import (
 	"strings"
 	"time"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/utils"
-	componentutils "github.tools.sap/CoLa/mcp-operator/internal/utils/components"
+	"github.com/openmcp-project/mcp-operator/internal/utils"
+	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
-	apiserverconfig "github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/config"
-	apiserverhandler "github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/handler"
+	apiserverconfig "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/config"
+	apiserverhandler "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/handler"
 
 	"github.com/openmcp-project/controller-utils/pkg/logging"
 	corev1 "k8s.io/api/core/v1"
@@ -24,11 +24,11 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
-	cconst "github.tools.sap/CoLa/mcp-operator/api/constants"
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	openmcperrors "github.tools.sap/CoLa/mcp-operator/api/errors"
-	gardenv1beta1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
-	"github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
+	cconst "github.com/openmcp-project/mcp-operator/api/constants"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	openmcperrors "github.com/openmcp-project/mcp-operator/api/errors"
+	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
+	"github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
 )
 
 const (

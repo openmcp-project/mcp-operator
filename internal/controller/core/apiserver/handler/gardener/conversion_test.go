@@ -8,10 +8,10 @@ import (
 	"github.com/apparentlymart/go-cidr/cidr"
 	"sigs.k8s.io/yaml"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/utils"
-	"github.tools.sap/CoLa/mcp-operator/internal/utils/region"
+	"github.com/openmcp-project/mcp-operator/internal/utils"
+	"github.com/openmcp-project/mcp-operator/internal/utils/region"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/handler/gardener"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/handler/gardener"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -21,9 +21,9 @@ import (
 
 	"github.com/openmcp-project/controller-utils/pkg/testing"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	gardenawsv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener-extension-provider-aws/pkg/apis/aws/v1alpha1"
-	gardenv1beta1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	gardenawsv1alpha1 "github.com/openmcp-project/mcp-operator/api/external/gardener-extension-provider-aws/pkg/apis/aws/v1alpha1"
+	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
 )
 
 var _ = Describe("APIServer Gardener Conversion", func() {

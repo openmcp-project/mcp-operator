@@ -3,10 +3,10 @@ package authorization_test
 import (
 	"strings"
 
-	components "github.tools.sap/CoLa/mcp-operator/internal/components"
+	components "github.com/openmcp-project/mcp-operator/internal/components"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization"
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization/config"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/authorization"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/authorization/config"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -18,13 +18,13 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	. "github.tools.sap/CoLa/mcp-operator/test/matchers"
+	. "github.com/openmcp-project/mcp-operator/test/matchers"
 
 	"github.com/openmcp-project/controller-utils/pkg/testing"
 
-	cconst "github.tools.sap/CoLa/mcp-operator/api/constants"
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	cconst "github.com/openmcp-project/mcp-operator/api/constants"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 const (

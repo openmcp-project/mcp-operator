@@ -7,9 +7,9 @@ import (
 	"testing"
 	"time"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/components"
+	"github.com/openmcp-project/mcp-operator/internal/components"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/managedcontrolplane"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/managedcontrolplane"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -24,11 +24,11 @@ import (
 
 	openmcptesting "github.com/openmcp-project/controller-utils/pkg/testing"
 
-	. "github.tools.sap/CoLa/mcp-operator/test/matchers"
+	. "github.com/openmcp-project/mcp-operator/test/matchers"
 
-	cconst "github.tools.sap/CoLa/mcp-operator/api/constants"
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	cconst "github.com/openmcp-project/mcp-operator/api/constants"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 func getReconciler(c ...client.Client) reconcile.Reconciler {

@@ -5,8 +5,8 @@ import (
 	"errors"
 	"fmt"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/components"
-	componentutils "github.tools.sap/CoLa/mcp-operator/internal/utils/components"
+	"github.com/openmcp-project/mcp-operator/internal/components"
+	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -14,14 +14,14 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	. "github.tools.sap/CoLa/mcp-operator/test/matchers"
+	. "github.com/openmcp-project/mcp-operator/test/matchers"
 
 	"github.com/openmcp-project/controller-utils/pkg/testing"
 
-	cconst "github.tools.sap/CoLa/mcp-operator/api/constants"
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	openmcperrors "github.tools.sap/CoLa/mcp-operator/api/errors"
-	"github.tools.sap/CoLa/mcp-operator/test/utils"
+	cconst "github.com/openmcp-project/mcp-operator/api/constants"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	openmcperrors "github.com/openmcp-project/mcp-operator/api/errors"
+	"github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 type TestManagedComponent struct {

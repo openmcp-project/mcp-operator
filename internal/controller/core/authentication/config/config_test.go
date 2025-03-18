@@ -3,9 +3,9 @@ package config_test
 import (
 	"errors"
 
-	"github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	"github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 
-	authconfig "github.tools.sap/CoLa/mcp-operator/internal/controller/core/authentication/config"
+	authconfig "github.com/openmcp-project/mcp-operator/internal/controller/core/authentication/config"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

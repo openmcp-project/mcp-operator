@@ -3,7 +3,7 @@ package config_test
 import (
 	"path"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/authentication/config"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/authentication/config"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"

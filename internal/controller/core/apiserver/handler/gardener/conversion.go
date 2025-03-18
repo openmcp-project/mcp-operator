@@ -24,13 +24,13 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client/fake"
 	"sigs.k8s.io/controller-runtime/pkg/client/interceptor"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	authenticationv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/authentication/v1alpha1"
-	gardenv1beta1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
-	gardenconstants "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/config"
-	"github.tools.sap/CoLa/mcp-operator/internal/utils"
-	"github.tools.sap/CoLa/mcp-operator/internal/utils/region"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	authenticationv1alpha1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/authentication/v1alpha1"
+	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
+	gardenconstants "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/config"
+	"github.com/openmcp-project/mcp-operator/internal/utils"
+	"github.com/openmcp-project/mcp-operator/internal/utils/region"
 )
 
 const (

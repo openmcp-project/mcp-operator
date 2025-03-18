@@ -9,12 +9,12 @@ import (
 	"github.com/openmcp-project/controller-utils/pkg/logging"
 	"sigs.k8s.io/yaml"
 
-	"github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	"github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/sets"
 
-	gardenv1beta1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
+	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
 )
 
 type shootBuilder interface {

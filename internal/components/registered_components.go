@@ -7,8 +7,8 @@ import (
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	openmcpinstall "github.tools.sap/CoLa/mcp-operator/api/install"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	openmcpinstall "github.com/openmcp-project/mcp-operator/api/install"
 )
 
 const (

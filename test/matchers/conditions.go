@@ -5,7 +5,7 @@ import (
 
 	"github.com/onsi/gomega/types"
 
-	corev1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	corev1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 // MatchComponentCondition returns a Gomega matcher that checks if a ComponentCondition is equal to the expected one.

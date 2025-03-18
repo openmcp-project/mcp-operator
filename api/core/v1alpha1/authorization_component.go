@@ -3,7 +3,7 @@ package v1alpha1
 import (
 	"k8s.io/apimachinery/pkg/util/sets"
 
-	openmcperrors "github.tools.sap/CoLa/mcp-operator/api/errors"
+	openmcperrors "github.com/openmcp-project/mcp-operator/api/errors"
 )
 
 const AuthorizationComponent ComponentType = "Authorization"

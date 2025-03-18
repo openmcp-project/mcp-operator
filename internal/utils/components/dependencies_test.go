@@ -4,16 +4,16 @@ import (
 	"sync"
 	"time"
 
-	componentutils "github.tools.sap/CoLa/mcp-operator/internal/utils/components"
+	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
 var _ = Describe("Dependencies", func() {

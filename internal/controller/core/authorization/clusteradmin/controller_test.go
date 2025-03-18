@@ -7,13 +7,13 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/types"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 
 	"github.com/openmcp-project/controller-utils/pkg/testing"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization/clusteradmin"
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/authorization/config"
-	testutils "github.tools.sap/CoLa/mcp-operator/test/utils"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/authorization/clusteradmin"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/authorization/config"
+	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"

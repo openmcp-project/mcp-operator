@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"time"
 
-	apiserverutils "github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/utils"
+	apiserverutils "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/utils"
 
 	"k8s.io/client-go/rest"
 	ctrl "sigs.k8s.io/controller-runtime"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
-	openmcperrors "github.tools.sap/CoLa/mcp-operator/api/errors"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	openmcperrors "github.com/openmcp-project/mcp-operator/api/errors"
 )
 
 // UpdateStatusFunc is expected to update all component-specific fields in the status.

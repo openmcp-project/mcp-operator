@@ -4,12 +4,12 @@ import (
 	"context"
 	"errors"
 
-	apiserverutils "github.tools.sap/CoLa/mcp-operator/internal/utils/apiserver"
+	apiserverutils "github.com/openmcp-project/mcp-operator/internal/utils/apiserver"
 
 	restclient "k8s.io/client-go/rest"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 // TestAPIServerAccess is a test implementation of APIServerAccess.

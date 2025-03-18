@@ -6,7 +6,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/controller/core/apiserver/schemes"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/schemes"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -14,7 +14,7 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
-	gardenv1beta1 "github.tools.sap/CoLa/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
+	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
 )
 
 const (

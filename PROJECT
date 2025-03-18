@@ -7,7 +7,7 @@ layout:
 - go.kubebuilder.io/v4
 multigroup: true
 projectName: mcp-operator
-repo: github.tools.sap/CoLa/mcp-operator
+repo: github.com/openmcp-project/mcp-operator
 resources:
 - api:
     crdVersion: v1
@@ -16,7 +16,7 @@ resources:
   domain: openmcp.cloud
   group: core
   kind: APIServer
-  path: github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1
+  path: github.com/openmcp-project/mcp-operator/api/core/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -25,7 +25,7 @@ resources:
   domain: openmcp.cloud
   group: core
   kind: CloudOrchestrator
-  path: github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1
+  path: github.com/openmcp-project/mcp-operator/api/core/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -34,7 +34,7 @@ resources:
   domain: openmcp.cloud
   group: core
   kind: Landscaper
-  path: github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1
+  path: github.com/openmcp-project/mcp-operator/api/core/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -43,7 +43,7 @@ resources:
   domain: openmcp.cloud
   group: core
   kind: ManagedControlPlane
-  path: github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1
+  path: github.com/openmcp-project/mcp-operator/api/core/v1alpha1
   version: v1alpha1
   webhooks:
     validation: true
@@ -55,7 +55,7 @@ resources:
   domain: openmcp.cloud
   group: core
   kind: InternalConfiguration
-  path: github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1
+  path: github.com/openmcp-project/mcp-operator/api/core/v1alpha1
   version: v1alpha1
 - api:
     crdVersion: v1
@@ -63,6 +63,6 @@ resources:
   domain: openmcp.cloud
   group: core
   kind: ManagedComponent
-  path: github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1
+  path: github.com/openmcp-project/mcp-operator/api/core/v1alpha1
   version: v1alpha1
 version: "3"

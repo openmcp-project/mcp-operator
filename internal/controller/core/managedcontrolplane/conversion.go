@@ -4,14 +4,14 @@ import (
 	"fmt"
 	"slices"
 
-	"github.tools.sap/CoLa/mcp-operator/internal/components"
-	componentutils "github.tools.sap/CoLa/mcp-operator/internal/utils/components"
+	"github.com/openmcp-project/mcp-operator/internal/components"
+	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 
-	openmcpv1alpha1 "github.tools.sap/CoLa/mcp-operator/api/core/v1alpha1"
+	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 )
 
 // ManagedControlPlaneToSplitInternalResources converts the given v1alpha1.ManagedControlPlane into multiple internal resources.
