@@ -13,7 +13,7 @@ deployment:
     leaseNamespace: default
 
 image:
-  repository: deploy-releases-hyperspace-docker.common.repositories.cloud.sap/openmcp/mcp-operator
+  repository: ghcr.io/openmcp-project/github.com/openmcp-project/mcp-operator/images/mcp-operator
   tag: v0.26.0
   pullPolicy: IfNotPresent
 
