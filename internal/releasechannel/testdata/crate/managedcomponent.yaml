@@ -1,0 +1,7 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: ManagedComponent
+metadata:
+  name: crossplane
+status:
+    versions:
+    - 1.1.0

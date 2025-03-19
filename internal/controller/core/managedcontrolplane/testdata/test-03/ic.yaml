@@ -1,0 +1,13 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: InternalConfiguration
+metadata:
+  name: test
+  namespace: test
+  generation: 3
+spec:
+  components:
+    apiServer:
+      gardener:
+        shootOverwrite:
+          name: foo
+          namespace: bar

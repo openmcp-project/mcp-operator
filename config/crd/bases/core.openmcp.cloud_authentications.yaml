@@ -1,0 +1,250 @@
+---
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.16.4
+  name: authentications.core.openmcp.cloud
+spec:
+  group: core.openmcp.cloud
+  names:
+    kind: Authentication
+    listKind: AuthenticationList
+    plural: authentications
+    shortNames:
+    - auth
+    singular: authentication
+  scope: Namespaced
+  versions:
+  - additionalPrinterColumns:
+    - jsonPath: .status.conditions[?(@.type=="AuthenticationReconciliation")].status
+      name: Successfully_Reconciled
+      type: string
+    - jsonPath: .metadata.deletionTimestamp
+      name: Deleted
+      type: date
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: Authentication is the Schema for the authentication API
+        properties:
+          apiVersion:
+            description: |-
+              APIVersion defines the versioned schema of this representation of an object.
+              Servers should convert recognized schemas to the latest internal value, and
+              may reject unrecognized values.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources
+            type: string
+          kind:
+            description: |-
+              Kind is a string value representing the REST resource this object represents.
+              Servers may infer this from the endpoint the client submits requests to.
+              Cannot be updated.
+              In CamelCase.
+              More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: AuthenticationSpec contains the specification for the authentication
+              component
+            properties:
+              enableSystemIdentityProvider:
+                type: boolean
+              identityProviders:
+                items:
+                  description: IdentityProvider contains the configuration for an
+                    OpenID Connect identity provider
+                  properties:
+                    caBundle:
+                      description: |-
+                        CABundle: When set, the OpenID server's certificate will be verified by one of the authorities in the bundle.
+                        Otherwise, the host's root CA set will be used.
+                      type: string
+                    clientConfig:
+                      description: ClientAuthentication contains configuration for
+                        OIDC clients
+                      properties:
+                        clientSecret:
+                          description: |-
+                            ClientSecret is a references to a secret containing the client secret.
+                            The client secret will be added to the generated kubeconfig with the "--oidc-client-secret" flag.
+                          properties:
+                            key:
+                              description: Key is the key inside the secret.
+                              type: string
+                            name:
+                              description: Name is the secret name.
+                              type: string
+                          required:
+                          - key
+                          - name
+                          type: object
+                        extraConfig:
+                          additionalProperties:
+                            description: SingleOrMultiStringValue is a type that can
+                              hold either a single string value or a list of string
+                              values.
+                            properties:
+                              value:
+                                description: Value is a single string value.
+                                type: string
+                              values:
+                                description: Values is a list of string values.
+                                items:
+                                  type: string
+                                type: array
+                            type: object
+                          description: |-
+                            ExtraConfig is added to the client configuration in the kubeconfig.
+                            Can either be a single string value, a list of string values or no value.
+                            Must not contain any of the following keys:
+                            - "client-id"
+                            - "client-secret"
+                            - "issuer-url"
+                          type: object
+                      type: object
+                    clientID:
+                      description: ClientID is the client ID of the identity provider.
+                      type: string
+                    groupsClaim:
+                      description: GroupsClaim is the claim that contains the groups.
+                      type: string
+                    issuerURL:
+                      description: IssuerURL is the issuer URL of the identity provider.
+                      type: string
+                    name:
+                      description: |-
+                        Name is the name of the identity provider.
+                        The name must be unique among all identity providers.
+                        The name must only contain lowercase letters.
+                        The length must not exceed 63 characters.
+                      maxLength: 63
+                      pattern: ^[a-z]+$
+                      type: string
+                    requiredClaims:
+                      additionalProperties:
+                        type: string
+                      description: RequiredClaims is a map of required claims. If
+                        set, the identity provider must provide these claims in the
+                        ID token.
+                      type: object
+                    signingAlgs:
+                      description: SigningAlgs is the list of allowed JOSE asymmetric
+                        signing algorithms.
+                      items:
+                        type: string
+                      type: array
+                    usernameClaim:
+                      description: UsernameClaim is the claim that contains the username.
+                      type: string
+                  required:
+                  - clientID
+                  - issuerURL
+                  - name
+                  - usernameClaim
+                  type: object
+                type: array
+            type: object
+          status:
+            description: AuthenticationStatus contains the status of the authentication
+              component
+            properties:
+              access:
+                description: |-
+                  UserAccess reference the secret containing the kubeconfig
+                  for the APIServer which is to be used by the customer.
+                properties:
+                  key:
+                    description: Key is the key inside the secret.
+                    type: string
+                  name:
+                    description: Name is the object's name.
+                    type: string
+                  namespace:
+                    description: Namespace is the object's namespace.
+                    type: string
+                required:
+                - key
+                - name
+                - namespace
+                type: object
+              conditions:
+                description: |-
+                  Conditions containts the conditions of the component.
+                  For each component, this is expected to contain at least one condition per top-level node that component has in the ManagedControlPlane's spec.
+                  This condition is expected to be named "<node>Healthy" and to describe the general availability of the functionality configured by that top-level node.
+                items:
+                  properties:
+                    lastTransitionTime:
+                      description: LastTransitionTime specifies the time when this
+                        condition's status last changed.
+                      format: date-time
+                      type: string
+                    message:
+                      description: |-
+                        Message contains further details regarding the condition.
+                        It is meant for human users, Reason should be used for programmatic evaluation instead.
+                        It is optional, but should be filled at least when Status is not "True".
+                      type: string
+                    reason:
+                      description: |-
+                        Reason is expected to contain a CamelCased string that provides further information regarding the condition.
+                        It should have a fixed value set (like an enum) to be machine-readable. The value set depends on the condition type.
+                        It is optional, but should be filled at least when Status is not "True".
+                      type: string
+                    status:
+                      description: Status is the status of the condition.
+                      type: string
+                    type:
+                      description: |-
+                        Type is the type of the condition.
+                        This is a unique identifier and each type of condition is expected to be managed by exactly one component controller.
+                      type: string
+                  required:
+                  - status
+                  - type
+                  type: object
+                type: array
+              observedGenerations:
+                description: |-
+                  ObservedGenerations contains information about the observed generations of a component.
+                  This information is required to determine whether a component's controller has already processed some changes or not.
+                properties:
+                  internalConfiguration:
+                    description: |-
+                      InternalConfiguration contains the last generation of the InternalConfiguration belonging to the owning v1alpha1.ManagedControlPlane that has been seen by the controller.
+                      Note that the component's controller does not read the InternalConfiguration itself, but fetches this information from a label which is populated by the v1alpha1.ManagedControlPlane controller.
+                      This refers to metadata.generation of the InternalConfiguration belonging to the owning v1alpha1.ManagedControlPlane, if any.
+                      If the resource does not have a label containing the generation of the corresponding InternalConfiguration, this means that no InternalConfiguration exists for
+                      the owning v1alpha1.ManagedControlPlane. In that case, the value of this field is expected to be -1.
+                    format: int64
+                    type: integer
+                  managedControlPlane:
+                    description: |-
+                      ManagedControlPlane contains the last generation of the owning v1alpha1.ManagedControlPlane that has been by the controller.
+                      Note that the component's controller does not read the ManagedControlPlane resource itself, but fetches this information from a label which is populated by the v1alpha1.ManagedControlPlane controller.
+                      This refers to metadata.generation of the owning v1alpha1.ManagedControlPlane resource.
+                      This value is probably identical to the one in 'Resource', unless something else than the v1alpha1.ManagedControlPlane controller touched the spec of this resource.
+                    format: int64
+                    type: integer
+                  resource:
+                    description: |-
+                      Resource contains the last generation of this resource that has been handled by the controller.
+                      This refers to metadata.generation of this resource.
+                    format: int64
+                    type: integer
+                required:
+                - internalConfiguration
+                - managedControlPlane
+                - resource
+                type: object
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

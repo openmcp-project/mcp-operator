@@ -1,0 +1,63 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: openmcp:admin
+  labels:
+    "openmcp.cloud/managed-by": "Authorization"
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: openmcp:view
+  labels:
+    "openmcp.cloud/managed-by": "Authorization"
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: openmcp:aggregate-to-admin
+  labels:
+    "openmcp.cloud/managed-by": "Authorization"
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: openmcp:aggregate-to-view
+  labels:
+    "openmcp.cloud/managed-by": "Authorization"
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: openmcp:admin:clusterscoped
+  labels:
+    "openmcp.cloud/managed-by": "Authorization"
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: openmcp:view:clusterscoped
+  labels:
+    "openmcp.cloud/managed-by": "Authorization"
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: openmcp:clusterscoped:aggregate-to-admin
+  labels:
+    "openmcp.cloud/managed-by": "Authorization"
+rules: []
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: openmcp:clusterscoped:aggregate-to-view
+  labels:
+    "openmcp.cloud/managed-by": "Authorization"
+rules: []

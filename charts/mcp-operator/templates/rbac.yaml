@@ -1,0 +1,177 @@
+{{- if not ( and .Values.clusters .Values.clusters.crate ) }}
+apiVersion: {{ include "rbacversion" . }}
+kind: ClusterRole
+metadata:
+  name: {{ include "mcp-operator.clusterrole" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+  - core.openmcp.cloud
+  resources:
+  - managedcontrolplanes
+  - managedcontrolplanes/status
+  - internalconfigurations
+  - apiservers
+  - landscapers
+  - cloudorchestrators
+  - authentications
+  - authorizations
+  - clusteradmin
+  verbs:
+  - "*"
+- apiGroups:
+    - ""
+  resources:
+    - "namespaces"
+  verbs:
+    - get
+    - list
+    - watch
+- apiGroups:
+  - coordination.k8s.io
+  resources:
+  - leases
+  - leases/status
+  verbs:
+  - "*"
+- apiGroups:
+    - ""
+  resources:
+    - events
+  verbs:
+    - "*"
+{{- if not .Values.webhooks.disabled }}
+- apiGroups: ["admissionregistration.k8s.io"]
+  resources:
+  - validatingwebhookconfigurations
+  # - mutatingwebhookconfigurations for now we are only using validatingwebhooks
+  verbs: ["*"]
+{{- end }}
+{{- if not (and .Values.crds .Values.crds.disabled) }}
+- apiGroups:
+  - apiextensions.k8s.io
+  resources:
+  - customresourcedefinitions
+  verbs:
+  - '*'
+---
+{{- end }}
+kind: ClusterRoleBinding
+apiVersion: {{ include "rbacversion" . }}
+metadata:
+  name: {{ include "mcp-operator.clusterrole" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: mcp-operator
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "mcp-operator.clusterrole" . }}
+  apiGroup: rbac.authorization.k8s.io
+---
+{{- end }}
+{{- if has "landscaper" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+{{- if not ( and .Values.landscaper.clusters .Values.landscaper.clusters.core ) }}
+apiVersion: {{ include "rbacversion" . }}
+kind: ClusterRole
+metadata:
+  name: {{ include "mcp-operator.landscaper.clusterrole" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+    - ""
+  resources:
+    - "namespaces"
+  verbs:
+    - "*"
+- apiGroups:
+    - landscaper-service.gardener.cloud
+  resources:
+    - landscaperdeployments
+  verbs:
+    - "*"
+---
+kind: ClusterRoleBinding
+apiVersion: {{ include "rbacversion" . }}
+metadata:
+  name: {{ include "mcp-operator.landscaper.clusterrole" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: mcp-operator
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "mcp-operator.landscaper.clusterrole" . }}
+  apiGroup: rbac.authorization.k8s.io
+---
+{{- end }}
+{{- end }}
+{{- if has "cloudorchestrator" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+{{- if not ( and .Values.cloudOrchestrator.clusters .Values.cloudOrchestrator.clusters.core ) }}
+apiVersion: {{ include "rbacversion" . }}
+kind: ClusterRole
+metadata:
+  name: {{ include "mcp-operator.cloudorchestrator.clusterrole" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+    - core.orchestrate.cloud.sap
+  resources:
+    - managedcontrolplanes
+  verbs:
+    - "*"
+---
+kind: ClusterRoleBinding
+apiVersion: {{ include "rbacversion" . }}
+metadata:
+  name: {{ include "mcp-operator.cloudorchestrator.clusterrole" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: mcp-operator
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "mcp-operator.cloudorchestrator.clusterrole" . }}
+  apiGroup: rbac.authorization.k8s.io
+---
+{{- end }}
+{{- end }}
+{{- if not .Values.webhooks.disabled }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ include "mcp-operator.fullname" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+rules:
+  - apiGroups: [""]
+    resources: ["secrets"]
+    verbs: ["*"]
+    resourceNames:
+      - {{ include "mcp-operator.fullname" . }}-webhooks-tls
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ include "mcp-operator.fullname" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ include "mcp-operator.fullname" . }}
+subjects:
+- kind: ServiceAccount
+  name: mcp-operator
+  namespace: {{ .Release.Namespace }}
+---
+{{- end }}

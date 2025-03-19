@@ -1,0 +1,135 @@
+kind: Shoot
+apiVersion: core.gardener.cloud/v1beta1
+metadata:
+  name: modified
+  namespace: garden-test
+  labels:
+    openmcp.cloud/mcp-name: modified
+    openmcp.cloud/mcp-namespace: modified
+    provider.extensions.gardener.cloud/gcp: 'true'
+    shoot.gardener.cloud/status: healthy
+  annotations:
+    shoot.gardener.cloud/cleanup-extended-apis-finalize-grace-period-seconds: '30'
+spec:
+  addons:
+    kubernetesDashboard:
+      enabled: false
+      authenticationMode: token
+  cloudProfileName: modified
+  dns:
+    domain: modified.example.org
+  extensions:
+    - type: shoot-oidc-service
+    - type: shoot-dns-service
+      providerConfig:
+        apiVersion: service.dns.extensions.gardener.cloud/v1alpha1
+        kind: DNSConfig
+        syncProvidersFromShootSpecDNS: true
+  hibernation:
+    enabled: false
+  kubernetes:
+    kubeAPIServer:
+      runtimeConfig:
+        apps/v1: true
+        batch/v1: true
+      requests:
+        maxNonMutatingInflight: 400
+        maxMutatingInflight: 200
+      enableAnonymousAuthentication: false
+      eventTTL: 1h0m0s
+      logging:
+        verbosity: 2
+      defaultNotReadyTolerationSeconds: 300
+      defaultUnreachableTolerationSeconds: 300
+    kubeControllerManager:
+      nodeCIDRMaskSize: 24
+      nodeMonitorGracePeriod: 40s
+    kubeScheduler:
+      profile: balanced
+    kubeProxy:
+      mode: IPTables
+      enabled: true
+    kubelet:
+      failSwapOn: true
+      kubeReserved:
+        cpu: 80m
+        memory: 1Gi
+        pid: 20k
+      imageGCHighThresholdPercent: 50
+      imageGCLowThresholdPercent: 40
+      serializeImagePulls: true
+    version: 1.29.3
+    verticalPodAutoscaler:
+      enabled: true
+      evictAfterOOMThreshold: 10m0s
+      evictionRateBurst: 1
+      evictionRateLimit: -1
+      evictionTolerance: 0.5
+      recommendationMarginFraction: 0.15
+      updaterInterval: 1m0s
+      recommenderInterval: 1m0s
+      targetCPUPercentile: 0.9
+    enableStaticTokenKubeconfig: false
+  networking:
+    type: modified
+    providerConfig:
+      overlay:
+        enabled: false
+    pods: 100.64.0.0/12
+    nodes: 10.180.0.0/16
+    services: 100.104.0.0/13
+    ipFamilies:
+      - IPv4
+  maintenance:
+    autoUpdate:
+      kubernetesVersion: true
+      machineImageVersion: true
+    timeWindow:
+      begin: 000000+0000
+      end: 010000+0000
+  provider:
+    type: modified
+    controlPlaneConfig:
+      apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+      kind: ControlPlaneConfig
+      zone: europe-west1-b
+    infrastructureConfig:
+      apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+      kind: InfrastructureConfig
+      networks:
+        workers: 10.180.0.0/16
+    workers:
+      - cri:
+          name: containerd
+        name: worker-0
+        machine:
+          type: n1-standard-2
+          image:
+            name: gardenlinux
+            version: 1312.3.0
+          architecture: amd64
+        maximum: 2
+        minimum: 1
+        maxSurge: 1
+        maxUnavailable: 0
+        volume:
+          type: pd-balanced
+          size: 50Gi
+        zones:
+          - europe-west1-b
+        systemComponents:
+          allow: true
+    workersSettings:
+      sshAccess:
+        enabled: true
+  purpose: production
+  region: europe-west1
+  secretBindingName: modified
+  seedName: modified
+  systemComponents:
+    coreDNS:
+      autoscaling:
+        mode: horizontal
+    nodeLocalDNS:
+      enabled: true
+  schedulerName: default-scheduler

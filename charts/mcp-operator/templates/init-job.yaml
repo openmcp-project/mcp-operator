@@ -1,0 +1,111 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mcp-operator-init
+  labels:
+    app: cola-onboarding
+    role: mcp-operator
+    chart-name: "{{ .Chart.Name }}"
+    chart-version: "{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+  annotations:
+    helm.sh/hook: post-install,post-upgrade
+    helm.sh/hook-delete-policy: before-hook-creation
+spec:
+  template:
+    metadata:
+      name: mcp-operator-init
+      labels:
+        app: cola-onboarding
+        role: mcp-operator
+        chart-name: "{{ .Chart.Name }}"
+        chart-version: "{{ .Chart.Version }}"
+        release: "{{ .Release.Name }}"
+        heritage: "{{ .Release.Service }}"
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: mcp-operator
+      restartPolicy: Never
+      containers:
+      - name: mcp-operator-init
+        image: "{{ include "image" .Values.image }}"
+        imagePullPolicy: "{{.Values.image.pullPolicy}}"
+        command:
+        - /mcp-operator
+        - --init
+        - --controllers=""
+        {{- if .Values.crds.manage }}
+        - --install-crds
+        {{- end }}
+        {{- if .Values.webhooks.manage }}
+        - --install-webhooks
+        {{- if .Values.webhooks.url }}
+        - --webhooks-base-url={{ .Values.webhooks.url }}
+        - --webhooks-without-ca
+        {{- end }}
+        {{- end }}
+        {{- if and .Values.clusters .Values.clusters.crate }}
+        - --crate-cluster=/etc/config/common/clusters/crate
+        {{- end }}
+        {{- if and .Values.logging .Values.logging.verbosity }}
+        - -v={{ .Values.logging.verbosity }}
+        {{- end }}
+        env:
+        {{- if not .Values.webhooks.disabled }}
+        - name: WEBHOOK_SECRET_NAME
+          value: {{ include "mcp-operator.fullname" . }}-webhooks-tls
+        - name: WEBHOOK_SECRET_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: WEBHOOK_SERVICE_NAME
+          value: {{ include "mcp-operator.fullname" . }}-webhooks
+        - name: WEBHOOK_SERVICE_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+          {{- end }}
+        volumeMounts:
+          - name: common
+            mountPath: /etc/config/common
+            readOnly: true
+      volumes:
+      - name: common
+        projected:
+          sources:
+          {{- if and .Values.clusters }}
+          {{- range $cname, $cvalues := .Values.clusters }}
+          {{- if $cvalues.kubeconfig }}
+          - secret:
+              name: {{ $cname }}-cluster
+              items:
+              - key: kubeconfig
+                path: clusters/{{ $cname }}/kubeconfig
+          {{- else }}
+          - secret:
+              name: {{ $cname }}-cluster
+              items:
+              - key: host
+                path: clusters/{{ $cname }}/host
+              {{- if $cvalues.caData }}
+              - key: caData
+                path: clusters/{{ $cname }}/ca.crt
+              {{- end }}
+          - serviceAccountToken:
+              path: clusters/{{ $cname }}/token
+              expirationSeconds: 7200
+              audience: {{ $cvalues.audience }}
+          {{- if $cvalues.caConfigMapName }}
+          - configMap:
+              name: {{ $cvalues.caConfigMapName }}
+              items:
+              - key: ca.crt
+                path: clusters/{{ $cname }}/ca.crt
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- end }}

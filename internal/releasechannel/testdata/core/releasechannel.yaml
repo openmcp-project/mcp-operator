@@ -1,0 +1,221 @@
+apiVersion: core.orchestrate.cloud.sap/v1beta1
+kind: ReleaseChannel
+metadata:
+  creationTimestamp: "2025-01-27T14:03:12Z"
+  generation: 1
+  labels:
+    kustomize.toolkit.fluxcd.io/name: bootstrap
+    kustomize.toolkit.fluxcd.io/namespace: co-system
+  name: cloudorchestration-default
+  resourceVersion: "108334211"
+  uid: a53b5f82-ee31-4175-8095-056fe8e1d8a6
+spec:
+  interval: 15m
+  ocmRegistryUrl: ghcr.io/openmcp-project/ocm
+  prefixFilter: ghcr.io/openmcp-project
+  pullSecretRef:
+    name: artifactory-readonly-ocm-openmcp
+    namespace: co-system
+status:
+  components:
+    - name: cert-manager
+      versions:
+        - helmChart: cert-manager
+          helmRepo: https://charts.jetstack.io
+          version: 1.13.1
+        - helmChart: cert-manager
+          helmRepo: https://charts.jetstack.io
+          version: 1.16.1
+    - name: crossplane
+      versions:
+        - helmChart: crossplane
+          helmRepo: https://charts.crossplane.io/stable
+          version: 1.15.0
+        - helmChart: crossplane
+          helmRepo: https://charts.crossplane.io/stable
+          version: 1.15.5
+        - helmChart: crossplane
+          helmRepo: https://charts.crossplane.io/stable
+          version: 1.16.0
+        - helmChart: crossplane
+          helmRepo: https://charts.crossplane.io/stable
+          version: 1.16.1
+        - helmChart: crossplane
+          helmRepo: https://charts.crossplane.io/stable
+          version: 1.16.2
+        - helmChart: crossplane
+          helmRepo: https://charts.crossplane.io/stable
+          version: 1.17.0
+        - helmChart: crossplane
+          helmRepo: https://charts.crossplane.io/stable
+          version: 1.17.1
+        - helmChart: crossplane
+          helmRepo: https://charts.crossplane.io/stable
+          version: 1.17.2
+        - helmChart: crossplane
+          helmRepo: https://charts.crossplane.io/stable
+          version: 1.17.3
+        - helmChart: crossplane
+          helmRepo: https://charts.crossplane.io/stable
+          version: 1.18.0
+    - name: external-secrets
+      versions:
+        - helmChart: external-secrets
+          helmRepo: https://charts.external-secrets.io
+          version: 0.10.7
+        - helmChart: external-secrets
+          helmRepo: https://charts.external-secrets.io
+          version: 0.11.0
+        - helmChart: external-secrets
+          helmRepo: https://charts.external-secrets.io
+          version: 0.12.1
+        - helmChart: external-secrets
+          helmRepo: https://charts.external-secrets.io
+          version: 0.13.0
+        - helmChart: external-secrets
+          helmRepo: https://charts.external-secrets.io
+          version: 0.8.0
+    - name: flux
+      versions:
+        - helmChart: flux2
+          helmRepo: https://fluxcd-community.github.io/helm-charts
+          version: 2.12.4
+        - helmChart: flux2
+          helmRepo: https://fluxcd-community.github.io/helm-charts
+          version: 2.13.0
+        - helmChart: flux2
+          helmRepo: https://fluxcd-community.github.io/helm-charts
+          version: 2.14.0
+    - name: kyverno
+      versions:
+        - helmChart: kyverno
+          helmRepo: https://kyverno.github.io/kyverno
+          version: 3.2.4
+    - name: provider-argocd
+      versions:
+        - dockerRef: xpkg.upbound.io/crossplane-contrib/provider-argocd:v0.8.0
+          version: 0.8.0
+        - dockerRef: xpkg.upbound.io/crossplane-contrib/provider-argocd:v0.8.1
+          version: 0.8.1
+        - dockerRef: xpkg.upbound.io/crossplane-contrib/provider-argocd:v0.9.0
+          version: 0.9.0
+        - dockerRef: xpkg.upbound.io/crossplane-contrib/provider-argocd:v0.9.1
+          version: 0.9.1
+    - name: provider-btp
+      versions:
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-btp:v1.0.0
+          version: 1.0.0
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-btp:v1.0.1
+          version: 1.0.1
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-btp:v1.0.2
+          version: 1.0.2
+    - name: provider-btp-account
+      versions:
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-btp-account:0.7.5
+          version: 0.7.5
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-btp-account:0.7.6
+          version: 0.7.6
+    - name: provider-cloudfoundry
+      versions:
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-cloudfoundry:2.2.3
+          version: 2.2.3
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-cloudfoundry:2.2.4
+          version: 2.2.4
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-cloudfoundry:2.2.5
+          version: 2.2.5
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-cloudfoundry:2.3.0
+          version: 2.3.0
+    - name: provider-destinations
+      versions:
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-destinations:1.0.3
+          version: 1.0.3
+    - name: provider-dynatrace
+      versions:
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-dynatrace:1.1.2
+          version: 1.1.2
+    - name: provider-gardener-auth
+      versions:
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-gardener-auth:0.0.4
+          version: 0.0.4
+    - name: provider-hana
+      versions:
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-hana:0.1.0
+          version: 0.1.0
+    - name: provider-helm
+      versions:
+        - dockerRef: xpkg.upbound.io/crossplane-contrib/provider-helm:v0.19.0
+          version: 0.19.0
+    - name: provider-hyperscaler
+      versions:
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-hyperscaler:0.0.1
+          version: 0.0.1
+    - name: provider-ias
+      versions:
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-ias:0.2.0
+          version: 0.2.0
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-ias:0.2.1
+          version: 0.2.1
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-ias:0.2.2
+          version: 0.2.2
+    - name: provider-kubernetes
+      versions:
+        - dockerRef: xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.14.0
+          version: 0.14.0
+        - dockerRef: xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.14.1
+          version: 0.14.1
+        - dockerRef: xpkg.upbound.io/crossplane-contrib/provider-kubernetes:v0.15.0
+          version: 0.15.0
+    - name: provider-message-queue
+      versions:
+        - dockerRef: ghcr.io/sap/crossplane-provider-btp/crossplane/provider-message-queue:1.0.1
+          version: 1.0.1
+    - name: provider-terraform
+      versions:
+        - dockerRef: xpkg.upbound.io/upbound/provider-terraform:v0.16.0
+          version: 0.16.0
+    - name: provider-vault
+      versions:
+        - dockerRef: xpkg.upbound.io/upbound/provider-vault:v1.0.0
+          version: 1.0.0
+    - name: sap-btp-service-operator
+      versions:
+        - helmChart: sap-btp-operator
+          helmRepo: https://sap.github.io/sap-btp-service-operator
+          version: 0.5.4
+        - helmChart: sap-btp-operator
+          helmRepo: https://sap.github.io/sap-btp-service-operator
+          version: 0.6.0
+        - helmChart: sap-btp-operator
+          helmRepo: https://sap.github.io/sap-btp-service-operator
+          version: 0.6.1
+        - helmChart: sap-btp-operator
+          helmRepo: https://sap.github.io/sap-btp-service-operator
+          version: 0.6.2
+        - helmChart: sap-btp-operator
+          helmRepo: https://sap.github.io/sap-btp-service-operator
+          version: 0.6.3
+        - helmChart: sap-btp-operator
+          helmRepo: https://sap.github.io/sap-btp-service-operator
+          version: 0.6.4
+        - helmChart: sap-btp-operator
+          helmRepo: https://sap.github.io/sap-btp-service-operator
+          version: 0.6.5
+        - helmChart: sap-btp-operator
+          helmRepo: https://sap.github.io/sap-btp-service-operator
+          version: 0.6.6
+        - helmChart: sap-btp-operator
+          helmRepo: https://sap.github.io/sap-btp-service-operator
+          version: 0.6.8
+    - name: syncer
+      versions:
+        - helmChart: co-syncer
+          helmRepo: https://example.com/artifactory/api/helm/deploy-releases-hyperspace-helm
+          version: 0.3.1
+        - helmChart: co-syncer
+          helmRepo: https://example.com/artifactory/api/helm/deploy-releases-hyperspace-helm
+          version: 0.3.2
+    - name: velero
+      versions:
+        - helmChart: velero
+          helmRepo: https://vmware-tanzu.github.io/helm-charts/
+          version: 7.1.0

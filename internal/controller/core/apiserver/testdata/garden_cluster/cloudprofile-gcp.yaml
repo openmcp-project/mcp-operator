@@ -1,0 +1,2089 @@
+apiVersion: core.gardener.cloud/v1beta1
+kind: CloudProfile
+metadata:
+  name: gcp
+spec:
+  kubernetes:
+    versions:
+    - classification: preview
+      version: 1.29.4
+    - classification: supported
+      expirationDate: "2025-04-15T23:59:59Z"
+      version: 1.29.3
+    - classification: deprecated
+      expirationDate: "2025-04-15T23:59:59Z"
+      version: 1.29.2
+    - classification: deprecated
+      expirationDate: "2025-04-15T23:59:59Z"
+      version: 1.29.1
+    - classification: preview
+      expirationDate: "2024-12-15T23:59:59Z"
+      version: 1.28.9
+    - classification: supported
+      expirationDate: "2024-12-15T23:59:59Z"
+      version: 1.28.8
+    - classification: deprecated
+      expirationDate: "2024-12-15T23:59:59Z"
+      version: 1.28.7
+    - classification: deprecated
+      expirationDate: "2024-12-15T23:59:59Z"
+      version: 1.28.6
+    - classification: deprecated
+      expirationDate: "2024-12-15T23:59:59Z"
+      version: 1.28.4
+    - classification: preview
+      expirationDate: "2024-09-30T23:59:59Z"
+      version: 1.27.13
+    - classification: supported
+      expirationDate: "2024-09-30T23:59:59Z"
+      version: 1.27.12
+    - classification: deprecated
+      expirationDate: "2024-09-30T23:59:59Z"
+      version: 1.27.11
+    - classification: deprecated
+      expirationDate: "2024-08-11T23:59:59Z"
+      version: 1.27.10
+    - classification: deprecated
+      expirationDate: "2024-08-11T23:59:59Z"
+      version: 1.27.9
+    - classification: deprecated
+      expirationDate: "2024-08-11T23:59:59Z"
+      version: 1.27.8
+    - classification: deprecated
+      expirationDate: "2024-08-11T23:59:59Z"
+      version: 1.27.7
+    - classification: deprecated
+      expirationDate: "2024-08-11T23:59:59Z"
+      version: 1.27.6
+    - classification: deprecated
+      expirationDate: "2024-08-11T23:59:59Z"
+      version: 1.27.5
+    - classification: deprecated
+      expirationDate: "2024-08-31T23:59:59Z"
+      version: 1.26.15
+    - classification: deprecated
+      expirationDate: "2024-08-31T23:59:59Z"
+      version: 1.26.14
+    - classification: deprecated
+      expirationDate: "2024-06-30T23:59:59Z"
+      version: 1.26.13
+    - classification: deprecated
+      expirationDate: "2024-05-31T23:59:59Z"
+      version: 1.26.11
+    - classification: deprecated
+      expirationDate: "2024-05-31T23:59:59Z"
+      version: 1.26.10
+    - classification: deprecated
+      expirationDate: "2024-05-20T23:59:59Z"
+      version: 1.26.9
+    - classification: deprecated
+      expirationDate: "2024-04-09T23:59:59Z"
+      version: 1.26.8
+    - classification: deprecated
+      expirationDate: "2024-04-09T23:59:59Z"
+      version: 1.26.7
+    - classification: deprecated
+      expirationDate: "2024-04-09T23:59:59Z"
+      version: 1.26.6
+    - classification: deprecated
+      expirationDate: "2024-04-09T23:59:59Z"
+      version: 1.26.5
+    - classification: deprecated
+      expirationDate: "2024-07-31T23:59:59Z"
+      version: 1.25.16
+    - classification: deprecated
+      expirationDate: "2024-05-31T23:59:59Z"
+      version: 1.25.15
+    - classification: deprecated
+      expirationDate: "2024-05-20T23:59:59Z"
+      version: 1.25.14
+  machineImages:
+  - name: gardenlinux
+    updateStrategy: minor
+    versions:
+    - architectures:
+      - amd64
+      - arm64
+      classification: preview
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      version: 1443.5.0
+    - architectures:
+      - amd64
+      - arm64
+      classification: supported
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      version: 1443.3.0
+    - architectures:
+      - amd64
+      - arm64
+      classification: deprecated
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      expirationDate: "2024-06-23T23:59:59Z"
+      version: 1443.2.0
+    - architectures:
+      - amd64
+      - arm64
+      classification: deprecated
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      expirationDate: "2024-04-17T23:59:59Z"
+      version: 1443.1.0
+    - architectures:
+      - amd64
+      - arm64
+      classification: deprecated
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      expirationDate: "2024-04-17T23:59:59Z"
+      version: 1443.0.0
+    - architectures:
+      - amd64
+      - arm64
+      classification: supported
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      version: 1312.3.0
+    - architectures:
+      - amd64
+      - arm64
+      classification: deprecated
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      expirationDate: "2024-09-01T23:59:59Z"
+      version: 1312.2.0
+    - architectures:
+      - amd64
+      - arm64
+      classification: deprecated
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      expirationDate: "2024-09-01T23:59:59Z"
+      version: 1312.1.0
+    - architectures:
+      - amd64
+      - arm64
+      classification: deprecated
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      expirationDate: "2024-02-29T23:59:59Z"
+      version: 1312.0.0
+    - architectures:
+      - amd64
+      - arm64
+      classification: deprecated
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      expirationDate: "2024-07-15T23:59:59Z"
+      version: 934.11.0
+    - architectures:
+      - amd64
+      - arm64
+      classification: deprecated
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      expirationDate: "2024-05-15T23:59:59Z"
+      version: 934.10.0
+    - architectures:
+      - amd64
+      - arm64
+      classification: deprecated
+      cri:
+      - containerRuntimes:
+        - type: gvisor
+        name: containerd
+      expirationDate: "2024-02-29T23:59:59Z"
+      version: 934.9.0
+  machineTypes:
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 7Gi
+    name: n1-standard-2
+    usable: true
+  - architecture: amd64
+    cpu: "12"
+    gpu: "0"
+    memory: 85Gi
+    name: a2-highgpu-1g
+    usable: true
+  - architecture: amd64
+    cpu: "24"
+    gpu: "0"
+    memory: 170Gi
+    name: a2-highgpu-2g
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 340Gi
+    name: a2-highgpu-4g
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 680Gi
+    name: a2-highgpu-8g
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 1360Gi
+    name: a2-megagpu-16g
+    usable: true
+  - architecture: amd64
+    cpu: "12"
+    gpu: "0"
+    memory: 170Gi
+    name: a2-ultragpu-1g
+    usable: true
+  - architecture: amd64
+    cpu: "24"
+    gpu: "0"
+    memory: 340Gi
+    name: a2-ultragpu-2g
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 680Gi
+    name: a2-ultragpu-4g
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 1360Gi
+    name: a2-ultragpu-8g
+    usable: true
+  - architecture: amd64
+    cpu: "208"
+    gpu: "0"
+    memory: 1872Gi
+    name: a3-highgpu-8g
+    usable: true
+  - architecture: amd64
+    cpu: "208"
+    gpu: "0"
+    memory: 1872Gi
+    name: a3-megagpu-8g
+    usable: true
+  - architecture: amd64
+    cpu: "56"
+    gpu: "0"
+    memory: 112Gi
+    name: c2-highcpu-56
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: c2-standard-16
+    usable: true
+  - architecture: amd64
+    cpu: "30"
+    gpu: "0"
+    memory: 120Gi
+    name: c2-standard-30
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: c2-standard-4
+    usable: true
+  - architecture: amd64
+    cpu: "56"
+    gpu: "0"
+    memory: 224Gi
+    name: c2-standard-56
+    usable: true
+  - architecture: amd64
+    cpu: "60"
+    gpu: "0"
+    memory: 240Gi
+    name: c2-standard-60
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: c2-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "112"
+    gpu: "0"
+    memory: 224Gi
+    name: c2d-highcpu-112
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 32Gi
+    name: c2d-highcpu-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 4Gi
+    name: c2d-highcpu-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 64Gi
+    name: c2d-highcpu-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 8Gi
+    name: c2d-highcpu-4
+    usable: true
+  - architecture: amd64
+    cpu: "56"
+    gpu: "0"
+    memory: 112Gi
+    name: c2d-highcpu-56
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 16Gi
+    name: c2d-highcpu-8
+    usable: true
+  - architecture: amd64
+    cpu: "112"
+    gpu: "0"
+    memory: 896Gi
+    name: c2d-highmem-112
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: c2d-highmem-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 16Gi
+    name: c2d-highmem-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 256Gi
+    name: c2d-highmem-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: c2d-highmem-4
+    usable: true
+  - architecture: amd64
+    cpu: "56"
+    gpu: "0"
+    memory: 448Gi
+    name: c2d-highmem-56
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: c2d-highmem-8
+    usable: true
+  - architecture: amd64
+    cpu: "112"
+    gpu: "0"
+    memory: 448Gi
+    name: c2d-standard-112
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: c2d-standard-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: c2d-standard-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: c2d-standard-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: c2d-standard-4
+    usable: true
+  - architecture: amd64
+    cpu: "56"
+    gpu: "0"
+    memory: 224Gi
+    name: c2d-standard-56
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: c2d-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "176"
+    gpu: "0"
+    memory: 352Gi
+    name: c3-highcpu-176
+    usable: true
+  - architecture: amd64
+    cpu: "22"
+    gpu: "0"
+    memory: 44Gi
+    name: c3-highcpu-22
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 8Gi
+    name: c3-highcpu-4
+    usable: true
+  - architecture: amd64
+    cpu: "44"
+    gpu: "0"
+    memory: 88Gi
+    name: c3-highcpu-44
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 16Gi
+    name: c3-highcpu-8
+    usable: true
+  - architecture: amd64
+    cpu: "88"
+    gpu: "0"
+    memory: 176Gi
+    name: c3-highcpu-88
+    usable: true
+  - architecture: amd64
+    cpu: "176"
+    gpu: "0"
+    memory: 1408Gi
+    name: c3-highmem-176
+    usable: true
+  - architecture: amd64
+    cpu: "22"
+    gpu: "0"
+    memory: 176Gi
+    name: c3-highmem-22
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: c3-highmem-4
+    usable: true
+  - architecture: amd64
+    cpu: "44"
+    gpu: "0"
+    memory: 352Gi
+    name: c3-highmem-44
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: c3-highmem-8
+    usable: true
+  - architecture: amd64
+    cpu: "88"
+    gpu: "0"
+    memory: 704Gi
+    name: c3-highmem-88
+    usable: true
+  - architecture: amd64
+    cpu: "176"
+    gpu: "0"
+    memory: 704Gi
+    name: c3-standard-176
+    usable: true
+  - architecture: amd64
+    cpu: "176"
+    gpu: "0"
+    memory: 704Gi
+    name: c3-standard-176-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "22"
+    gpu: "0"
+    memory: 88Gi
+    name: c3-standard-22
+    usable: true
+  - architecture: amd64
+    cpu: "22"
+    gpu: "0"
+    memory: 88Gi
+    name: c3-standard-22-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: c3-standard-4
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: c3-standard-4-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "44"
+    gpu: "0"
+    memory: 176Gi
+    name: c3-standard-44
+    usable: true
+  - architecture: amd64
+    cpu: "44"
+    gpu: "0"
+    memory: 176Gi
+    name: c3-standard-44-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: c3-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: c3-standard-8-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "88"
+    gpu: "0"
+    memory: 352Gi
+    name: c3-standard-88
+    usable: true
+  - architecture: amd64
+    cpu: "88"
+    gpu: "0"
+    memory: 352Gi
+    name: c3-standard-88-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 32Gi
+    name: c3d-highcpu-16
+    usable: true
+  - architecture: amd64
+    cpu: "180"
+    gpu: "0"
+    memory: 354Gi
+    name: c3d-highcpu-180
+    usable: true
+  - architecture: amd64
+    cpu: "30"
+    gpu: "0"
+    memory: 59Gi
+    name: c3d-highcpu-30
+    usable: true
+  - architecture: amd64
+    cpu: "360"
+    gpu: "0"
+    memory: 708Gi
+    name: c3d-highcpu-360
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 8Gi
+    name: c3d-highcpu-4
+    usable: true
+  - architecture: amd64
+    cpu: "60"
+    gpu: "0"
+    memory: 118Gi
+    name: c3d-highcpu-60
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 16Gi
+    name: c3d-highcpu-8
+    usable: true
+  - architecture: amd64
+    cpu: "90"
+    gpu: "0"
+    memory: 177Gi
+    name: c3d-highcpu-90
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: c3d-highmem-16
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: c3d-highmem-16-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "180"
+    gpu: "0"
+    memory: 1440Gi
+    name: c3d-highmem-180
+    usable: true
+  - architecture: amd64
+    cpu: "180"
+    gpu: "0"
+    memory: 1440Gi
+    name: c3d-highmem-180-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "30"
+    gpu: "0"
+    memory: 240Gi
+    name: c3d-highmem-30
+    usable: true
+  - architecture: amd64
+    cpu: "30"
+    gpu: "0"
+    memory: 240Gi
+    name: c3d-highmem-30-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "360"
+    gpu: "0"
+    memory: 2880Gi
+    name: c3d-highmem-360
+    usable: true
+  - architecture: amd64
+    cpu: "360"
+    gpu: "0"
+    memory: 2880Gi
+    name: c3d-highmem-360-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: c3d-highmem-4
+    usable: true
+  - architecture: amd64
+    cpu: "60"
+    gpu: "0"
+    memory: 480Gi
+    name: c3d-highmem-60
+    usable: true
+  - architecture: amd64
+    cpu: "60"
+    gpu: "0"
+    memory: 480Gi
+    name: c3d-highmem-60-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: c3d-highmem-8
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: c3d-highmem-8-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "90"
+    gpu: "0"
+    memory: 720Gi
+    name: c3d-highmem-90
+    usable: true
+  - architecture: amd64
+    cpu: "90"
+    gpu: "0"
+    memory: 720Gi
+    name: c3d-highmem-90-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: c3d-standard-16
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: c3d-standard-16-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "180"
+    gpu: "0"
+    memory: 720Gi
+    name: c3d-standard-180
+    usable: true
+  - architecture: amd64
+    cpu: "180"
+    gpu: "0"
+    memory: 720Gi
+    name: c3d-standard-180-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "30"
+    gpu: "0"
+    memory: 120Gi
+    name: c3d-standard-30
+    usable: true
+  - architecture: amd64
+    cpu: "30"
+    gpu: "0"
+    memory: 120Gi
+    name: c3d-standard-30-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "360"
+    gpu: "0"
+    memory: 1440Gi
+    name: c3d-standard-360
+    usable: true
+  - architecture: amd64
+    cpu: "360"
+    gpu: "0"
+    memory: 1440Gi
+    name: c3d-standard-360-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: c3d-standard-4
+    usable: true
+  - architecture: amd64
+    cpu: "60"
+    gpu: "0"
+    memory: 240Gi
+    name: c3d-standard-60
+    usable: true
+  - architecture: amd64
+    cpu: "60"
+    gpu: "0"
+    memory: 240Gi
+    name: c3d-standard-60-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: c3d-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: c3d-standard-8-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "90"
+    gpu: "0"
+    memory: 360Gi
+    name: c3d-standard-90
+    usable: true
+  - architecture: amd64
+    cpu: "90"
+    gpu: "0"
+    memory: 360Gi
+    name: c3d-standard-90-lssd
+    usable: true
+  - architecture: amd64
+    cpu: "240"
+    gpu: "0"
+    memory: 407Gi
+    name: ct4p-hightpu-4t
+    usable: true
+  - architecture: amd64
+    cpu: "24"
+    gpu: "0"
+    memory: 48Gi
+    name: ct5l-hightpu-1t
+    usable: true
+  - architecture: amd64
+    cpu: "112"
+    gpu: "0"
+    memory: 192Gi
+    name: ct5l-hightpu-4t
+    usable: true
+  - architecture: amd64
+    cpu: "224"
+    gpu: "0"
+    memory: 384Gi
+    name: ct5l-hightpu-8t
+    usable: true
+  - architecture: amd64
+    cpu: "24"
+    gpu: "0"
+    memory: 48Gi
+    name: ct5lp-hightpu-1t
+    usable: true
+  - architecture: amd64
+    cpu: "112"
+    gpu: "0"
+    memory: 192Gi
+    name: ct5lp-hightpu-4t
+    usable: true
+  - architecture: amd64
+    cpu: "224"
+    gpu: "0"
+    memory: 384Gi
+    name: ct5lp-hightpu-8t
+    usable: true
+  - architecture: amd64
+    cpu: "208"
+    gpu: "0"
+    memory: 448Gi
+    name: ct5p-hightpu-4t
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 16Gi
+    name: e2-highcpu-16
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 32Gi
+    name: e2-highcpu-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 4Gi
+    name: e2-highcpu-4
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 8Gi
+    name: e2-highcpu-8
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: e2-highmem-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 16Gi
+    name: e2-highmem-2
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: e2-highmem-4
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: e2-highmem-8
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 4Gi
+    name: e2-medium
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: e2-standard-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: e2-standard-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: e2-standard-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: e2-standard-4
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: e2-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "12"
+    gpu: "0"
+    memory: 48Gi
+    name: g2-standard-12
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: g2-standard-16
+    usable: true
+  - architecture: amd64
+    cpu: "24"
+    gpu: "0"
+    memory: 96Gi
+    name: g2-standard-24
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: g2-standard-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: g2-standard-4
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 192Gi
+    name: g2-standard-48
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: g2-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 384Gi
+    name: g2-standard-96
+    usable: true
+  - architecture: amd64
+    cpu: "88"
+    gpu: "0"
+    memory: 352Gi
+    name: h3-standard-88
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 1433Gi
+    name: m1-megamem-96
+    usable: true
+  - architecture: amd64
+    cpu: "160"
+    gpu: "0"
+    memory: 3844Gi
+    name: m1-ultramem-160
+    usable: true
+  - architecture: amd64
+    cpu: "40"
+    gpu: "0"
+    memory: 961Gi
+    name: m1-ultramem-40
+    usable: true
+  - architecture: amd64
+    cpu: "80"
+    gpu: "0"
+    memory: 1922Gi
+    name: m1-ultramem-80
+    usable: true
+  - architecture: amd64
+    cpu: "416"
+    gpu: "0"
+    memory: 8832Gi
+    name: m2-hypermem-416
+    usable: true
+  - architecture: amd64
+    cpu: "416"
+    gpu: "0"
+    memory: 5888Gi
+    name: m2-megamem-416
+    usable: true
+  - architecture: amd64
+    cpu: "208"
+    gpu: "0"
+    memory: 5888Gi
+    name: m2-ultramem-208
+    usable: true
+  - architecture: amd64
+    cpu: "416"
+    gpu: "0"
+    memory: 11776Gi
+    name: m2-ultramem-416
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 1250Gi
+    name: m2-ultramem2x-96
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 600Gi
+    name: m2-ultramemx-96
+    usable: true
+  - architecture: amd64
+    cpu: "128"
+    gpu: "0"
+    memory: 1952Gi
+    name: m3-megamem-128
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 976Gi
+    name: m3-megamem-64
+    usable: true
+  - architecture: amd64
+    cpu: "128"
+    gpu: "0"
+    memory: 3904Gi
+    name: m3-ultramem-128
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 976Gi
+    name: m3-ultramem-32
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 1952Gi
+    name: m3-ultramem-64
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 14Gi
+    name: n1-highcpu-16
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 28Gi
+    name: n1-highcpu-32
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 57Gi
+    name: n1-highcpu-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 7Gi
+    name: n1-highcpu-8
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 86Gi
+    name: n1-highcpu-96
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 104Gi
+    name: n1-highmem-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 13Gi
+    name: n1-highmem-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 208Gi
+    name: n1-highmem-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 26Gi
+    name: n1-highmem-4
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 416Gi
+    name: n1-highmem-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 52Gi
+    name: n1-highmem-8
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 624Gi
+    name: n1-highmem-96
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 60Gi
+    name: n1-standard-16
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 120Gi
+    name: n1-standard-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 15Gi
+    name: n1-standard-4
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 240Gi
+    name: n1-standard-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 30Gi
+    name: n1-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 360Gi
+    name: n1-standard-96
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 16Gi
+    name: n2-highcpu-16
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 32Gi
+    name: n2-highcpu-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 4Gi
+    name: n2-highcpu-4
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 48Gi
+    name: n2-highcpu-48
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 64Gi
+    name: n2-highcpu-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 8Gi
+    name: n2-highcpu-8
+    usable: true
+  - architecture: amd64
+    cpu: "80"
+    gpu: "0"
+    memory: 80Gi
+    name: n2-highcpu-80
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 96Gi
+    name: n2-highcpu-96
+    usable: true
+  - architecture: amd64
+    cpu: "128"
+    gpu: "0"
+    memory: 864Gi
+    name: n2-highmem-128
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: n2-highmem-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 16Gi
+    name: n2-highmem-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 256Gi
+    name: n2-highmem-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: n2-highmem-4
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 384Gi
+    name: n2-highmem-48
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 512Gi
+    name: n2-highmem-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: n2-highmem-8
+    usable: true
+  - architecture: amd64
+    cpu: "80"
+    gpu: "0"
+    memory: 640Gi
+    name: n2-highmem-80
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 768Gi
+    name: n2-highmem-96
+    usable: true
+  - architecture: amd64
+    cpu: "128"
+    gpu: "0"
+    memory: 512Gi
+    name: n2-standard-128
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: n2-standard-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: n2-standard-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: n2-standard-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: n2-standard-4
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 192Gi
+    name: n2-standard-48
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 256Gi
+    name: n2-standard-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: n2-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "80"
+    gpu: "0"
+    memory: 320Gi
+    name: n2-standard-80
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 384Gi
+    name: n2-standard-96
+    usable: true
+  - architecture: amd64
+    cpu: "128"
+    gpu: "0"
+    memory: 128Gi
+    name: n2d-highcpu-128
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 16Gi
+    name: n2d-highcpu-16
+    usable: true
+  - architecture: amd64
+    cpu: "224"
+    gpu: "0"
+    memory: 224Gi
+    name: n2d-highcpu-224
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 32Gi
+    name: n2d-highcpu-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 4Gi
+    name: n2d-highcpu-4
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 48Gi
+    name: n2d-highcpu-48
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 64Gi
+    name: n2d-highcpu-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 8Gi
+    name: n2d-highcpu-8
+    usable: true
+  - architecture: amd64
+    cpu: "80"
+    gpu: "0"
+    memory: 80Gi
+    name: n2d-highcpu-80
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 96Gi
+    name: n2d-highcpu-96
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: n2d-highmem-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 16Gi
+    name: n2d-highmem-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 256Gi
+    name: n2d-highmem-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: n2d-highmem-4
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 384Gi
+    name: n2d-highmem-48
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 512Gi
+    name: n2d-highmem-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: n2d-highmem-8
+    usable: true
+  - architecture: amd64
+    cpu: "80"
+    gpu: "0"
+    memory: 640Gi
+    name: n2d-highmem-80
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 768Gi
+    name: n2d-highmem-96
+    usable: true
+  - architecture: amd64
+    cpu: "128"
+    gpu: "0"
+    memory: 512Gi
+    name: n2d-standard-128
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: n2d-standard-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: n2d-standard-2
+    usable: true
+  - architecture: amd64
+    cpu: "224"
+    gpu: "0"
+    memory: 896Gi
+    name: n2d-standard-224
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: n2d-standard-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: n2d-standard-4
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 192Gi
+    name: n2d-standard-48
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 256Gi
+    name: n2d-standard-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: n2d-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "80"
+    gpu: "0"
+    memory: 320Gi
+    name: n2d-standard-80
+    usable: true
+  - architecture: amd64
+    cpu: "96"
+    gpu: "0"
+    memory: 384Gi
+    name: n2d-standard-96
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 32Gi
+    name: n4-highcpu-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 4Gi
+    name: n4-highcpu-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 64Gi
+    name: n4-highcpu-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 8Gi
+    name: n4-highcpu-4
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 96Gi
+    name: n4-highcpu-48
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 128Gi
+    name: n4-highcpu-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 16Gi
+    name: n4-highcpu-8
+    usable: true
+  - architecture: amd64
+    cpu: "80"
+    gpu: "0"
+    memory: 160Gi
+    name: n4-highcpu-80
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 128Gi
+    name: n4-highmem-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 16Gi
+    name: n4-highmem-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 256Gi
+    name: n4-highmem-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 32Gi
+    name: n4-highmem-4
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 384Gi
+    name: n4-highmem-48
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 512Gi
+    name: n4-highmem-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 64Gi
+    name: n4-highmem-8
+    usable: true
+  - architecture: amd64
+    cpu: "80"
+    gpu: "0"
+    memory: 640Gi
+    name: n4-highmem-80
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: n4-standard-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: n4-standard-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: n4-standard-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: n4-standard-4
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 192Gi
+    name: n4-standard-48
+    usable: true
+  - architecture: amd64
+    cpu: "64"
+    gpu: "0"
+    memory: 256Gi
+    name: n4-standard-64
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: n4-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "80"
+    gpu: "0"
+    memory: 320Gi
+    name: n4-standard-80
+    usable: true
+  - architecture: arm64
+    cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: t2a-standard-16
+    usable: true
+  - architecture: arm64
+    cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: t2a-standard-2
+    usable: true
+  - architecture: arm64
+    cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: t2a-standard-32
+    usable: true
+  - architecture: arm64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: t2a-standard-4
+    usable: true
+  - architecture: arm64
+    cpu: "48"
+    gpu: "0"
+    memory: 192Gi
+    name: t2a-standard-48
+    usable: true
+  - architecture: arm64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: t2a-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "16"
+    gpu: "0"
+    memory: 64Gi
+    name: t2d-standard-16
+    usable: true
+  - architecture: amd64
+    cpu: "2"
+    gpu: "0"
+    memory: 8Gi
+    name: t2d-standard-2
+    usable: true
+  - architecture: amd64
+    cpu: "32"
+    gpu: "0"
+    memory: 128Gi
+    name: t2d-standard-32
+    usable: true
+  - architecture: amd64
+    cpu: "4"
+    gpu: "0"
+    memory: 16Gi
+    name: t2d-standard-4
+    usable: true
+  - architecture: amd64
+    cpu: "48"
+    gpu: "0"
+    memory: 192Gi
+    name: t2d-standard-48
+    usable: true
+  - architecture: amd64
+    cpu: "60"
+    gpu: "0"
+    memory: 240Gi
+    name: t2d-standard-60
+    usable: true
+  - architecture: amd64
+    cpu: "8"
+    gpu: "0"
+    memory: 32Gi
+    name: t2d-standard-8
+    usable: true
+  - architecture: amd64
+    cpu: "176"
+    gpu: "0"
+    memory: 1408Gi
+    name: z3-highmem-176
+    usable: true
+  - architecture: amd64
+    cpu: "88"
+    gpu: "0"
+    memory: 704Gi
+    name: z3-highmem-88
+    usable: true
+  providerConfig:
+    apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+    kind: CloudProfileConfig
+    machineImages:
+    - name: gardenlinux
+      versions:
+      - architecture: amd64
+        image: images/gardenlinux-amd64-1443-5-bfb687a7
+        version: 1443.5.0
+      - architecture: arm64
+        image: images/gardenlinux-arm64-1443-5-bfb687a7
+        version: 1443.5.0
+      - architecture: amd64
+        image: images/gardenlinux-amd64-1443-3-c261f887
+        version: 1443.3.0
+      - architecture: arm64
+        image: images/gardenlinux-arm64-1443-3-c261f887
+        version: 1443.3.0
+      - architecture: amd64
+        image: images/gardenlinux-amd64-1443-2-7c14ae22
+        version: 1443.2.0
+      - architecture: arm64
+        image: images/gardenlinux-arm64-1443-2-7c14ae22
+        version: 1443.2.0
+      - architecture: amd64
+        image: images/gardenlinux-amd64-1443-1-36c740a4
+        version: 1443.1.0
+      - architecture: arm64
+        image: images/gardenlinux-arm64-1443-1-36c740a4
+        version: 1443.1.0
+      - architecture: amd64
+        image: images/gardenlinux-amd64-1443-0-ea851d67
+        version: 1443.0.0
+      - architecture: arm64
+        image: images/gardenlinux-arm64-1443-0-ea851d67
+        version: 1443.0.0
+      - architecture: amd64
+        image: images/gardenlinux-amd64-1312-3-3dc9d0b5
+        version: 1312.3.0
+      - architecture: arm64
+        image: images/gardenlinux-arm64-1312-3-3dc9d0b5
+        version: 1312.3.0
+      - architecture: amd64
+        image: images/gardenlinux-amd64-1312-2-77c8471d
+        version: 1312.2.0
+      - architecture: arm64
+        image: images/gardenlinux-arm64-1312-2-77c8471d
+        version: 1312.2.0
+      - architecture: amd64
+        image: images/gardenlinux-amd64-1312-1-c6ebc74e
+        version: 1312.1.0
+      - architecture: arm64
+        image: images/gardenlinux-arm64-1312-1-c6ebc74e
+        version: 1312.1.0
+      - architecture: amd64
+        image: images/gardenlinux-amd64-1312-0-40b9db2c
+        version: 1312.0.0
+      - architecture: arm64
+        image: images/gardenlinux-arm64-1312-0-40b9db2c
+        version: 1312.0.0
+      - architecture: amd64
+        image: images/gardenlinux-amd64-934-11-75132b8
+        version: 934.11.0
+      - architecture: amd64
+        image: images/gardenlinux-amd64-934-10-f057c9b
+        version: 934.10.0
+      - architecture: amd64
+        image: images/gardenlinux-amd64-934-9-54c63e5
+        version: 934.9.0
+  regions:
+  - name: africa-south1
+    zones:
+    - name: africa-south1-a
+    - name: africa-south1-b
+    - name: africa-south1-c
+  - name: asia-east1
+    zones:
+    - name: asia-east1-a
+    - name: asia-east1-b
+    - name: asia-east1-c
+  - name: asia-east2
+    zones:
+    - name: asia-east2-a
+    - name: asia-east2-b
+    - name: asia-east2-c
+  - name: asia-northeast1
+    zones:
+    - name: asia-northeast1-a
+    - name: asia-northeast1-b
+    - name: asia-northeast1-c
+  - name: asia-northeast2
+    zones:
+    - name: asia-northeast2-a
+    - name: asia-northeast2-b
+    - name: asia-northeast2-c
+  - name: asia-northeast3
+    zones:
+    - name: asia-northeast3-a
+    - name: asia-northeast3-b
+    - name: asia-northeast3-c
+  - name: asia-south1
+    zones:
+    - name: asia-south1-a
+    - name: asia-south1-b
+    - name: asia-south1-c
+  - name: asia-south2
+    zones:
+    - name: asia-south2-a
+    - name: asia-south2-b
+    - name: asia-south2-c
+  - name: asia-southeast1
+    zones:
+    - name: asia-southeast1-a
+    - name: asia-southeast1-b
+    - name: asia-southeast1-c
+  - name: asia-southeast2
+    zones:
+    - name: asia-southeast2-a
+    - name: asia-southeast2-b
+    - name: asia-southeast2-c
+  - name: australia-southeast1
+    zones:
+    - name: australia-southeast1-a
+    - name: australia-southeast1-b
+    - name: australia-southeast1-c
+  - name: australia-southeast2
+    zones:
+    - name: australia-southeast2-a
+    - name: australia-southeast2-b
+    - name: australia-southeast2-c
+  - name: europe-central2
+    zones:
+    - name: europe-central2-a
+    - name: europe-central2-b
+    - name: europe-central2-c
+  - name: europe-north1
+    zones:
+    - name: europe-north1-a
+    - name: europe-north1-b
+    - name: europe-north1-c
+  - name: europe-southwest1
+    zones:
+    - name: europe-southwest1-a
+    - name: europe-southwest1-b
+    - name: europe-southwest1-c
+  - name: europe-west1
+    zones:
+    - name: europe-west1-b
+    - name: europe-west1-c
+    - name: europe-west1-d
+  - name: europe-west10
+    zones:
+    - name: europe-west10-a
+    - name: europe-west10-b
+    - name: europe-west10-c
+  - name: europe-west12
+    zones:
+    - name: europe-west12-a
+    - name: europe-west12-b
+    - name: europe-west12-c
+  - name: europe-west2
+    zones:
+    - name: europe-west2-a
+    - name: europe-west2-b
+    - name: europe-west2-c
+  - name: europe-west3
+    zones:
+    - name: europe-west3-a
+    - name: europe-west3-b
+    - name: europe-west3-c
+  - name: europe-west4
+    zones:
+    - name: europe-west4-a
+    - name: europe-west4-b
+    - name: europe-west4-c
+  - name: europe-west5
+    zones:
+    - name: europe-west5-a
+    - name: europe-west5-b
+    - name: europe-west5-c
+  - name: europe-west6
+    zones:
+    - name: europe-west6-a
+    - name: europe-west6-b
+    - name: europe-west6-c
+  - name: europe-west8
+    zones:
+    - name: europe-west8-a
+    - name: europe-west8-b
+    - name: europe-west8-c
+  - name: europe-west9
+    zones:
+    - name: europe-west9-a
+    - name: europe-west9-b
+    - name: europe-west9-c
+  - name: me-central1
+    zones:
+    - name: me-central1-a
+    - name: me-central1-b
+    - name: me-central1-c
+  - name: me-central2
+    zones:
+    - name: me-central2-a
+    - name: me-central2-b
+    - name: me-central2-c
+  - name: me-west1
+    zones:
+    - name: me-west1-a
+    - name: me-west1-b
+    - name: me-west1-c
+  - name: northamerica-northeast1
+    zones:
+    - name: northamerica-northeast1-a
+    - name: northamerica-northeast1-b
+    - name: northamerica-northeast1-c
+  - name: northamerica-northeast2
+    zones:
+    - name: northamerica-northeast2-a
+    - name: northamerica-northeast2-b
+    - name: northamerica-northeast2-c
+  - name: southamerica-east1
+    zones:
+    - name: southamerica-east1-a
+    - name: southamerica-east1-b
+    - name: southamerica-east1-c
+  - name: southamerica-west1
+    zones:
+    - name: southamerica-west1-a
+    - name: southamerica-west1-b
+    - name: southamerica-west1-c
+  - name: us-central1
+    zones:
+    - name: us-central1-a
+    - name: us-central1-b
+    - name: us-central1-c
+    - name: us-central1-f
+  - name: us-east1
+    zones:
+    - name: us-east1-b
+    - name: us-east1-c
+    - name: us-east1-d
+  - name: us-east4
+    zones:
+    - name: us-east4-a
+    - name: us-east4-b
+    - name: us-east4-c
+  - name: us-east5
+    zones:
+    - name: us-east5-a
+    - name: us-east5-b
+    - name: us-east5-c
+  - name: us-south1
+    zones:
+    - name: us-south1-a
+    - name: us-south1-b
+    - name: us-south1-c
+  - name: us-west1
+    zones:
+    - name: us-west1-a
+    - name: us-west1-b
+    - name: us-west1-c
+  - name: us-west2
+    zones:
+    - name: us-west2-a
+    - name: us-west2-b
+    - name: us-west2-c
+  - name: us-west3
+    zones:
+    - name: us-west3-a
+    - name: us-west3-b
+    - name: us-west3-c
+  - name: us-west4
+    zones:
+    - name: us-west4-a
+    - name: us-west4-b
+    - name: us-west4-c
+  type: gcp
+  volumeTypes:
+  - class: premium
+    minSize: 20Gi
+    name: pd-balanced
+    usable: true
+  - class: standard
+    minSize: 20Gi
+    name: pd-standard
+    usable: true
+  - class: premium
+    minSize: 20Gi
+    name: pd-ssd
+    usable: true

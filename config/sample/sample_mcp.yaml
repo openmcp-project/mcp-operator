@@ -1,0 +1,15 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: ManagedControlPlane
+metadata:
+  name: mcp-sample
+  namespace: project-sample--ws-sample
+spec:
+  desiredRegion:
+    direction: central
+    name: europe
+  components:
+    apiServer:
+      type: GardenerDedicated
+    landscaper: {}
+    crossplane:
+      version: 1.17.0

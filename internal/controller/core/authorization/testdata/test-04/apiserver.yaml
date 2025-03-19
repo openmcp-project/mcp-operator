@@ -1,0 +1,42 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: APIServer
+metadata:
+  name: test
+  namespace: test
+  labels:
+    "openmcp.cloud/mcp-generation": "1"
+spec:
+  desiredRegion:
+    direction: central
+    name: europe
+  type: GardenerDedicated
+status:
+  conditions:
+    - lastTransitionTime: "2024-05-22T08:23:47Z"
+      status: "True"
+      type: apiServerHealthy
+  observedGenerations:
+    internalConfiguration: -1
+    managedControlPlane: 1
+    resource: 0
+  adminAccess:
+    creationTimestamp: "2024-05-22T08:23:47Z"
+    expirationTimestamp: "2024-11-18T08:23:47Z"
+    kubeconfig: |
+      apiVersion: v1
+      clusters:
+      - name: apiserver
+        cluster:
+          server: https://apiserver.dummy
+          certificate-authority-data: ZHVtbXkK
+      contexts:
+      - name: apiserver
+        context:
+          cluster: apiserver
+          user: apiserver
+      current-context: apiserver
+      users:
+      - name: apiserver
+        user:
+          client-certificate-data: ZHVtbXkK
+          client-key-data: ZHVtbXkK

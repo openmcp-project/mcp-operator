@@ -1,0 +1,21 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: Authentication
+metadata:
+  generation: 1
+  labels:
+    openmcp.cloud/mcp-generation: "5"
+    openmcp.cloud/mcp-name: test
+    openmcp.cloud/mcp-namespace: test
+  name: test
+  namespace: test
+spec:
+  enableSystemIdentityProvider: true
+status:
+  access:
+    key: config
+    name: test-access
+    namespace: test
+  observedGenerations:
+    internalConfiguration: -1
+    managedControlPlane: 5
+    resource: 1

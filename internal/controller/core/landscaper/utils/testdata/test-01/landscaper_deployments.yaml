@@ -1,0 +1,9 @@
+apiVersion: landscaper-service.gardener.cloud/v1alpha1
+kind: LandscaperDeployment
+metadata:
+  name: test
+  namespace: test
+  labels:
+    openmcp.cloud/mcp-name: test
+    openmcp.cloud/mcp-namespace: test
+spec: {}

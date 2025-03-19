@@ -1,0 +1,33 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: Landscaper
+metadata:
+  generation: 1
+  labels:
+    openmcp.cloud/mcp-generation: "5"
+    openmcp.cloud/mcp-name: test
+    openmcp.cloud/mcp-namespace: test
+  name: test
+  namespace: test
+spec:
+  deployers:
+  - helm
+  - manifest
+  - container
+status:
+  conditions:
+  - lastTransitionTime: "2024-05-16T11:50:14Z"
+    status: "True"
+    type: LandscaperReconciliation
+  - lastTransitionTime: "2024-05-16T11:50:14Z"
+    status: "True"
+    type: AdditionalCondition
+  - lastTransitionTime: "2024-05-16T11:50:14Z"
+    status: "True"
+    type: additionalUnexportedCondition
+  landscaperDeployment:
+    name: test
+    namespace: test
+  observedGenerations:
+    internalConfiguration: -1
+    managedControlPlane: 5
+    resource: 1

@@ -1,0 +1,160 @@
+kind: Shoot
+apiVersion: core.gardener.cloud/v1beta1
+metadata:
+  name: test
+  namespace: garden-test
+  labels:
+    openmcp.cloud/mcp-name: test
+    openmcp.cloud/mcp-namespace: test
+    provider.extensions.gardener.cloud/gcp: 'true'
+    shoot.gardener.cloud/status: healthy
+  annotations:
+    shoot.gardener.cloud/cleanup-extended-apis-finalize-grace-period-seconds: '30'
+spec:
+  addons:
+    kubernetesDashboard:
+      enabled: false
+      authenticationMode: token
+  cloudProfileName: gcp
+  dns:
+    domain: test.example.org
+  extensions:
+    - type: shoot-oidc-service
+    - type: shoot-dns-service
+      providerConfig:
+        apiVersion: service.dns.extensions.gardener.cloud/v1alpha1
+        kind: DNSConfig
+        syncProvidersFromShootSpecDNS: true
+  hibernation:
+    enabled: false
+  kubernetes:
+    kubeAPIServer:
+      runtimeConfig:
+        apps/v1: true
+        batch/v1: true
+      requests:
+        maxNonMutatingInflight: 400
+        maxMutatingInflight: 200
+      enableAnonymousAuthentication: false
+      eventTTL: 1h0m0s
+      logging:
+        verbosity: 2
+      defaultNotReadyTolerationSeconds: 300
+      defaultUnreachableTolerationSeconds: 300
+    kubeControllerManager:
+      nodeCIDRMaskSize: 24
+      nodeMonitorGracePeriod: 40s
+    kubeScheduler:
+      profile: balanced
+    kubeProxy:
+      mode: IPTables
+      enabled: true
+    kubelet:
+      failSwapOn: true
+      kubeReserved:
+        cpu: 80m
+        memory: 1Gi
+        pid: 20k
+      imageGCHighThresholdPercent: 50
+      imageGCLowThresholdPercent: 40
+      serializeImagePulls: true
+    version: 1.29.3
+    verticalPodAutoscaler:
+      enabled: true
+      evictAfterOOMThreshold: 10m0s
+      evictionRateBurst: 1
+      evictionRateLimit: -1
+      evictionTolerance: 0.5
+      recommendationMarginFraction: 0.15
+      updaterInterval: 1m0s
+      recommenderInterval: 1m0s
+      targetCPUPercentile: 0.9
+    enableStaticTokenKubeconfig: false
+  maintenance:
+    autoUpdate:
+      kubernetesVersion: true
+      machineImageVersion: true
+    timeWindow:
+      begin: 000000+0000
+      end: 010000+0000
+  provider:
+    type: gcp
+    controlPlaneConfig:
+      apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+      kind: ControlPlaneConfig
+      zone: europe-west1-b
+    infrastructureConfig:
+      apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+      kind: InfrastructureConfig
+      networks:
+        workers: 10.180.0.0/16
+  purpose: production
+  region: europe-west1
+  secretBindingName: laasds
+  systemComponents:
+    coreDNS:
+      autoscaling:
+        mode: horizontal
+    nodeLocalDNS:
+      enabled: true
+  schedulerName: default-scheduler
+status:
+  conditions:
+    - type: APIServerAvailable
+      status: 'True'
+      lastTransitionTime: '2024-06-11T00:38:43Z'
+      lastUpdateTime: '2024-06-11T00:38:43Z'
+      reason: HealthzRequestSucceeded
+      message: API server /healthz endpoint responded with success status code.
+    - type: ControlPlaneHealthy
+      status: 'True'
+      lastTransitionTime: '2024-06-11T02:13:15Z'
+      lastUpdateTime: '2024-06-11T02:13:15Z'
+      reason: ControlPlaneRunning
+      message: All control plane components are healthy.
+    - type: ObservabilityComponentsHealthy
+      status: 'True'
+      lastTransitionTime: '2024-06-11T00:38:43Z'
+      lastUpdateTime: '2024-06-11T00:38:43Z'
+      reason: ObservabilityComponentsRunning
+      message: All observability components are healthy.
+    - type: EveryNodeReady
+      status: 'True'
+      lastTransitionTime: '2024-06-11T02:11:15Z'
+      lastUpdateTime: '2024-06-11T02:11:15Z'
+      reason: EveryNodeReady
+      message: All nodes are ready.
+    - type: SystemComponentsHealthy
+      status: 'True'
+      lastTransitionTime: '2024-06-11T00:38:43Z'
+      lastUpdateTime: '2024-06-11T00:38:43Z'
+      reason: SystemComponentsRunning
+      message: All system components are healthy.
+  constraints:
+    - type: HibernationPossible
+      status: 'True'
+      lastTransitionTime: '2024-06-11T00:38:43Z'
+      lastUpdateTime: '2024-06-07T01:56:39Z'
+      reason: NoProblematicWebhooks
+      message: All webhooks are properly configured.
+    - type: MaintenancePreconditionsSatisfied
+      status: 'True'
+      lastTransitionTime: '2024-06-11T00:38:43Z'
+      lastUpdateTime: '2024-06-07T01:56:39Z'
+      reason: NoProblematicWebhooks
+      message: All webhooks are properly configured.
+  hibernated: false
+  advertisedAddresses:
+    - name: external
+      url: https://api.example.org
+    - name: internal
+      url: https://api.internal.example.org
+    - name: service-account-issuer
+      url: >-
+        https://discovery.example.org/projects/test/shoots/test/issuer
+  lastOperation:
+    description: Shoot cluster has been successfully reconciled.
+    lastUpdateTime: '2024-06-11T00:38:43Z'
+    progress: 100
+    state: Succeeded
+    type: Reconcile

@@ -1,0 +1,109 @@
+# Usage:
+# 
+# Feed arguments into ocm CLI like this:
+#   ocm add componentversions ... -- CHART_REGISTRY=... IMG_REGISTRY=...
+#
+# Required values:
+# - VERSION (set via the ocm CLI's --version flag)
+#   - Used as version for the source element pointing to this repo.
+#   - Used as referenced GitHub release, if it does not contain a '-dev'.
+#   - Used as fallback value for other versions.
+# - COMMIT
+#   - Commit hash of the git commit used to generate this component descriptor.
+#   - Used for the source element pointing to this repo.
+# - CHART_REGISTRY
+#   - URL of the OCI registry used for the helm charts.
+# - IMG_REGISTRY
+#   - URL of the OCI registry used for the container images.
+# - COMPONENTS
+#   - Comma-separated list of components for which resources should be added to the component descriptor, e.g. "apiserver-controller,managedcontrolplane-controller,landscaper-connector".
+#   - Not required if all of BP_COMPONENTS, CHART_COMPONENTS, and IMG_COMPONENTS are specified instead.
+#
+# Optional values:
+# - CD_VERSION
+#   - Version used for the component descriptor.
+#   - Defaults to VERSION if not specified.
+# - CHART_VERSION
+#   - Default version for referenced helm charts.
+#   - Defaults to VERSION if not specified.
+# - IMG_VERSION
+#   - Default version for referenced container images.
+#   - Defaults to VERSION if not specified.
+# - BP_COMPONENTS
+#   - Comma-separated list of components for which the blueprint should be added to the component descriptor, e.g. "apiserver-controller,managedcontrolplane-controller,landscaper-connector"
+#   - Each element will result in a resource entry of type 'landscaper.gardener.cloud/blueprint' named '<component>-blueprint'. The corresponding blueprint is expected at '../blueprints/<component>' (relative to this file).
+#   - Defaults to COMPONENTS if not specified.
+# - CHART_COMPONENTS
+#   - Comma-separated list of components for which helm charts should be referenced in the component descriptor, optionally with version (separated by ":").
+#   - Example: "apiserver-controller:v0.1.0,managedcontrolplane-controller:v0.2.0,landscaper-connector"
+#   - Each element will result in a resource entry of type 'helmChart' named '<component>-chart'. The chart is expected in the OCI registry at '<CHART_REGISTRY>/<component>:<version>'.
+#   - Defaults to COMPONENTS if not specified.
+#   - Each chart's version defaults to CHART_VERSION if not specified.
+# - IMG_COMPONENTS
+#   - Comma-separated list of components for which container images should be referenced in the component descriptor, optionally with version (separated by ":").
+#   - Example: "apiserver-controller:v0.1.0,managedcontrolplane-controller:v0.2.0,landscaper-connector"
+#   - Each element will result in a resource entry of type 'ociImage' named '<component>-image'. The image is expected in the OCI registry at '<IMG_REGISTRY>/<component>:<version>'.
+#   - Defaults to COMPONENTS if not specified.
+#   - Each image's version defaults to IMG_VERSION if not specified.
+
+
+name: github.com/openmcp-project/mcp-operator
+version: (( defaults.CD_VERSION ))
+provider:
+  name: openmcp-project
+
+sources:
+- name: mcp-operator
+  type: blob
+  version: (( values.VERSION ))
+  access:
+    type: gitHub
+    repoUrl: https://github.com/openmcp-project/mcp-operator
+    commit: (( values.COMMIT ))
+    ref: (( contains(values.VERSION, "-dev") ? ~~ :"refs/tags/" values.VERSION ))
+resources:
+- <<<: (( sum[split(",", defaults.BP_COMPONENTS)|[]|s,comp|-> s *templates.blueprint] ))
+- <<<: (( sum[split(",", defaults.CHART_COMPONENTS)|[]|s,cv|-> ("cvs" = split(":", cv)) ("comp" = cvs[0], "chart_version" = (cvs[1] || defaults.CHART_VERSION)) s *templates.chart] ))
+- <<<: (( sum[split(",", defaults.IMG_COMPONENTS)|[]|s,cv|-> ("cvs" = split(":", cv)) ("comp" = cvs[0], "img_version" = (cvs[1] || defaults.IMG_VERSION)) s *templates.image] ))
+
+
+##########################################################################
+# Everything below this is temporary stuff only required during rendering and will not be part of the generated component descriptor.
+
+defaults:
+  <<<: (( &temporary ))
+  CD_VERSION: (( values.CD_VERSION || values.VERSION ))
+  CHART_VERSION: (( values.CHART_VERSION || values.VERSION ))
+  IMG_VERSION: (( values.IMG_VERSION || values.VERSION ))
+  BP_COMPONENTS: (( values.BP_COMPONENTS || values.COMPONENTS ))
+  CHART_COMPONENTS: (( values.CHART_COMPONENTS || values.COMPONENTS ))
+  IMG_COMPONENTS: (( values.IMG_COMPONENTS || values.COMPONENTS ))
+
+templates:
+  <<<: (( &temporary ))
+  blueprint:
+    <<<: (( &template ))
+    name: (( comp "-blueprint" ))
+    type: landscaper.gardener.cloud/blueprint
+    input:
+      path: (( "../blueprints/" comp ))
+      type: dir
+  chart:
+    <<<: (( &template ))
+    name: (( comp "-chart" ))
+    type: helmChart
+    version: (( chart_version ))
+    access:
+      type: ociArtifact
+      imageReference: (( values.CHART_REGISTRY "/" comp ":" chart_version ))
+  image:
+    <<<: (( &template ))
+    name: (( comp "-image" ))
+    type: ociImage
+    version: (( img_version ))
+    access:
+      imageReference: (( values.IMG_REGISTRY "/" comp ":" img_version ))
+      type: ociArtifact
+
+
+

@@ -1,0 +1,22 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: Authorization
+metadata:
+  name: test
+  namespace: test
+  labels:
+    "openmcp.cloud/mcp-generation": "1"
+  annotations:
+    "openmcp.cloud/operation": "ignore"
+spec:
+  roleBindings:
+    - role: admin
+      subjects:
+        - kind: User
+          name: admin
+        - kind: ServiceAccount
+          name: pipeline
+          namespace: automate
+    - role: view
+      subjects:
+      - kind: Group
+        name: auditors

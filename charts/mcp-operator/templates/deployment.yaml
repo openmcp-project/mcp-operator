@@ -1,0 +1,306 @@
+apiVersion: {{ include "deploymentversion" . }}
+kind: Deployment
+metadata:
+  name: mcp-operator
+  namespace: {{ .Release.Namespace }}
+  labels:
+    app: cola-onboarding
+    role: mcp-operator
+    chart-name: "{{ .Chart.Name }}"
+    chart-version: "{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+spec:
+  replicas: {{ .Values.deployment.replicaCount }}
+  minReadySeconds: {{ .Values.deployment.minReadySeconds }}
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge:  {{ .Values.deployment.maxSurge }}
+      maxUnavailable: {{ .Values.deployment.maxUnavailable }}
+  selector:
+    matchLabels:
+      {{- include "mcp-operator.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        checksum/apiserver-config: {{ include (print $.Template.BasePath "/secret-apiserver-config.yaml") . | sha256sum }}
+        checksum/common-clusters: {{ include (print $.Template.BasePath "/secrets-common-clusters.yaml") . | sha256sum }}
+        checksum/laas-clusters: {{ include (print $.Template.BasePath "/secrets-landscaper-clusters.yaml") . | sha256sum }}
+        checksum/co-clusters: {{ include (print $.Template.BasePath "/secrets-cloudorchestrator-clusters.yaml") . | sha256sum }}
+        checksum/auth-config: {{ include (print $.Template.BasePath "/secret-auth-config.yaml") . | sha256sum }}
+        checksum/authz-config: {{ include (print $.Template.BasePath "/secret-authz-config.yaml") . | sha256sum }}
+        {{- with .Values.podAnnotations }}
+          {{- toYaml . | nindent 8 }}
+        {{- end }}
+      labels:
+        openmcp.cloud/topology: mcp-operator
+        openmcp.cloud/topology-ns: {{ .Release.Namespace }}
+        {{- include "mcp-operator.labels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: mcp-operator
+      containers:
+      - name: mcp-operator
+        image: "{{ include "image" .Values.image }}"
+        imagePullPolicy: "{{.Values.image.pullPolicy}}"
+        command:
+        - /mcp-operator
+        - --controllers={{ include "mcp-operator.activeControllersString" .Values }}
+        {{- if .Values.deployment.leaderElection.enabled }}
+        - --leader-elect
+        - --lease-namespace={{ .Values.deployment.leaderElection.leaseNamespace }}
+        {{- end }}
+        {{- if .Values.webhooks.manage }}
+        - --install-webhooks
+        {{- end }}
+        - --metrics-bind-address=:{{ .Values.metrics.listen.port }}
+        {{- if has "apiserver" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+        - --apiserver-config=/etc/config/apiserver/config.yaml
+        {{- end }}
+        {{- if has "authentication" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+        - --auth-config=/etc/config/authentication/config.yaml
+        {{- end }}
+        {{- if has "authorization" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+        - --authz-config=/etc/config/authorization/config.yaml
+        {{- end }}
+        {{- if has "landscaper" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+        {{- if and .Values.landscaper.clusters .Values.landscaper.clusters.core }}
+        - --laas-cluster=/etc/config/landscaper/clusters/core
+        {{- end }}
+        {{- end }}
+        {{- if has "cloudorchestrator" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+        {{- if and .Values.cloudOrchestrator.clusters .Values.cloudOrchestrator.clusters.core }}
+        - --co-cluster=/etc/config/cloudorchestrator/clusters/core
+        {{- end }}
+        {{- end }}
+        {{- if and .Values.clusters .Values.clusters.crate }}
+        - --crate-cluster=/etc/config/common/clusters/crate
+        {{- end }}
+        {{- if and .Values.logging .Values.logging.verbosity }}
+        - -v={{ .Values.logging.verbosity }}
+        {{- end }}
+        {{- if .Values.apiserver.worker.maxWorkers }}
+        - --apiserver-workers={{ .Values.apiserver.worker.maxWorkers }}
+        {{- end }}
+        {{- if .Values.apiserver.worker.intervalTime }}
+        - --apiserver-worker-interval={{ .Values.apiserver.worker.intervalTime }}
+        {{- end }}
+        ports:
+        {{- if not .Values.webhooks.disabled }}
+          - name: webhooks-https
+            containerPort: 9443
+        {{- end }}
+          - name: metrics-http
+            containerPort: {{ .Values.metrics.listen.port }}
+            protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8081
+          initialDelaySeconds: 15
+          periodSeconds: 20
+        readinessProbe:
+          httpGet:
+            path: /readyz
+            port: 8081
+          initialDelaySeconds: 5
+          periodSeconds: 10
+        volumeMounts:
+        {{- if has "apiserver" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+        - name: apiserver
+          mountPath: /etc/config/apiserver
+          readOnly: true
+        {{- end }}
+        {{- if has "authentication" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+        - name: authentication
+          mountPath: /etc/config/authentication
+          readOnly: true
+        {{- end }}
+        {{- if has "authorization" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+        - name: authorization
+          mountPath: /etc/config/authorization
+          readOnly: true
+        {{- end }}
+        {{- if has "landscaper" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+        - name: landscaper
+          mountPath: /etc/config/landscaper
+          readOnly: true
+        {{- end }}
+        {{- if has "cloudorchestrator" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+        - name: cloudorchestrator
+          mountPath: /etc/config/cloudorchestrator
+          readOnly: true
+        {{- end }}
+        {{- if not .Values.webhooks.disabled }}
+        - name: {{ include "mcp-operator.fullname" . }}-webhooks-tls
+          mountPath: /tmp/k8s-webhook-server/serving-certs/
+          readOnly: true
+        {{- end }}
+        - name: common
+          mountPath: /etc/config/common
+          readOnly: true
+        resources:
+          requests:
+            cpu: {{ .Values.resources.requests.cpu | default "100m" }}
+            memory: {{ .Values.resources.requests.memory | default "256Mi" }}
+          {{- if .Values.resources.limits }}
+          limits:
+          {{- .Values.resources.limits | toYaml | nindent 12 }}
+          {{- end }}
+      volumes:
+      {{- if has "apiserver" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+      - name: apiserver
+        projected:
+          sources:
+          - secret:
+              name: apiserver-provider-config
+      {{- end }}
+      {{- if has "authentication" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+      - name: authentication
+        projected:
+          sources:
+            - secret:
+                name: authentication-provider-config
+      {{- end }}
+      {{- if has "authorization" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+      - name: authorization
+        projected:
+          sources:
+            - secret:
+                name: authorization-provider-config
+      {{- end }}
+      {{- if has "landscaper" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+      - name: landscaper
+        projected:
+          sources:
+          {{- if and .Values.landscaper.clusters }}
+          {{- range $cname, $cvalues := .Values.landscaper.clusters }}
+          {{- if $cvalues.kubeconfig }}
+          - secret:
+              name: landscaper-{{ $cname }}-cluster
+              items:
+              - key: kubeconfig
+                path: clusters/{{ $cname }}/kubeconfig
+          {{- else }}
+          - secret:
+              name: landscaper-{{ $cname }}-cluster
+              items:
+              - key: host
+                path: clusters/{{ $cname }}/host
+              {{- if $cvalues.caData }}
+              - key: caData
+                path: clusters/{{ $cname }}/ca.crt
+              {{- end }}
+          - serviceAccountToken:
+              path: clusters/{{ $cname }}/token
+              expirationSeconds: 7200
+              audience: {{ $cvalues.audience }}
+          {{- if $cvalues.caConfigMapName }}
+          - configMap:
+              name: {{ $cvalues.caConfigMapName }}
+              items:
+              - key: ca.crt
+                path: clusters/{{ $cname }}/ca.crt
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+      {{- end }}
+      {{- if has "cloudorchestrator" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
+      - name: cloudorchestrator
+        projected:
+          sources:
+          {{- if and .Values.cloudOrchestrator.clusters }}
+          {{- range $cname, $cvalues := .Values.cloudOrchestrator.clusters }}
+          {{- if $cvalues.kubeconfig }}
+          - secret:
+              name: cloudorchestrator-{{ $cname }}-cluster
+              items:
+              - key: kubeconfig
+                path: clusters/{{ $cname }}/kubeconfig
+          {{- else }}
+          - secret:
+              name: cloudorchestrator-{{ $cname }}-cluster
+              items:
+              - key: host
+                path: clusters/{{ $cname }}/host
+              {{- if $cvalues.caData }}
+              - key: caData
+                path: clusters/{{ $cname }}/ca.crt
+              {{- end }}
+          - serviceAccountToken:
+              path: clusters/{{ $cname }}/token
+              expirationSeconds: 7200
+              audience: {{ $cvalues.audience }}
+          {{- if $cvalues.caConfigMapName }}
+          - configMap:
+              name: {{ $cvalues.caConfigMapName }}
+              items:
+              - key: ca.crt
+                path: clusters/{{ $cname }}/ca.crt
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+      {{- end }}
+      - name: common
+        projected:
+          sources:
+          {{- if and .Values.clusters }}
+          {{- range $cname, $cvalues := .Values.clusters }}
+          {{- if $cvalues.kubeconfig }}
+          - secret:
+              name: {{ $cname }}-cluster
+              items:
+              - key: kubeconfig
+                path: clusters/{{ $cname }}/kubeconfig
+          {{- else }}
+          - secret:
+              name: {{ $cname }}-cluster
+              items:
+              - key: host
+                path: clusters/{{ $cname }}/host
+              {{- if $cvalues.caData }}
+              - key: caData
+                path: clusters/{{ $cname }}/ca.crt
+              {{- end }}
+          - serviceAccountToken:
+              path: clusters/{{ $cname }}/token
+              expirationSeconds: 7200
+              audience: {{ $cvalues.audience }}
+          {{- if $cvalues.caConfigMapName }}
+          - configMap:
+              name: {{ $cvalues.caConfigMapName }}
+              items:
+              - key: ca.crt
+                path: clusters/{{ $cname }}/ca.crt
+          {{- end }}
+          {{- end }}
+          {{- end }}
+          {{- end }}
+      {{- if not .Values.webhooks.disabled }}
+      - name: {{ include "mcp-operator.fullname" . }}-webhooks-tls
+        secret:
+          secretName: {{ include "mcp-operator.fullname" . }}-webhooks-tls
+      {{- end }}
+      {{- if .Values.deployment.topologySpreadConstraints.enabled }}
+      topologySpreadConstraints:
+      - maxSkew: {{ .Values.deployment.topologySpreadConstraints.maxSkew }}
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            openmcp.cloud/topology: mcp-operator
+            openmcp.cloud/topology-ns: {{ .Release.Namespace }}
+      - maxSkew: {{ .Values.deployment.topologySpreadConstraints.maxSkew }}
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: ScheduleAnyway
+        labelSelector:
+          matchLabels:
+            openmcp.cloud/topology: mcp-operator
+            openmcp.cloud/topology-ns: {{ .Release.Namespace }}
+      {{- end }}

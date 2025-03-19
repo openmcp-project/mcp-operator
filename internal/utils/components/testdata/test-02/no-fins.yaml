@@ -1,0 +1,11 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: Landscaper
+metadata:
+  generation: 1
+  name: no-finalizers
+  namespace: test
+spec:
+  deployers:
+  - helm
+  - manifest
+  - container

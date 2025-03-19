@@ -1,0 +1,11 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: ManagedControlPlane
+metadata:
+  name: test
+  namespace: test
+  generation: 5
+spec:
+  desiredRegion:
+    name: europe
+    direction: central
+  components: {}

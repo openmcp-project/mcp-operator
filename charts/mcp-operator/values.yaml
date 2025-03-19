@@ -1,0 +1,256 @@
+deployment:
+  replicaCount: 1
+  minReadySeconds: 5
+  maxSurge: 1
+  maxUnavailable: 0
+
+  topologySpreadConstraints:
+    enabled: false
+    maxSkew: 1
+
+  leaderElection:
+    enabled: false
+    leaseNamespace: default
+
+image:
+  repository: ghcr.io/openmcp-project/github.com/openmcp-project/mcp-operator/images/mcp-operator
+  tag: v0.26.0
+  pullPolicy: IfNotPresent
+
+imagePullSecrets: []
+  # - name: pull-secret
+
+clusters:
+  # crate:
+  #   # specify either kubeconfig or host, audience, and one of caData or caConfigMapName.
+  #   kubeconfig: |
+  #     apiVersion: v1
+  #     clusters:
+  #     - cluster: ...
+  #   host: https://api.mycluster.com
+  #   audience: ...
+  #   caData: ...
+  #   caConfigMapName: ...
+
+
+
+crds:
+  manage: true
+
+webhooks:
+  manage: true
+  url: ""
+  listen:
+    port: 9443
+  service:
+    enabled: true
+    port: 443
+    type: ClusterIP
+    annotations: {}
+
+managedcontrolplane:
+  disabled: false
+
+apiserver:
+  disabled: false
+  worker:
+    maxWorkers: 10
+    intervalTime: 10s
+
+  config:
+    #gardener:
+    #  project: my-project
+    #  cloudProfile: gcp
+    #  regions:
+    #    - name: europe-west1
+    #    - name: us-east1
+    #    - name: us-west1
+    #  defaultRegion: europe-west1
+    #  shootTemplate:
+    #    spec:
+    #      networking:
+    #        type: "calico"
+    #        nodes: "10.180.0.0/16"
+    #      provider:
+    #        type: gcp
+    #        infrastructureConfig:
+    #          apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+    #          kind: InfrastructureConfig
+    #          networks:
+    #            workers: 10.180.0.0/16
+    #        controlPlaneConfig:
+    #          apiVersion: gcp.provider.extensions.gardener.cloud/v1alpha1
+    #          kind: ControlPlaneConfig
+    #          zone: ""
+    #        workers:
+    #          - name: worker-0
+    #            machine:
+    #              type: n1-standard-2
+    #              image:
+    #                name: gardenlinux
+    #                version: 1312.3.0
+    #              architecture: amd64
+    #            maximum: 2
+    #            minimum: 1
+    #            volume:
+    #              type: pd-standard
+    #              size: 50Gi
+    #      secretBindingName: trial-secretbinding-gcp
+    #  kubeconfig: |
+    #    apiVersion: v1
+    #    kind: Config
+    #    ...
+
+landscaper:
+  disabled: false
+  clusters:
+    # core:
+    #   # specify either kubeconfig or host, audience, and one of caData or caConfigMapName.
+    #   kubeconfig: |
+    #     apiVersion: v1
+    #     clusters:
+    #     - cluster: ...
+    #   host: https://api.mycluster.com
+    #   audience: ...
+    #   caData: ...
+    #   caConfigMapName: ...
+
+cloudOrchestrator:
+  disabled: false
+  clusters:
+    # core:
+    #   # specify either kubeconfig or host, audience, and one of caData or caConfigMapName.
+    #   kubeconfig: |
+    #     apiVersion: v1
+    #     clusters:
+    #     - cluster: ...
+    #   host: https://api.mycluster.com
+    #   audience: ...
+    #   caData: ...
+    #   caConfigMapName: ...
+
+authentication:
+  disabled: false
+  config:
+    # systemIdentityProvider:
+    #   name: example
+    #   issuerURL: https://accounts.example.com
+    #   clientID: foo
+    #   groupsClaim: groups
+    #   usernameClaim: email
+
+authorization:
+  disabled: false
+  config:
+    protectedNamespaces:
+      - prefix: "kube-"
+      - postfix: "-system"
+    admin:
+      namespaceScoped:
+        rules:
+        - apiGroups:
+          - ""
+          resources:
+          - configmaps
+          - secrets
+          verbs:
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts
+          verbs:
+          - create
+          - update
+          - patch
+          - delete
+          - impersonate
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - roles
+          - rolebindings
+          verbs:
+          - create
+          - update
+          - patch
+          - delete
+        - apiGroups:
+          - ""
+          resources:
+          - serviceaccounts/token
+          verbs:
+          - create
+
+      clusterScoped:
+        rules:
+        - apiGroups:
+          - ""
+          resources:
+          - namespaces
+          verbs:
+          - create
+
+    view:
+      namespaceScoped:
+        rules:
+        - apiGroups: [ "" ]
+          resources:
+          - configmaps
+          - secrets
+          - serviceaccounts
+          verbs:
+          - get
+          - list
+          - watch
+
+      clusterScoped:
+        rules:
+        - apiGroups: [ "" ]
+          resources:
+          - namespaces
+          verbs:
+          - get
+          - list
+          - watch
+        - apiGroups:
+          - rbac.authorization.k8s.io
+          resources:
+          - "*"
+          verbs:
+          - get
+          - list
+          - watch
+        - apiGroups:
+          - apiextensions.k8s.io
+          resources:
+          - customresourcedefinitions
+          verbs:
+          - get
+          - list
+          - watch
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 256Mi
+#   limits:
+#     cpu: 500m
+#     memory: 2Gi
+
+# logging:
+#   verbosity: info # error, info, or debug
+
+metrics:
+  listen:
+    port: 8080
+  service:
+    enabled: false
+    port: 8080
+    type: ClusterIP
+    annotations: {}
+
+podAnnotations: {}

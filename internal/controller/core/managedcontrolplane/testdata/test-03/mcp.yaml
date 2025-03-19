@@ -1,0 +1,29 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: ManagedControlPlane
+metadata:
+  name: test
+  namespace: test
+  generation: 5
+spec:
+  desiredRegion:
+    name: europe
+    direction: central
+  authentication:
+    enableSystemIdentityProvider: true
+  authorization:
+    roleBindings:
+    - role: admin
+      subjects:
+      - kind: User
+        name: idp:john.doe@example.org
+  components:
+    apiServer:
+      type: Gardener
+    landscaper: {}
+    crossplane:
+      version: 1.17.0
+      providers:
+      - name: cloudfoundry
+        version: 2.2.3
+    btpServiceOperator:
+      version: 0.8.0

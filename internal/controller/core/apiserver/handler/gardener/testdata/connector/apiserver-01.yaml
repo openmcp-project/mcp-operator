@@ -1,0 +1,53 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: APIServer
+metadata:
+  generation: 1
+  labels:
+    openmcp.cloud/mcp-generation: "1"
+    openmcp.cloud/mcp-name: test
+    openmcp.cloud/mcp-namespace: test
+  name: test
+  namespace: test
+spec:
+  desiredRegion:
+    direction: central
+    name: europe
+  type: Gardener
+status:
+  adminAccess:
+    creationTimestamp: "2024-05-16T07:29:26Z"
+    expirationTimestamp: "2024-11-12T07:29:26Z"
+    kubeconfig: |
+      apiVersion: v1
+      clusters:
+      - cluster:
+          certificate-authority-data: redacted
+          server: redacted
+        name: cluster
+      contexts:
+      - context:
+          cluster: cluster
+          user: admin
+        name: cluster
+      current-context: cluster
+      kind: Config
+      preferences: {}
+      users:
+      - name: admin
+        user:
+          token: redacted
+  conditions:
+  - lastTransitionTime: "2024-06-03T09:07:26Z"
+    status: "True"
+    type: apiServerHealthy
+  gardener:
+    shoot:
+      apiVersion: core.gardener.cloud/v1beta1
+      kind: Shoot
+      metadata:
+        name: test
+        namespace: garden-test
+  observedGenerations:
+    internalConfiguration: -1
+    managedControlPlane: 3
+    resource: 1
