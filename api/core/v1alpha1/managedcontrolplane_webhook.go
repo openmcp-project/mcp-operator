@@ -3,7 +3,6 @@ package v1alpha1
 import (
 	"context"
 	"fmt"
-	"reflect"
 
 	"k8s.io/apimachinery/pkg/runtime"
 	apierrors "k8s.io/apimachinery/pkg/util/errors"
@@ -49,10 +48,8 @@ func (r *ManagedControlPlane) ValidateUpdate(_ context.Context, old runtime.Obje
 	}
 	var errorList []error
 
-	updateValidators := []func(*ManagedControlPlane, *ManagedControlPlane) error{
-		validateUpdateDesiredRegion,
-		validateUpdateAPIServerUpdate,
-	}
+	// Add update validators here when needed
+	var updateValidators []func(*ManagedControlPlane, *ManagedControlPlane) error
 
 	for _, validator := range updateValidators {
 		if err := validator(newMcp, oldMcp); err != nil {
@@ -77,45 +74,4 @@ func (r *ManagedControlPlane) ValidateDelete(_ context.Context, obj runtime.Obje
 		return nil, nil
 	}
 	return nil, fmt.Errorf("ManagedControlPlane %q requires annotation %q to be set to true, before it can be deleted", r.Name, ManagedControlPlaneDeletionConfirmationAnnotation)
-}
-
-// validateUpdateDesiredRegion ensures that DesiredRegion is immutable
-func validateUpdateDesiredRegion(newMCP, oldMcp *ManagedControlPlane) error {
-	if oldMcp.Spec.CommonConfig == nil || oldMcp.Spec.CommonConfig.DesiredRegion == nil {
-		return nil
-	}
-	if !reflect.DeepEqual(newMCP.Spec.DesiredRegion, oldMcp.Spec.DesiredRegion) {
-		return fmt.Errorf("spec.desiredRegion is immutable")
-	}
-	return nil
-}
-
-// validateUpdateAPIServerUpdate ensure that APIServer is immutable while allowing delete
-func validateUpdateAPIServerUpdate(newMCP, oldMcp *ManagedControlPlane) error {
-	if oldMcp.Spec.Components.APIServer == nil { // APIServer is already unset, nothing to do here
-		return nil
-	}
-
-	if newMCP.Spec.Components.APIServer == nil { // APIServer is being deleted.
-		return newMCP.validateUpdateAPIServerRemove(oldMcp)
-	}
-	if !reflect.DeepEqual(newMCP.Spec.Components.APIServer, oldMcp.Spec.Components.APIServer) {
-		return fmt.Errorf("spec.components.apiServer is immutable")
-	}
-	return nil
-}
-
-// validateUpdateAPIServerRemove ensures that APIserver is not removed before all other components are removed
-func (r *ManagedControlPlane) validateUpdateAPIServerRemove(oldMcp *ManagedControlPlane) error {
-	if oldMcp.Spec.Components.APIServer != nil && r.Spec.Components.APIServer == nil {
-		if r.Spec.Components.Landscaper != nil ||
-			r.Spec.Components.CloudOrchestratorConfiguration.Flux != nil ||
-			r.Spec.Components.CloudOrchestratorConfiguration.Kyverno != nil ||
-			r.Spec.Components.CloudOrchestratorConfiguration.Crossplane != nil ||
-			r.Spec.Components.CloudOrchestratorConfiguration.BTPServiceOperator != nil ||
-			r.Spec.Components.CloudOrchestratorConfiguration.ExternalSecretsOperator != nil {
-			return fmt.Errorf("spec.components.apiServer can't be removed while other components are configured")
-		}
-	}
-	return nil
 }
