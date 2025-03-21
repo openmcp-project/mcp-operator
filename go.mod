@@ -2,8 +2,6 @@ module github.com/openmcp-project/mcp-operator
 
 go 1.23.5
 
-toolchain go1.24.0
-
 replace github.com/openmcp-project/mcp-operator/api => ./api
 
 replace github.com/imdario/mergo v1.0.0 => github.com/imdario/mergo v0.3.16
