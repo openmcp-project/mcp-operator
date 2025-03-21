@@ -33,3 +33,4 @@ components/
 /**/cover.*.html
 
 *.tmp
+.task/
