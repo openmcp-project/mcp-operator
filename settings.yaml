@@ -1,4 +1,0 @@
-COMPONENT_NAME: mcp-operator
-COMPONENT_NAME_PREFIX: github.com/openmcp-project
-PROVIDER: openmcp-project
-COMPONENT_REPO_PREFIX: ghcr.io/openmcp-project/mcp-operator
