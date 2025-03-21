@@ -1,0 +1,56 @@
+version: 3
+
+# vars: # cannot be specified here due to https://github.com/go-task/task/issues/2108
+#   NESTED_MODULES: api
+#   API_DIRS: '{{.ROOT_DIR}}/api/core/v1alpha1/...'
+#   MANIFEST_OUT: '{{.ROOT_DIR}}/api/crds/manifests'
+#   CODE_DIRS: '{{.ROOT_DIR}}/cmd/... {{.ROOT_DIR}}/internal/... {{.ROOT_DIR}}/test/... {{.ROOT_DIR}}/api/constants/... {{.ROOT_DIR}}/api/errors/... {{.ROOT_DIR}}/api/install/... {{.ROOT_DIR}}/api/v1alpha1/... {{.ROOT_DIR}}/api/core/v1alpha1/...'
+#   COMPONENTS: 'mcp-operator'
+#   REPO_URL: 'https://github.com/openmcp-project/mcp-operator'
+#   GENERATE_DOCS_INDEX: "true"
+
+includes:
+  shared:
+    taskfile: hack/common/Taskfile_controller.yaml
+    flatten: true
+    excludes: # put task names in here which are overwritten in this file
+    - generate:code
+    vars:
+      NESTED_MODULES: api
+      API_DIRS: '{{.ROOT_DIR}}/api/core/v1alpha1/...'
+      MANIFEST_OUT: '{{.ROOT_DIR}}/api/crds/manifests'
+      CODE_DIRS: '{{.ROOT_DIR}}/cmd/... {{.ROOT_DIR}}/internal/... {{.ROOT_DIR}}/test/... {{.ROOT_DIR}}/api/constants/... {{.ROOT_DIR}}/api/errors/... {{.ROOT_DIR}}/api/install/... {{.ROOT_DIR}}/api/v1alpha1/... {{.ROOT_DIR}}/api/core/v1alpha1/...'
+      COMPONENTS: 'mcp-operator'
+      REPO_URL: 'https://github.com/openmcp-project/mcp-operator'
+      GENERATE_DOCS_INDEX: "true"
+  common: # imported a second time so that overwriting task definitions can call the overwritten task with a 'c:' prefix
+    taskfile: hack/common/Taskfile_controller.yaml
+    internal: true
+    aliases:
+    - c
+    vars:
+      NESTED_MODULES: api
+      API_DIRS: '{{.ROOT_DIR}}/api/core/v1alpha1/...'
+      MANIFEST_OUT: '{{.ROOT_DIR}}/api/crds/manifests'
+      CODE_DIRS: '{{.ROOT_DIR}}/cmd/... {{.ROOT_DIR}}/internal/... {{.ROOT_DIR}}/test/... {{.ROOT_DIR}}/api/constants/... {{.ROOT_DIR}}/api/errors/... {{.ROOT_DIR}}/api/install/... {{.ROOT_DIR}}/api/v1alpha1/... {{.ROOT_DIR}}/api/core/v1alpha1/...'
+      COMPONENTS: 'mcp-operator'
+      REPO_URL: 'https://github.com/openmcp-project/mcp-operator'
+      GENERATE_DOCS_INDEX: "true"
+
+tasks:
+  generate:code: # overwrites shared code task to add external API fetching
+    desc: "  Generate code (mainly DeepCopy functions) and fetches external APIs."
+    run: once
+    cmds:
+    - task: external-apis
+    - task: c:generate:code
+
+  external-apis:
+    desc: "  Fetch external APIs."
+    run: once
+    method: checksum
+    sources:
+    - hack/external-apis/*
+    cmds:
+    - 'go run {{.ROOT_DIR}}/hack/external-apis/main.go'
+    internal: true
