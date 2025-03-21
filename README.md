@@ -6,7 +6,7 @@
 
 This repository contains the controllers which reconcile ManagedControlPlane resources.
 
-This is a quickly done documentation of the contract between the ManagedControlPlane controller and the component controllers. Needs to be properly expanded in the future.
+This document provides a preliminary overview of the contract between the ManagedControlPlane controller and the component controllers. A more comprehensive and detailed version will be added shortly.
 
 ### Component Controllers
 
