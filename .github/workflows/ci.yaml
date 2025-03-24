@@ -30,11 +30,11 @@ jobs:
 
       - name: task generate
         run: |
-          task generate
+          task generate --verbose
           git diff --exit-code
           
       - name: task validate
-        run: task validate
+        run: task validate --verbose
 
       - name: task test
-        run: task test
+        run: task test --verbose
