@@ -15,7 +15,7 @@ require (
 	github.com/onsi/gomega v1.36.2
 	github.com/openmcp-project/control-plane-operator v0.1.4
 	github.com/openmcp-project/controller-utils v0.4.2
-	github.com/openmcp-project/mcp-operator/api v0.26.4
+	github.com/openmcp-project/mcp-operator/api v0.26.5
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
 	github.com/stretchr/testify v1.10.0
