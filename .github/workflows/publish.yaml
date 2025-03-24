@@ -76,12 +76,12 @@ jobs:
       
       - name: Build and Push Images
         run: |
-          task build:img:all
+          task build:img:all --verbose
 
       - name: Package and Push Helm Charts
         run: |
-          task build:helm:all
+          task build:helm:all --verbose
 
       - name: Build and Push OCM Component
         run: |
-          task build:ocm:all
+          task build:ocm:all --verbose

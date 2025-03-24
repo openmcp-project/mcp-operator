@@ -101,7 +101,7 @@ jobs:
       - name: Push dev VERSION
         if: ${{ env.SKIP != 'true' }}
         run: |
-          task release:set-version -- "${{ env.version }}-dev"
+          task release:set-version --verbose -- "${{ env.version }}-dev"
           git config user.name "${{ env.AUTHOR_NAME }}"
           git config user.email "${{ env.AUTHOR_EMAIL }}"
           git add VERSION
