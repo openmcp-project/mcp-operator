@@ -15,7 +15,6 @@ includes:
     flatten: true
     excludes: # put task names in here which are overwritten in this file
     - generate:code
-    - validate:test
     vars:
       NESTED_MODULES: api
       API_DIRS: '{{.ROOT_DIR}}/api/core/v1alpha1/...'
@@ -24,6 +23,7 @@ includes:
       COMPONENTS: 'mcp-operator'
       REPO_URL: 'https://github.com/openmcp-project/mcp-operator'
       GENERATE_DOCS_INDEX: "true"
+      ENVTEST_REQUIRED: "true"
   common: # imported a second time so that overwriting task definitions can call the overwritten task with a 'c:' prefix
     taskfile: hack/common/Taskfile_controller.yaml
     internal: true
@@ -37,6 +37,7 @@ includes:
       COMPONENTS: 'mcp-operator'
       REPO_URL: 'https://github.com/openmcp-project/mcp-operator'
       GENERATE_DOCS_INDEX: "true"
+      ENVTEST_REQUIRED: "true"
 
 tasks:
   generate:code: # overwrites shared code task to add external API fetching
@@ -58,14 +59,3 @@ tasks:
     cmds:
     - 'go run {{.ROOT_DIR}}/hack/external-apis/main.go'
     internal: true
-
-  validate:test: # overwrites the test task to add a dependency towards envtest
-    desc: "  Run all tests."
-    aliases:
-    - val:test
-    - v:test
-    run: once
-    deps:
-    - tools:envtest
-    cmds:
-    - task: c:validate:test
