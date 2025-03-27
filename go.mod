@@ -1,6 +1,6 @@
 module github.com/openmcp-project/mcp-operator
 
-go 1.23.5
+go 1.24.1
 
 replace github.com/openmcp-project/mcp-operator/api => ./api
 
@@ -11,7 +11,7 @@ require (
 	github.com/alitto/pond/v2 v2.2.0
 	github.com/apparentlymart/go-cidr v1.1.0
 	github.com/gardener/landscaper-service v0.122.0
-	github.com/onsi/ginkgo/v2 v2.22.2
+	github.com/onsi/ginkgo/v2 v2.23.1
 	github.com/onsi/gomega v1.36.2
 	github.com/openmcp-project/control-plane-operator v0.1.4
 	github.com/openmcp-project/controller-utils v0.4.2
@@ -20,12 +20,12 @@ require (
 	github.com/spf13/pflag v1.0.6
 	github.com/stretchr/testify v1.10.0
 	gopkg.in/yaml.v3 v3.0.1
-	k8s.io/api v0.32.2
-	k8s.io/apiextensions-apiserver v0.32.2
-	k8s.io/apimachinery v0.32.2
-	k8s.io/client-go v0.32.2
+	k8s.io/api v0.32.3
+	k8s.io/apiextensions-apiserver v0.32.3
+	k8s.io/apimachinery v0.32.3
+	k8s.io/client-go v0.32.3
 	k8s.io/utils v0.0.0-20241210054802-24370beab758
-	sigs.k8s.io/controller-runtime v0.20.2
+	sigs.k8s.io/controller-runtime v0.20.3
 	sigs.k8s.io/yaml v1.4.0
 )
 
