@@ -3,6 +3,8 @@ package app
 import (
 	goflag "flag"
 	"fmt"
+	"os"
+	"regexp"
 	"strings"
 	"time"
 
@@ -27,6 +29,9 @@ import (
 
 const (
 	ControllerIDManagedControlPlane = "managedcontrolplane"
+	PprofEnabledEnvVar              = "ENABLE_PROFILER"
+	PprofAddrEnvVar                 = "PROFILER_ADDRESS"
+	PprofDefaultAddr                = ":8082"
 )
 
 var (
@@ -101,6 +106,9 @@ type Options struct {
 	ActiveControllers              sets.Set[string]
 	WebhooksFlags                  *webhooks.Flags
 	CRDFlags                       *crds.Flags
+
+	// options based on env vars
+	PprofAddr string `json:"pprofAddr"`
 }
 
 func NewOptions() *Options {
@@ -145,6 +153,12 @@ func (o *Options) String(includeHeader bool, includeRawOptions bool) (string, er
 
 	opts["authConfig"] = o.AuthConfig
 	opts["authzConfig"] = o.AuthzConfig
+
+	if o.PprofAddr == "" {
+		opts["pprof"] = "disabled"
+	} else {
+		opts["pprof"] = o.PprofAddr
+	}
 
 	// controllers
 	opts["activeControllers"] = sets.List(o.ActiveControllers)
@@ -309,6 +323,17 @@ func (o *Options) Complete() error {
 		err = configauthz.Validate(o.AuthzConfig)
 		if err != nil {
 			return fmt.Errorf("invalid authorization config: %w", err)
+		}
+	}
+
+	// evaluate env vars
+	if os.Getenv(PprofEnabledEnvVar) == "true" {
+		o.PprofAddr = os.Getenv(PprofAddrEnvVar)
+		if o.PprofAddr == "" {
+			o.PprofAddr = PprofDefaultAddr
+		} else if regexp.MustCompile(`^[0-9]{1,5}$`).MatchString(o.PprofAddr) {
+			// if only a port is given, prepend a colon
+			o.PprofAddr = ":" + o.PprofAddr
 		}
 	}
 

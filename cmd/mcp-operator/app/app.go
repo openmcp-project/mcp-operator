@@ -104,9 +104,6 @@ func (o *Options) runInit(ctx context.Context) error {
 	}
 
 	if o.CRDFlags.Install {
-		if err != nil {
-			return fmt.Errorf("error building setup client: %w", err)
-		}
 		setupLog.Info("CRD installation configured, deploying CRDs ...")
 		crds := crdinstall.CRDs()
 		for _, crd := range crds {
@@ -176,6 +173,7 @@ func (o *Options) run(ctx context.Context) error {
 			RecoverPanic: ptr.To(true),
 		},
 		HealthProbeBindAddress:  o.ProbeAddr,
+		PprofBindAddress:        o.PprofAddr,
 		LeaderElection:          o.EnableLeaderElection,
 		LeaderElectionID:        "mcpo.openmcp.cloud",
 		LeaderElectionNamespace: o.LeaseNamespace,
