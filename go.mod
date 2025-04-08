@@ -12,7 +12,7 @@ require (
 	github.com/apparentlymart/go-cidr v1.1.0
 	github.com/gardener/landscaper-service v0.123.0
 	github.com/onsi/ginkgo/v2 v2.23.4
-	github.com/onsi/gomega v1.36.3
+	github.com/onsi/gomega v1.37.0
 	github.com/openmcp-project/control-plane-operator v0.1.5
 	github.com/openmcp-project/controller-utils v0.4.2
 	github.com/openmcp-project/mcp-operator/api v0.26.6
