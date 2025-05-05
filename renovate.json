@@ -2,7 +2,9 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "minimumReleaseAge": "3 days",
   "extends": [
-    "config:recommended"
+    "config:recommended",
+    "config:best-practices",
+    "helpers:pinGitHubActionDigests"
   ],
   "postUpdateOptions": [
     "gomodTidy"
