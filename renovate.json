@@ -4,7 +4,9 @@
   "extends": [
     "config:recommended",
     "config:best-practices",
-    "helpers:pinGitHubActionDigests"
+    "security:openssf-scorecard",
+    "helpers:pinGitHubActionDigests",
+    ":rebaseStalePrs"
   ],
   "postUpdateOptions": [
     "gomodTidy"
