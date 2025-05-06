@@ -14,8 +14,10 @@
       "matchPackageNames": [
         "github.com/gardener/landscaper-service"
       ],
+      "description": "Update landscaper-service immediately",
+      "rebaseWhen": "auto",
       "minimumReleaseAge": "0 days",
-      "enabled": false
+      "enabled": true
     }
   ]
 }
