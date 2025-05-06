@@ -8,5 +8,14 @@
   ],
   "postUpdateOptions": [
     "gomodTidy"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "github.com/gardener/landscaper-service"
+      ],
+      "minimumReleaseAge": "0 days",
+      "enabled": false
+    }
   ]
 }
