@@ -18,6 +18,16 @@
       "rebaseWhen": "auto",
       "minimumReleaseAge": "0 days",
       "enabled": true
+    },
+    {
+      "description": "Ignore version for mcp-operator/api as used locally",
+      "matchManagers": [
+        "gomod"
+      ],
+      "enabled": false,
+      "matchPackageNames": [
+        "github.com/openmcp-project/mcp-operator/api"
+      ]
     }
   ]
 }
