@@ -13,7 +13,7 @@ deployment:
     leaseNamespace: default
 
 image:
-  repository: ghcr.io/openmcp-project/github.com/openmcp-project/mcp-operator/images/mcp-operator
+  repository: ghcr.io/openmcp-project/images/mcp-operator
   tag: v0.27.0
   pullPolicy: IfNotPresent
 
