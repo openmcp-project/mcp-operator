@@ -83,7 +83,7 @@ var _ = Describe("ManagedControlPlane Webhook", func() {
 			Expect(err).To(HaveOccurred())
 		})
 
-		It("Should deny updates to spec.components.apiServer", func() {
+		It("Should deny update to spec.components.apiServer", func() {
 			var err error
 
 			namespace := string(uuid.NewUUID())
