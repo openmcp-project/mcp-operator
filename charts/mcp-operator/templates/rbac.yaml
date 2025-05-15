@@ -45,7 +45,7 @@ rules:
 - apiGroups: ["admissionregistration.k8s.io"]
   resources:
   - validatingwebhookconfigurations
-  # - mutatingwebhookconfigurations for now we are only using validatingwebhooks
+  - mutatingwebhookconfigurations
   verbs: ["*"]
 {{- end }}
 {{- if not (and .Values.crds .Values.crds.disabled) }}
