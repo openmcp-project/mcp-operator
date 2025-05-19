@@ -117,12 +117,12 @@ package main
 
 import (
  "fmt" // we need to import something here so golint is happy
- //+kubebuilder:scaffold:imports
+ // +kubebuilder:scaffold:imports
 )
 
 func main() {
  fmt.Println("I should never be called")
- //+kubebuilder:scaffold:builder
+ // +kubebuilder:scaffold:builder
 }
 EOF
 ```

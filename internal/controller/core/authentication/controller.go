@@ -67,8 +67,8 @@ func (ar *AuthenticationReconciler) SetAPIServerAccess(apiServerAccess apiserver
 	ar.APIServerAccess = apiServerAccess
 }
 
-//+kubebuilder:rbac:groups=core.openmcp.cloud,resources=authentications,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=core.openmcp.cloud,resources=authentications/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=core.openmcp.cloud,resources=authentications,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core.openmcp.cloud,resources=authentications/status,verbs=get;update;patch
 
 // Reconcile reconciles authentications and updates Gardener OpenIDConnect resources
 func (ar *AuthenticationReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
@@ -96,7 +96,7 @@ func (ar *AuthenticationReconciler) reconcile(ctx context.Context, req ctrl.Requ
 			log.Debug("Resource not found")
 			return components.ReconcileResult[*openmcpv1alpha1.Authentication]{}
 		}
-		return components.ReconcileResult[*openmcpv1alpha1.Authentication]{ReconcileError: openmcperrors.WithReason(fmt.Errorf("unable to get resource '%s' from cluster: %w", req.NamespacedName.String(), err), cconst.ReasonCrateClusterInteractionProblem)}
+		return components.ReconcileResult[*openmcpv1alpha1.Authentication]{ReconcileError: openmcperrors.WithReason(fmt.Errorf("unable to get resource '%s' from cluster: %w", req.String(), err), cconst.ReasonCrateClusterInteractionProblem)}
 	}
 
 	// handle operation annotation

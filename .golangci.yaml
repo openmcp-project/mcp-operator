@@ -1,8 +1,47 @@
+version: "2"
 run:
-  concurrency: 4
-  timeout: 10m
-
-issues:
-  exclude-files:
-  - "zz_generated.*\\.go$"
-  - "tmp/.*"
+  allow-parallel-runners: true
+linters:
+  default: none
+  enable:
+    - copyloopvar
+    - errcheck
+    - govet
+    - ineffassign
+    - misspell
+    - nakedret
+    - prealloc
+    - revive
+    - staticcheck
+    - unconvert
+    - unused
+  settings:
+    revive:
+      rules:
+        - name: comment-spacings
+  exclusions:
+    generated: lax
+    rules:
+      - linters:
+          - lll
+        path: api/*
+      - linters:
+          - dupl
+          - lllgit ad
+        path: internal/*
+    paths:
+      - zz_generated.*\.go$
+      - tmp/.*
+      - third_party$
+      - builtin$
+      - examples$
+formatters:
+  enable:
+    - gofmt
+    - goimports
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

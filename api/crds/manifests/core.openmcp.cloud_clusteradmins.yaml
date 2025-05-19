@@ -12,7 +12,7 @@ spec:
     listKind: ClusterAdminList
     plural: clusteradmins
     shortNames:
-    - clas
+    - class
     singular: clusteradmin
   scope: Namespaced
   versions:

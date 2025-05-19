@@ -93,8 +93,8 @@ const (
 	MCPStatusDeleting MCPStatus = "Deleting"
 )
 
-//+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // ManagedControlPlane is the Schema for the ManagedControlPlane API
 // +kubebuilder:resource:shortName=mcp
@@ -109,7 +109,7 @@ type ManagedControlPlane struct {
 	Status ManagedControlPlaneStatus `json:"status,omitempty"`
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
 // ManagedControlPlaneList contains a list of ManagedControlPlane
 type ManagedControlPlaneList struct {
