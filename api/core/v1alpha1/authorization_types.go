@@ -166,7 +166,7 @@ type ClusterAdminStatus struct {
 // +kubebuilder:subresource:status
 
 // ClusterAdmin is the Schema for the cluster admin API
-// +kubebuilder:resource:shortName=class
+// +kubebuilder:resource:shortName=clas
 // +kubebuilder:printcolumn:name="Active",type=string,JSONPath=`.status.active`
 // +kubebuilder:printcolumn:name="Activated",type="date",JSONPath=".status.activationTime"
 // +kubebuilder:printcolumn:name="Expiration",type="string",JSONPath=".status.expirationTime"
