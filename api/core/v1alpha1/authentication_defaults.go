@@ -79,7 +79,7 @@ func ValidateIdp(idp IdentityProvider, fldPath *field.Path) field.ErrorList {
 // isLowerCaseLetter checks if the given string is a lowercase letter.
 func isLowerCaseLetter(s string) bool {
 	for _, r := range s {
-		if !unicode.IsLetter(r) && !unicode.IsLower(r) {
+		if !(unicode.IsLetter(r) && unicode.IsLower(r)) { //nolint:staticcheck
 			return false
 		}
 	}
