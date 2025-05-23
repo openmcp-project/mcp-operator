@@ -64,7 +64,7 @@ func (cfg *APIServerProviderConfiguration) Complete(ctx context.Context) (*Compl
 	}
 	errs = append(errs, err)
 
-	res.CompletedCommonConfig, err = cfg.CommonConfig.complete()
+	res.CompletedCommonConfig, err = cfg.complete()
 	errs = append(errs, err)
 
 	return res, errors.Join(errs...)
@@ -82,7 +82,7 @@ func Validate(cfg *APIServerProviderConfiguration) error {
 		allErrs = append(allErrs, validateGardenerConfig(cfg.GardenerConfig, field.NewPath("gardener"))...)
 	}
 
-	allErrs = append(allErrs, cfg.CommonConfig.validate()...)
+	allErrs = append(allErrs, cfg.validate()...)
 
 	return allErrs.ToAggregate()
 }

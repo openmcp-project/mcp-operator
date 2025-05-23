@@ -58,8 +58,8 @@ func (r *LandscaperConnector) SetAPIServerAccess(apiServerAccess apiserver.APISe
 	r.ApiServerAccess = apiServerAccess
 }
 
-//+kubebuilder:rbac:groups=core.openmcp.cloud,resources=managedcontrolplanes,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=core.openmcp.cloud,resources=managedcontrolplanes/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=core.openmcp.cloud,resources=managedcontrolplanes,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core.openmcp.cloud,resources=managedcontrolplanes/status,verbs=get;update;patch
 
 func (r *LandscaperConnector) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log, ctx := utils.InitializeControllerLogger(ctx, ControllerName)
@@ -86,7 +86,7 @@ func (r *LandscaperConnector) reconcile(ctx context.Context, req ctrl.Request) c
 			log.Debug("Resource not found")
 			return components.ReconcileResult[*openmcpv1alpha1.Landscaper]{}
 		}
-		return components.ReconcileResult[*openmcpv1alpha1.Landscaper]{ReconcileError: openmcperrors.WithReason(fmt.Errorf("unable to get resource '%s' from cluster: %w", req.NamespacedName.String(), err), cconst.ReasonCrateClusterInteractionProblem)}
+		return components.ReconcileResult[*openmcpv1alpha1.Landscaper]{ReconcileError: openmcperrors.WithReason(fmt.Errorf("unable to get resource '%s' from cluster: %w", req.String(), err), cconst.ReasonCrateClusterInteractionProblem)}
 	}
 
 	// handle operation annotation
@@ -241,7 +241,7 @@ func (r *LandscaperConnector) handleCreateOrUpdate(ctx context.Context, ls *open
 		ld = generatedLD
 		log = log.WithValues("ldNamespace", ld.Namespace, "ldName", ld.Name)
 
-		//check if namespace exists and create if necessary
+		// check if namespace exists and create if necessary
 		targetNamespace := &corev1.Namespace{}
 		targetNamespace.SetName(ld.Namespace)
 		targetNamespace.SetLabels(map[string]string{

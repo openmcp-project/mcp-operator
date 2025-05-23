@@ -85,7 +85,7 @@ func (ar *AuthorizationReconciler) reconcile(ctx context.Context, req ctrl.Reque
 			log.Debug("Resource not found")
 			return componentutils.ReconcileResult[*openmcpv1alpha1.Authorization]{}
 		}
-		return componentutils.ReconcileResult[*openmcpv1alpha1.Authorization]{ReconcileError: openmcperrors.WithReason(fmt.Errorf("unable to get resource '%s' from cluster: %w", req.NamespacedName.String(), err), cconst.ReasonCrateClusterInteractionProblem)}
+		return componentutils.ReconcileResult[*openmcpv1alpha1.Authorization]{ReconcileError: openmcperrors.WithReason(fmt.Errorf("unable to get resource '%s' from cluster: %w", req.String(), err), cconst.ReasonCrateClusterInteractionProblem)}
 	}
 
 	// handle operation annotation

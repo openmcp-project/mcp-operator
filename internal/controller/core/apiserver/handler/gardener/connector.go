@@ -210,10 +210,10 @@ func (gc *GardenerConnector) HandleCreateOrUpdate(ctx context.Context, as *openm
 		for _, endpoint := range sh.Status.AdvertisedAddresses {
 			switch endpoint.Name {
 			case constants.AdvertisedAddressExternal:
-				status.ExternalAPIServerStatus.Endpoint = endpoint.URL
+				status.Endpoint = endpoint.URL
 			case constants.AdvertisedAddressInternal:
 			case constants.AdvertisedAddressServiceAccountIssuer:
-				status.ExternalAPIServerStatus.ServiceAccountIssuer = endpoint.URL
+				status.ServiceAccountIssuer = endpoint.URL
 			default:
 				log.Error(nil, "unexpected endpoint name in shoot's advertised addresses", "endpoint", endpoint.Name)
 			}

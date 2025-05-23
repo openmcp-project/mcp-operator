@@ -71,9 +71,9 @@ type APIServerProvider struct {
 	FakeHandler apiserverhandler.APIServerHandler
 }
 
-//+kubebuilder:rbac:groups=core.openmcp.cloud,resources=apiservers,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=core.openmcp.cloud,resources=apiservers/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=core.openmcp.cloud,resources=apiservers/finalizers,verbs=update
+// +kubebuilder:rbac:groups=core.openmcp.cloud,resources=apiservers,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core.openmcp.cloud,resources=apiservers/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=core.openmcp.cloud,resources=apiservers/finalizers,verbs=update
 
 func (r *APIServerProvider) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log, ctx := utils.InitializeControllerLogger(ctx, ControllerName)
@@ -97,7 +97,7 @@ func (r *APIServerProvider) reconcile(ctx context.Context, req ctrl.Request) com
 			log.Debug("Resource not found")
 			return componentutils.ReconcileResult[*openmcpv1alpha1.APIServer]{}
 		}
-		return componentutils.ReconcileResult[*openmcpv1alpha1.APIServer]{ReconcileError: openmcperrors.WithReason(fmt.Errorf("unable to get resource '%s' from cluster: %w", req.NamespacedName.String(), err), cconst.ReasonCrateClusterInteractionProblem)}
+		return componentutils.ReconcileResult[*openmcpv1alpha1.APIServer]{ReconcileError: openmcperrors.WithReason(fmt.Errorf("unable to get resource '%s' from cluster: %w", req.String(), err), cconst.ReasonCrateClusterInteractionProblem)}
 	}
 
 	// handle operation annotation

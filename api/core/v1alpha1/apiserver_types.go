@@ -97,8 +97,8 @@ type APIServerAccess struct {
 	ExpirationTimestamp *metav1.Time `json:"expirationTimestamp,omitempty"`
 }
 
-//+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // APIServer is the Schema for the APIServer API
 // +kubebuilder:resource:shortName=as
@@ -113,7 +113,7 @@ type APIServer struct {
 	Status APIServerStatus `json:"status,omitempty"`
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
 // APIServerList contains a list of APIServer
 type APIServerList struct {
