@@ -1,5 +1,8 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "git-submodules": {
+    "enabled": true
+  },
   "minimumReleaseAge": "3 days",
   "extends": [
     "config:recommended",
@@ -22,6 +25,12 @@
       "rebaseWhen": "auto",
       "minimumReleaseAge": "0 days",
       "enabled": true
+    },
+    {
+      "description": "Ignore our own image in chart as it will be updated on release",
+      "matchPackageNames": ["ghcr.io/openmcp-project/github.com/openmcp-project/mcp-operator/images/mcp-operator"],
+      "matchManagers": ["helm-values"],
+      "enabled": false
     }
   ]
 }
