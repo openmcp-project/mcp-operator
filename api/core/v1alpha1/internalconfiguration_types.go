@@ -16,7 +16,7 @@ type InternalConfigurationSpec struct {
 	Components InternalConfigurationComponents `json:"components,omitempty"`
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
 // InternalConfiguration is the Schema for the InternalConfigurations API
 // +kubebuilder:resource:shortName=icfg
@@ -27,7 +27,7 @@ type InternalConfiguration struct {
 	Spec InternalConfigurationSpec `json:"spec,omitempty"`
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
 // InternalConfigurationList contains a list of InternalConfiguration
 type InternalConfigurationList struct {

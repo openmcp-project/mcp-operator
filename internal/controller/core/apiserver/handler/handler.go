@@ -90,10 +90,10 @@ func computeTokenRenewalTime(acc *openmcpv1alpha1.APIServerAccess) time.Time {
 		return time.Time{}
 	}
 	// validity is how long the token was valid in the first place
-	validity := acc.ExpirationTimestamp.Time.Sub(acc.CreationTimestamp.Time)
+	validity := acc.ExpirationTimestamp.Sub(acc.CreationTimestamp.Time)
 	// renewalAfter is 80% of the validity
 	renewalAfter := time.Duration(float64(validity) * 0.8)
 	// renewalAt is the point in time at which the token should be renewed
-	renewalAt := acc.CreationTimestamp.Time.Add(renewalAfter)
+	renewalAt := acc.CreationTimestamp.Add(renewalAfter)
 	return renewalAt
 }

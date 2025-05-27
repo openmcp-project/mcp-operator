@@ -77,10 +77,10 @@ var _ = Describe("CO-1153 ReleasechannelRunnable", func() {
 			}
 		}
 
-		//err := crateClient.Create(env.Ctx, &managedComponent)
-		//if err != nil {
-		//	Fail(err.Error())
-		//}
+		// err := crateClient.Create(env.Ctx, &managedComponent)
+		// if err != nil {
+		// 	Fail(err.Error())
+		// }
 
 		Expect(coreClient).ToNot(BeNil())
 		Expect(crateClient).ToNot(BeNil())

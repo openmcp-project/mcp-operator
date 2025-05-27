@@ -50,8 +50,8 @@ type CloudOrchestratorStatus struct {
 	ComponentsHealthy int `json:"componentsHealthy"`
 }
 
-//+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 // +kubebuilder:resource:shortName=co
 // +kubebuilder:printcolumn:name="Successfully_Reconciled",type=string,JSONPath=`.status.conditions[?(@.type=="CloudOrchestratorReconciliation")].status`
 // +kubebuilder:printcolumn:name="Deleted",type="date",JSONPath=".metadata.deletionTimestamp"
@@ -66,7 +66,7 @@ type CloudOrchestrator struct {
 	Status CloudOrchestratorStatus `json:"status,omitempty"`
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
 // CloudOrchestratorList contains a list of CloudOrchestrator
 type CloudOrchestratorList struct {
