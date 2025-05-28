@@ -27,7 +27,7 @@ import (
 )
 
 func getReconciler(c ...client.Client) reconcile.Reconciler {
-	r, err := apiserver.NewAPIServerProvider(constructorContext, c[0], defaultConfig)
+	r, err := apiserver.NewAPIServerProvider(constructorContext, c[0], c[1], defaultConfig)
 	Expect(err).NotTo(HaveOccurred())
 	r.FakeHandler = fakeHandler
 	return r
@@ -39,7 +39,7 @@ const (
 )
 
 func testEnvSetup(testDirPathSegments ...string) *testing.ComplexEnvironment {
-	return testutils.DefaultTestSetupBuilder(testDirPathSegments...).WithFakeClient(testutils.APIServerCluster, testutils.Scheme).WithReconcilerConstructor(apiServerReconciler, getReconciler, testutils.CrateCluster).Build()
+	return testutils.DefaultTestSetupBuilder(testDirPathSegments...).WithFakeClient(testutils.APIServerCluster, testutils.Scheme).WithFakeClient(testutils.LaaSCoreCluster, testutils.Scheme).WithReconcilerConstructor(apiServerReconciler, getReconciler, testutils.CrateCluster, testutils.LaaSCoreCluster).Build()
 }
 
 func mockReadyConditions(ready bool) []openmcpv1alpha1.ComponentCondition {

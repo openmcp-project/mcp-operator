@@ -3,6 +3,7 @@ package managedcontrolplane
 import (
 	"fmt"
 	"slices"
+	"strings"
 
 	"github.com/openmcp-project/mcp-operator/internal/components"
 	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
@@ -31,6 +32,12 @@ func (*ManagedControlPlaneController) ManagedControlPlaneToSplitInternalResource
 		}
 		if workspace, ok := ns.Labels[openmcpv1alpha1.ProjectWorkspaceOperatorWorkspaceLabel]; ok {
 			labels[openmcpv1alpha1.ManagedControlPlaneBackReferenceLabelWorkspace] = workspace
+		}
+	}
+	for key, value := range mcp.Labels {
+		if strings.Contains(key, openmcpv1alpha1.ArchitectureLabelPrefix) {
+			// propagate architecture split labels from the MCP to the component resources
+			labels[key] = value
 		}
 	}
 

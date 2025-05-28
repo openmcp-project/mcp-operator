@@ -19,6 +19,8 @@ import (
 
 	"sigs.k8s.io/controller-runtime/pkg/cluster"
 
+	v2install "github.com/openmcp-project/openmcp-operator/api/install"
+
 	laasinstall "github.com/gardener/landscaper-service/pkg/apis/core/install"
 	cocorev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
 	"github.com/openmcp-project/controller-utils/pkg/init/webhooks"
@@ -219,7 +221,15 @@ func (o *Options) run(ctx context.Context) error {
 
 	if o.ActiveControllers.Has(ControllerIDAPIServer) {
 		// APIServer controller
-		apiServerProvider, err := apiservercontroller.NewAPIServerProvider(ctx, mgr.GetClient(), o.APIServerConfig)
+		// build platform cluster client for v2 path
+		v2scheme := v2install.InstallOperatorAPIs(runtime.NewScheme())
+		platformClient, err := client.New(o.LaaSClusterConfig, client.Options{
+			Scheme: v2scheme,
+		})
+		if err != nil {
+			return fmt.Errorf("error creating platform cluster client: %w", err)
+		}
+		apiServerProvider, err := apiservercontroller.NewAPIServerProvider(ctx, mgr.GetClient(), platformClient, o.APIServerConfig)
 		if err != nil {
 			return fmt.Errorf("error creating %s: %w", apiservercontroller.ControllerName, err)
 		}

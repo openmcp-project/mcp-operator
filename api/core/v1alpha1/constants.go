@@ -76,4 +76,10 @@ const (
 	APIServerDomain = "apiserver." + BaseDomain
 
 	ManagedByAPIServerLabel = APIServerDomain + "/managed"
+
+	// Architecture Switch Labels
+	ArchitectureLabelPrefix      = "architecture." + BaseDomain + "/"
+	ArchitectureV2               = "v2"
+	V1MCPReferenceLabelName      = "v1." + BaseDomain + "/mcp-name"
+	V1MCPReferenceLabelNamespace = "v1." + BaseDomain + "/mcp-namespace"
 )
