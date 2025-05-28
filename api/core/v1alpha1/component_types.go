@@ -139,3 +139,11 @@ func (ct ComponentType) ReconciliationCondition() string {
 func (ct ComponentType) HealthyCondition() string {
 	return fmt.Sprintf("%sHealthy", string(ct))
 }
+
+func (ct ComponentType) ArchitectureLabelPrefix() string {
+	return fmt.Sprintf("%s.%s", strings.ToLower(string(ct)), ArchitectureLabelPrefix)
+}
+
+func (ct ComponentType) ArchitectureVersionLabel() string {
+	return fmt.Sprintf("%s%s", ct.ArchitectureLabelPrefix(), "version")
+}

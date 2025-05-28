@@ -13,9 +13,11 @@ require (
 	github.com/gardener/landscaper-service v0.132.0
 	github.com/onsi/ginkgo/v2 v2.23.4
 	github.com/onsi/gomega v1.38.0
+	github.com/openmcp-project/cluster-provider-gardener/api v0.2.0
 	github.com/openmcp-project/control-plane-operator v0.1.10
 	github.com/openmcp-project/controller-utils v0.13.1
 	github.com/openmcp-project/mcp-operator/api v0.32.0
+	github.com/openmcp-project/openmcp-operator/api v0.6.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.7
 	github.com/stretchr/testify v1.10.0
