@@ -344,6 +344,7 @@ func convertToControlPlaneSpec(coSpec *openmcpv1alpha1.CloudOrchestratorSpec, ap
 		}
 		controlPlaneSpec.ComponentsConfig.CertManager = &corev1beta1.CertManagerConfig{
 			Version: "1.16.1",
+			Values:  &apiextensionsv1.JSON{Raw: []byte(`{"webhook":{"timeoutSeconds":15}}`)},
 		}
 	}
 
