@@ -338,7 +338,7 @@ var _ = Describe("Components", func() {
 			result, err := componentutils.UpdateStatus(context.Background(), env.Client(), rr)
 			Expect(err).To(HaveOccurred())
 			Expect(errors.Is(err, rr.ReconcileError)).To(BeTrue())
-			Expect(result.Requeue).To(BeFalse())
+			Expect(result.RequeueAfter).To(BeZero())
 
 			err = env.Client().Get(context.Background(), client.ObjectKeyFromObject(as), as)
 			Expect(err).ToNot(HaveOccurred())

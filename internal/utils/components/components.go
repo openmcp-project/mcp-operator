@@ -250,7 +250,7 @@ type ReconcileResult[T components.Component] struct {
 
 // LogRequeue logs a message with the given logger at the given verbosity if the currently reconciled object is requeued for another reconciliation.
 func (rr *ReconcileResult[T]) LogRequeue(log logging.Logger, verbosity logging.LogLevel) {
-	if rr.Result.Requeue || rr.Result.RequeueAfter > 0 {
+	if rr.Result.RequeueAfter > 0 {
 		log.Log(verbosity, "Object requeued for reconciliation", "requeueAfter", rr.Result.RequeueAfter.String(), "reconcileAt", time.Now().Add(rr.Result.RequeueAfter).Format(time.RFC3339))
 	}
 }

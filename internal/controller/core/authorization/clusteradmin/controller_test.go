@@ -88,7 +88,7 @@ var _ = Describe("CO-1153 ClusterAdmin Controller", func() {
 		Eventually(func() bool {
 			res := env.ShouldReconcile(clusterAdminReconciler, req)
 			err = env.Client(testutils.APIServerCluster).Get(env.Ctx, types.NamespacedName{Name: openmcpv1alpha1.ClusterAdminRoleBinding}, crb)
-			return errors.IsNotFound(err) && res.Requeue == false && res.RequeueAfter == 0
+			return errors.IsNotFound(err) && res.RequeueAfter == 0
 		}, 2*time.Second, 100*time.Millisecond).Should(BeTrue())
 
 		err = env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(ca), ca)

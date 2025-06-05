@@ -163,7 +163,7 @@ func (r *APIServerProvider) reconcile(ctx context.Context, req ctrl.Request) com
 
 	if deletionWaitingForDependenciesMsg != "" {
 		// we are waiting for one or more dependencies to be deleted
-		return componentutils.ReconcileResult[*openmcpv1alpha1.APIServer]{Component: as, OldComponent: old, Result: ctrl.Result{Requeue: res.Requeue, RequeueAfter: minExceptZero(res.RequeueAfter, 60*time.Second)}, ReconcileError: errs.Aggregate(), Reason: cconst.ReasonDeletionWaitingForDependingComponents, Message: deletionWaitingForDependenciesMsg, Conditions: cons}
+		return componentutils.ReconcileResult[*openmcpv1alpha1.APIServer]{Component: as, OldComponent: old, Result: ctrl.Result{RequeueAfter: minExceptZero(res.RequeueAfter, 60*time.Second)}, ReconcileError: errs.Aggregate(), Reason: cconst.ReasonDeletionWaitingForDependingComponents, Message: deletionWaitingForDependenciesMsg, Conditions: cons}
 	}
 
 	if deleteAPIServer && componentutils.AllConditionsTrue(cons...) {
