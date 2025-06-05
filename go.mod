@@ -14,7 +14,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.23.4
 	github.com/onsi/gomega v1.37.0
 	github.com/openmcp-project/control-plane-operator v0.1.5
-	github.com/openmcp-project/controller-utils v0.9.0
+	github.com/openmcp-project/controller-utils v0.10.0
 	github.com/openmcp-project/mcp-operator/api v0.30.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.6
@@ -44,7 +44,7 @@ require (
 	github.com/gardener/component-spec/bindings-go v0.0.98 // indirect
 	github.com/gardener/landscaper/apis v0.135.0 // indirect
 	github.com/ghodss/yaml v1.0.0 // indirect
-	github.com/go-logr/logr v1.4.2 // indirect
+	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/zapr v1.3.0 // indirect
 	github.com/go-openapi/jsonpointer v0.21.0 // indirect
 	github.com/go-openapi/jsonreference v0.21.0 // indirect

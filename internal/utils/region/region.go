@@ -126,7 +126,7 @@ func (g Geography) SortByProximity(start openmcpv1alpha1.RegionSpecification, pr
 			continue
 		}
 		addDummy = true
-		if !(preferSameRegion && !sameRegionPriorityMode && cur.Name == start.Name) {
+		if !(preferSameRegion && !sameRegionPriorityMode && cur.Name == start.Name) { //nolint:staticcheck
 			curRes = append(curRes, cur)
 		}
 		visited.Insert(cur)

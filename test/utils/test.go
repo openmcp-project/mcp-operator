@@ -47,7 +47,7 @@ func DefaultTestSetupBuilder(testDirPathSegments ...string) *testing.ComplexEnvi
 	builder := testing.NewComplexEnvironmentBuilder().
 		WithFakeClient(CrateCluster, Scheme)
 
-	if len(testDirPathSegments) > 0 && !(len(testDirPathSegments) == 1 && testDirPathSegments[0] == "") {
+	if len(testDirPathSegments) > 0 && !(len(testDirPathSegments) == 1 && testDirPathSegments[0] == "") { //nolint:staticcheck
 		builder.WithInitObjectPath(CrateCluster, testDirPathSegments...)
 		apiServerDir := path.Join(path.Join(testDirPathSegments...), "apiserver")
 		_, err := os.Stat(apiServerDir)

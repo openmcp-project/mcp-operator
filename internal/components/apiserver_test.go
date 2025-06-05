@@ -91,7 +91,7 @@ var _ = Describe("APIServerConverter", func() {
 			Expect(apiServerSpecT.Type).To(Equal(mcp.Spec.Components.APIServer.Type))
 			Expect(apiServerSpecT.GardenerConfig).To(Equal(mcp.Spec.Components.APIServer.GardenerConfig))
 			Expect(apiServerSpecT.Internal.GardenerConfig.ShootOverwrite).To(Equal(icfg.Spec.Components.APIServer.GardenerConfig.ShootOverwrite))
-			Expect(apiServerSpecT.DesiredRegion).To(Equal(mcp.Spec.CommonConfig.DesiredRegion))
+			Expect(apiServerSpecT.DesiredRegion).To(Equal(mcp.Spec.DesiredRegion))
 		})
 
 		It("should return an error if the spec is not configured", func() {

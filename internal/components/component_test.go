@@ -30,7 +30,7 @@ var _ = Describe("Components", func() {
 			commonCfg, iCommonConfig := components.GetCommonConfig(mcp, icfg)
 			Expect(commonCfg).ToNot(BeNil())
 			Expect(iCommonConfig).ToNot(BeNil())
-			Expect(commonCfg.DesiredRegion).To(Equal(mcp.Spec.CommonConfig.DesiredRegion))
+			Expect(commonCfg.DesiredRegion).To(Equal(mcp.Spec.DesiredRegion))
 			Expect(iCommonConfig).To(Equal(icfg.Spec.InternalCommonConfig))
 		})
 

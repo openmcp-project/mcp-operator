@@ -38,8 +38,8 @@ type LandscaperSpec struct {
 	LandscaperConfiguration `json:",inline"`
 }
 
-//+kubebuilder:object:root=true
-//+kubebuilder:subresource:status
+// +kubebuilder:object:root=true
+// +kubebuilder:subresource:status
 
 // Landscaper is the Schema for the laasinstances API
 // +kubebuilder:resource:shortName=ls
@@ -54,7 +54,7 @@ type Landscaper struct {
 	Status LandscaperStatus `json:"status,omitempty"`
 }
 
-//+kubebuilder:object:root=true
+// +kubebuilder:object:root=true
 
 // LandscaperList contains a list of Landscaper
 type LandscaperList struct {

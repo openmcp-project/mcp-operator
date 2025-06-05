@@ -15,7 +15,7 @@ import (
 )
 
 // ManagedControlPlaneToSplitInternalResources converts the given v1alpha1.ManagedControlPlane into multiple internal resources.
-// The returned map contains only those componentes, for which the ManagedControlPlane contains configuration.
+// The returned map contains only those components for which the ManagedControlPlane contains configuration.
 func (*ManagedControlPlaneController) ManagedControlPlaneToSplitInternalResources(mcp *openmcpv1alpha1.ManagedControlPlane, icfg *openmcpv1alpha1.InternalConfiguration, ns *corev1.Namespace, scheme *runtime.Scheme, addReconcileAnnotation bool) (map[openmcpv1alpha1.ComponentType]*components.ComponentHandler, error) {
 	if mcp == nil {
 		return nil, nil

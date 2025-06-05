@@ -65,12 +65,12 @@ type CloudOrchestratorReconciler struct {
 	CrateClient client.Client
 }
 
-//+kubebuilder:rbac:groups=core.openmcp.cloud,resources=cloudorchestrators,verbs=get;list;watch;create;update;patch;delete
-//+kubebuilder:rbac:groups=core.openmcp.cloud,resources=cloudorchestrators/status,verbs=get;update;patch
-//+kubebuilder:rbac:groups=core.openmcp.cloud,resources=cloudorchestrators/finalizers,verbs=update
-//+kubebuilder:rbac:groups=core.openmcp.cloud,resources=apiservers/finalizers,verbs=update
-//+kubebuilder:rbac:groups=*,resources=*,verbs=*
-//+kubebuilder:rbac:urls=*,verbs=*
+// +kubebuilder:rbac:groups=core.openmcp.cloud,resources=cloudorchestrators,verbs=get;list;watch;create;update;patch;delete
+// +kubebuilder:rbac:groups=core.openmcp.cloud,resources=cloudorchestrators/status,verbs=get;update;patch
+// +kubebuilder:rbac:groups=core.openmcp.cloud,resources=cloudorchestrators/finalizers,verbs=update
+// +kubebuilder:rbac:groups=core.openmcp.cloud,resources=apiservers/finalizers,verbs=update
+// +kubebuilder:rbac:groups=*,resources=*,verbs=*
+// +kubebuilder:rbac:urls=*,verbs=*
 
 func (r *CloudOrchestratorReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
 	log, ctx := utils.InitializeControllerLogger(ctx, ControllerName)
@@ -332,36 +332,36 @@ func convertToControlPlaneSpec(coSpec *openmcpv1alpha1.CloudOrchestratorSpec, ap
 	}
 
 	if coSpec.Crossplane != nil {
-		controlPlaneSpec.ComponentsConfig.Crossplane = &corev1beta1.CrossplaneConfig{
+		controlPlaneSpec.Crossplane = &corev1beta1.CrossplaneConfig{
 			Version:   coSpec.Crossplane.Version,
 			Providers: convertCrossplaneProviders(coSpec.Crossplane.Providers),
 		}
 	}
 
 	if coSpec.BTPServiceOperator != nil {
-		controlPlaneSpec.ComponentsConfig.BTPServiceOperator = &corev1beta1.BTPServiceOperatorConfig{
+		controlPlaneSpec.BTPServiceOperator = &corev1beta1.BTPServiceOperatorConfig{
 			Version: coSpec.BTPServiceOperator.Version,
 		}
-		controlPlaneSpec.ComponentsConfig.CertManager = &corev1beta1.CertManagerConfig{
+		controlPlaneSpec.CertManager = &corev1beta1.CertManagerConfig{
 			Version: "1.16.1",
 			Values:  &apiextensionsv1.JSON{Raw: []byte(`{"webhook":{"timeoutSeconds":15}}`)},
 		}
 	}
 
 	if coSpec.ExternalSecretsOperator != nil {
-		controlPlaneSpec.ComponentsConfig.ExternalSecretsOperator = &corev1beta1.ExternalSecretsOperatorConfig{
+		controlPlaneSpec.ExternalSecretsOperator = &corev1beta1.ExternalSecretsOperatorConfig{
 			Version: coSpec.ExternalSecretsOperator.Version,
 		}
 	}
 
 	if coSpec.Kyverno != nil {
-		controlPlaneSpec.ComponentsConfig.Kyverno = &corev1beta1.KyvernoConfig{
+		controlPlaneSpec.Kyverno = &corev1beta1.KyvernoConfig{
 			Version: coSpec.Kyverno.Version,
 		}
 	}
 
 	if coSpec.Flux != nil {
-		controlPlaneSpec.ComponentsConfig.Flux = &corev1beta1.FluxConfig{
+		controlPlaneSpec.Flux = &corev1beta1.FluxConfig{
 			Version: coSpec.Flux.Version,
 			Values:  &apiextensionsv1.JSON{Raw: fluxValues},
 		}
