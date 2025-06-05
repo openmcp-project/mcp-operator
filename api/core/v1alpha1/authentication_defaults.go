@@ -10,8 +10,8 @@ import (
 // Default sets the default values for the AuthenticationSpec.
 // This modifies the receiver object.
 func (as *AuthenticationSpec) Default() {
-	if as.AuthenticationConfiguration.EnableSystemIdentityProvider == nil {
-		as.AuthenticationConfiguration.EnableSystemIdentityProvider = ptr.To(true)
+	if as.EnableSystemIdentityProvider == nil {
+		as.EnableSystemIdentityProvider = ptr.To(true)
 	}
 }
 
@@ -79,7 +79,7 @@ func ValidateIdp(idp IdentityProvider, fldPath *field.Path) field.ErrorList {
 // isLowerCaseLetter checks if the given string is a lowercase letter.
 func isLowerCaseLetter(s string) bool {
 	for _, r := range s {
-		if !(unicode.IsLetter(r) && unicode.IsLower(r)) {
+		if !(unicode.IsLetter(r) && unicode.IsLower(r)) { //nolint:staticcheck
 			return false
 		}
 	}

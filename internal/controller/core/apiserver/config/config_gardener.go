@@ -76,7 +76,7 @@ type GardenerConfiguration struct {
 	Name string `json:"name,omitempty"`
 
 	// Project is the Gardener project which should be used to create shoot clusters in it.
-	// The provided kubeconfig must have priviliges for this project.
+	// The provided kubeconfig must have privileges for this project.
 	Project string `json:"project,omitempty"`
 
 	// CloudProfile is the name of the Gardener CloudProfile that should be used for this shoot.

@@ -19,12 +19,12 @@ var _ = Describe("Patch", func() {
 	Context("IsAnnotationAlreadyExistsError", func() {
 
 		It("should return true if the error is of type AnnotationAlreadyExistsError", func() {
-			var err error = componentutils.NewAnnotationAlreadyExistsError("test-annotation", "desired-value", "actual-value")
+			err := componentutils.NewAnnotationAlreadyExistsError("test-annotation", "desired-value", "actual-value")
 			Expect(componentutils.IsAnnotationAlreadyExistsError(err)).To(BeTrue())
 		})
 
 		It("should return false if the error is not of type AnnotationAlreadyExistsError", func() {
-			var err error = fmt.Errorf("test-error")
+			err := fmt.Errorf("test-error")
 			Expect(componentutils.IsAnnotationAlreadyExistsError(err)).To(BeFalse())
 		})
 

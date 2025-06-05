@@ -157,7 +157,7 @@ func IsComponentReady(comp components.Component, relevantConditions ...string) b
 // The generation of the InternalConfiguration is expected to be -1, if no InternalConfiguration exists.
 // The generation of the component resource can be set to -1 if it is not known (it will then be ignored).
 func IsComponentReadyRaw(cpGen, icGen, rGen int64, obsGen openmcpv1alpha1.ObservedGenerations, conditions ...openmcpv1alpha1.ComponentCondition) bool {
-	if !(obsGen.ManagedControlPlane == cpGen && obsGen.InternalConfiguration == icGen && (rGen < 0 || obsGen.Resource == rGen)) {
+	if !(obsGen.ManagedControlPlane == cpGen && obsGen.InternalConfiguration == icGen && (rGen < 0 || obsGen.Resource == rGen)) { //nolint:staticcheck
 		return false
 	}
 	for _, con := range conditions {

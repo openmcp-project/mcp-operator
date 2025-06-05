@@ -191,7 +191,7 @@ func UpdateStatus[T components.Component](ctx context.Context, c client.Client, 
 	}
 	reqCons := rr.Component.GetRequiredConditions()
 	if reqCons != nil && reqCons.Has(rr.Component.Type().HealthyCondition()) && !cu.HasCondition(rr.Component.Type().HealthyCondition()) && rr.ReconcileError != nil {
-		// if an error occured during the reconciliation and the component is expected to expose a <component>Healthy condition, which is missing, put a reconciliation error into the condition
+		// if an error occurred during the reconciliation and the component is expected to expose a <component>Healthy condition, which is missing, put a reconciliation error into the condition
 		cu.UpdateCondition(rr.Component.Type().HealthyCondition(), openmcpv1alpha1.ComponentConditionStatusFalse, cconst.ReasonReconciliationError, cconst.MessageReconciliationError)
 	}
 	for eCon := range rr.Component.GetRequiredConditions() {
@@ -243,7 +243,7 @@ type ReconcileResult[T components.Component] struct {
 	// Conditions contains a list of conditions that should be updated on the component.
 	// Note that this must not contain the <component>Reconciliation condition, as that one is constructed from this struct's other fields.
 	// Also note that names of conditions are globally unique, so take care to avoid conflicts with other components.
-	// Futhermore, all conditions on the component resource that are not included in this list anymore will be removed.
+	// Furthermore, all conditions on the component resource that are not included in this list anymore will be removed.
 	// The lastTransition timestamp of the condition will be overwritten with the current time while updating.
 	Conditions []openmcpv1alpha1.ComponentCondition
 }

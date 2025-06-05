@@ -70,7 +70,7 @@ type ObservedGenerations struct {
 
 // CommonComponentStatus contains fields which all component resources' statuses must contain.
 type CommonComponentStatus struct {
-	// Conditions containts the conditions of the component.
+	// Conditions contains the conditions of the component.
 	// For each component, this is expected to contain at least one condition per top-level node that component has in the ManagedControlPlane's spec.
 	// This condition is expected to be named "<node>Healthy" and to describe the general availability of the functionality configured by that top-level node.
 	Conditions ComponentConditionList `json:"conditions,omitempty"`
