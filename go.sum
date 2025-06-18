@@ -109,8 +109,8 @@ github.com/onsi/ginkgo/v2 v2.23.4 h1:ktYTpKJAVZnDT4VjxSbiBenUjmlL/5QkBEocaWXiQus
 github.com/onsi/ginkgo/v2 v2.23.4/go.mod h1:Bt66ApGPBFzHyR+JO10Zbt0Gsp4uWxu5mIOTusL46e8=
 github.com/onsi/gomega v1.37.0 h1:CdEG8g0S133B4OswTDC/5XPSzE1OeP29QOioj2PID2Y=
 github.com/onsi/gomega v1.37.0/go.mod h1:8D9+Txp43QWKhM24yyOBEdpkzN8FvJyAwecBgsU4KU0=
-github.com/openmcp-project/control-plane-operator v0.1.9 h1:vvijAVP0wbs+djAPVUiUHUVSOvEFl5kg1V6hDg7pyPM=
-github.com/openmcp-project/control-plane-operator v0.1.9/go.mod h1:GNu9LBTPWoE3dKsBo2kS+SeKSLU2qLtu3VjpaznsB2o=
+github.com/openmcp-project/control-plane-operator v0.1.10 h1:5ticEP3llBmIHQkBzkZwgTdcHJ7Z9rSaw5BsY3QQ2pM=
+github.com/openmcp-project/control-plane-operator v0.1.10/go.mod h1:GNu9LBTPWoE3dKsBo2kS+SeKSLU2qLtu3VjpaznsB2o=
 github.com/openmcp-project/controller-utils v0.10.0 h1:2WGSBeoVqoVebVKzjNF4DR8raT2v96hIPvyVBqufz/Y=
 github.com/openmcp-project/controller-utils v0.10.0/go.mod h1:QAAeb7VOEE2PRfRRJHcYm8bRKiLShpIruZIRjO1u+bc=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
