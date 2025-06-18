@@ -13,7 +13,7 @@ require (
 	github.com/gardener/landscaper-service v0.128.0
 	github.com/onsi/ginkgo/v2 v2.23.4
 	github.com/onsi/gomega v1.37.0
-	github.com/openmcp-project/control-plane-operator v0.1.9
+	github.com/openmcp-project/control-plane-operator v0.1.10
 	github.com/openmcp-project/controller-utils v0.10.0
 	github.com/openmcp-project/mcp-operator/api v0.30.1
 	github.com/spf13/cobra v1.9.1
