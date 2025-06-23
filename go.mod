@@ -8,7 +8,7 @@ replace github.com/imdario/mergo v1.0.0 => github.com/imdario/mergo v0.3.16
 
 require (
 	github.com/Masterminds/semver/v3 v3.3.1
-	github.com/alitto/pond/v2 v2.3.4
+	github.com/alitto/pond/v2 v2.4.0
 	github.com/apparentlymart/go-cidr v1.1.0
 	github.com/gardener/landscaper-service v0.128.0
 	github.com/onsi/ginkgo/v2 v2.23.4
