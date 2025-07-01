@@ -1,6 +1,6 @@
 module github.com/openmcp-project/mcp-operator/api
 
-go 1.24.3
+go 1.24.4
 
 require (
 	github.com/onsi/ginkgo/v2 v2.23.4
