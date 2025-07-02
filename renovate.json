@@ -28,7 +28,7 @@
     },
     {
       "description": "Ignore our own image in chart as it will be updated on release",
-      "matchPackageNames": ["ghcr.io/openmcp-project/github.com/openmcp-project/mcp-operator/images/mcp-operator"],
+      "matchPackageNames": ["ghcr.io/openmcp-project/images/mcp-operator"],
       "matchManagers": ["helm-values"],
       "enabled": false
     }
