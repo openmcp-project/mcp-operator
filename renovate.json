@@ -16,6 +16,18 @@
   ],
   "packageRules": [
     {
+      "matchManagers": [
+        "gomod"
+      ],
+      "matchDepNames": [
+        "go"
+      ],
+      "matchDepTypes": [
+        "golang"
+      ],
+      "rangeStrategy": "bump"
+    },
+    {
       "matchPackageNames": [
         "github.com/gardener/landscaper",
         "github.com/gardener/landscaper-service",
