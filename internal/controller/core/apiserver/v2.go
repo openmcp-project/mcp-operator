@@ -9,6 +9,7 @@ import (
 	"github.com/openmcp-project/controller-utils/pkg/logging"
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -25,6 +26,7 @@ import (
 
 	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
 
+	cconst "github.com/openmcp-project/mcp-operator/api/constants"
 	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 	openmcperrors "github.com/openmcp-project/mcp-operator/api/errors"
 	handler "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/handler"
@@ -35,6 +37,19 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 	log := logging.FromContextOrPanic(ctx).WithName(openmcpv1alpha1.ArchitectureV2)
 	ctx = logging.NewContext(ctx, log)
 
+	clusterRequestGrantedCon := openmcpv1alpha1.ComponentCondition{
+		Type:   cconst.ConditionClusterRequestGranted,
+		Status: openmcpv1alpha1.ComponentConditionStatusUnknown,
+	}
+	clusterReadyCon := openmcpv1alpha1.ComponentCondition{
+		Type:   cconst.ConditionClusterReady,
+		Status: openmcpv1alpha1.ComponentConditionStatusUnknown,
+	}
+	accessRequestGrantedCon := openmcpv1alpha1.ComponentCondition{
+		Type:   cconst.ConditionAccessRequestGranted,
+		Status: openmcpv1alpha1.ComponentConditionStatusUnknown,
+	}
+
 	// instead of calling a handler, create a ClusterRequest and an AccessRequest
 	// ensure namespace, because this is created on the platform cluster
 	nsName := fmt.Sprintf("mcp-%s", ctrlutils.K8sNameHash(as.Namespace))
@@ -44,7 +59,7 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 	})
 	if err := resources.CreateOrUpdateResource(ctx, platformClient, nsm); err != nil {
 		rerr := openmcperrors.WithReason(fmt.Errorf("failed to create or update namespace %s: %w", nsName, err), clustersconst.ReasonPlatformClusterInteractionProblem)
-		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
+		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
 	}
 
 	// create or update ClusterRequest
@@ -55,8 +70,8 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 	case openmcpv1alpha1.GardenerDedicated:
 		purpose = "mcp-worker"
 	default:
-		rerr := openmcperrors.WithReason(fmt.Errorf("unknown APIServer type %s", as.Spec.Type), clustersconst.ReasonConfigurationProblem)
-		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
+		rerr := openmcperrors.WithReason(fmt.Errorf("unknown APIServer type '%s'", as.Spec.Type), clustersconst.ReasonConfigurationProblem)
+		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
 	}
 	cr := &clustersv1alpha1.ClusterRequest{}
 	cr.Name = as.Name
@@ -68,31 +83,43 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 	})
 	if err := resources.CreateOrUpdateResource(ctx, platformClient, crm); err != nil {
 		rerr := openmcperrors.WithReason(fmt.Errorf("failed to create or update ClusterRequest %s/%s: %w", cr.Namespace, cr.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
-		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
+		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
 	}
 
 	// if the ClusterRequest is granted, fetch the corresponding cluster
 	if err := platformClient.Get(ctx, client.ObjectKeyFromObject(cr), cr); err != nil {
 		rerr := openmcperrors.WithReason(fmt.Errorf("failed to get ClusterRequest %s/%s: %w", cr.Namespace, cr.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
-		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
+		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
 	}
 	var setShootInStatus handler.UpdateStatusFunc
 	if cr.Status.Phase == clustersv1alpha1.REQUEST_GRANTED && cr.Status.Cluster != nil {
+		clusterRequestGrantedCon.Status = openmcpv1alpha1.ComponentConditionStatusTrue
+
 		// fetch Cluster resource
 		cluster := &clustersv1alpha1.Cluster{}
 		cluster.Name = cr.Status.Cluster.Name
 		cluster.Namespace = cr.Status.Cluster.Namespace
 		if err := platformClient.Get(ctx, client.ObjectKeyFromObject(cluster), cluster); err != nil {
 			rerr := openmcperrors.WithReason(fmt.Errorf("failed to get Cluster %s/%s: %w", cluster.Namespace, cluster.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
-			return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
+			return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
 		}
+
+		clusterReadyCon.Status = openmcpv1alpha1.ComponentConditionStatusFromBool(cluster.Status.Phase == clustersv1alpha1.CLUSTER_PHASE_READY)
+		if clusterReadyCon.Status != openmcpv1alpha1.ComponentConditionStatusTrue {
+			clusterReadyCon.Reason = cconst.ReasonClusterNotReady
+			clusterReadyCon.Message = cluster.Status.Message
+			if clusterReadyCon.Message == "" {
+				clusterReadyCon.Message = "Cluster is not ready yet, no further information available"
+			}
+		}
+
 		// check if there is a shoot manifest in the Cluster status
 		// if so, copy it into the APIServer status
 		if cluster.Status.ProviderStatus != nil {
 			cs := &gcpv1alpha1.ClusterStatus{}
 			if err := cluster.Status.GetProviderStatus(cs); err != nil {
 				rerr := openmcperrors.WithReason(fmt.Errorf("error unmarshalling provider status: %w", err), clustersconst.ReasonInternalError)
-				return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
+				return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
 			}
 			log.Debug("Provider status found, checking for shoot manifest")
 			if cs.Shoot != nil {
@@ -125,6 +152,30 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 
 			}
 		}
+
+		if clusterReadyCon.Status != openmcpv1alpha1.ComponentConditionStatusTrue {
+			return ctrl.Result{RequeueAfter: 30 * time.Second}, nil, clusterConditions(false, cconst.ReasonClusterNotReady, clusterReadyCon.Message, clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), nil
+		}
+
+	} else {
+		clusterRequestGrantedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
+		clusterRequestGrantedCon.Reason = cconst.ReasonClusterRequestNotGranted
+		crReason := cr.Status.Reason
+		crMessage := cr.Status.Message
+		if crReason == "" {
+			crReason = "<NoReason>"
+		}
+		if crMessage == "" {
+			crMessage = "<NoMessage>"
+		}
+		clusterRequestGrantedCon.Message = fmt.Sprintf("ClusterRequest is not granted or does not reference a cluster: [%s] %s", crReason, crMessage)
+
+		rr := ctrl.Result{RequeueAfter: 30 * time.Second}
+		if cr.Status.Phase == clustersv1alpha1.REQUEST_DENIED {
+			// a denied request will never become granted (at least that's the idea), so no reason to wait for it
+			rr = ctrl.Result{}
+		}
+		return rr, nil, clusterConditions(false, clusterRequestGrantedCon.Reason, clusterRequestGrantedCon.Message, clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), nil
 	}
 
 	// build the UpdateStatusFunc
@@ -144,86 +195,115 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 		return nil
 	}
 
-	// ensure AccessRequest
-	ar := &clustersv1alpha1.AccessRequest{}
-	ar.Name = as.Name
-	ar.Namespace = nsName
-	arm := NewAccessRequestMutator(ar.Name, ar.Namespace, cr.Name, cr.Namespace, false, []clustersv1alpha1.PermissionsRequest{
-		{
-			Rules: []rbacv1.PolicyRule{
-				{
-					APIGroups: []string{"*"},
-					Resources: []string{"*"},
-					Verbs:     []string{"*"},
+	rr := ctrl.Result{}
+	if clusterReadyCon.Status == openmcpv1alpha1.ComponentConditionStatusTrue {
+		// ensure AccessRequest
+		ar := &clustersv1alpha1.AccessRequest{}
+		ar.Name = as.Name
+		ar.Namespace = nsName
+		arm := NewAccessRequestMutator(ar.Name, ar.Namespace, cr.Name, cr.Namespace, false, []clustersv1alpha1.PermissionsRequest{
+			{
+				Rules: []rbacv1.PolicyRule{
+					{
+						APIGroups: []string{"*"},
+						Resources: []string{"*"},
+						Verbs:     []string{"*"},
+					},
 				},
 			},
-		},
-	})
-	arm.MetadataMutator().WithLabels(map[string]string{
-		openmcpv1alpha1.V1MCPReferenceLabelName:      as.Name,
-		openmcpv1alpha1.V1MCPReferenceLabelNamespace: as.Namespace,
-	})
-	if err := resources.CreateOrUpdateResource(ctx, platformClient, arm); err != nil {
-		rerr := openmcperrors.WithReason(fmt.Errorf("failed to create or update AccessRequest %s/%s: %w", ar.Namespace, ar.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
-		return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
-	}
-	// if the AccessRequest is granted, fetch the corresponding access
-	if err := platformClient.Get(ctx, client.ObjectKeyFromObject(ar), ar); err != nil {
-		rerr := openmcperrors.WithReason(fmt.Errorf("failed to get AccessRequest %s/%s: %w", ar.Namespace, ar.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
-		return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
-	}
-	if ar.Status.Phase != clustersv1alpha1.REQUEST_GRANTED && ar.Status.SecretRef == nil {
-		// todo return condition
-		rerr := openmcperrors.WithReason(fmt.Errorf("AccessRequest %s/%s is not granted yet", ar.Namespace, ar.Name), clustersconst.ReasonInternalError)
-		return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
+		})
+		arm.MetadataMutator().WithLabels(map[string]string{
+			openmcpv1alpha1.V1MCPReferenceLabelName:      as.Name,
+			openmcpv1alpha1.V1MCPReferenceLabelNamespace: as.Namespace,
+		})
+		if err := resources.CreateOrUpdateResource(ctx, platformClient, arm); err != nil {
+			rerr := openmcperrors.WithReason(fmt.Errorf("failed to create or update AccessRequest %s/%s: %w", ar.Namespace, ar.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
+			return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
+		}
+		// if the AccessRequest is granted, fetch the corresponding access
+		if err := platformClient.Get(ctx, client.ObjectKeyFromObject(ar), ar); err != nil {
+			rerr := openmcperrors.WithReason(fmt.Errorf("failed to get AccessRequest %s/%s: %w", ar.Namespace, ar.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
+			return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
+		}
+		if ar.Status.Phase != clustersv1alpha1.REQUEST_GRANTED && ar.Status.SecretRef == nil {
+			accessRequestGrantedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
+			accessRequestGrantedCon.Reason = cconst.ReasonAccessRequestNotGranted
+			arReason := cr.Status.Reason
+			arMessage := cr.Status.Message
+			if arReason == "" {
+				arReason = "<NoReason>"
+			}
+			if arMessage == "" {
+				arMessage = "<NoMessage>"
+			}
+			accessRequestGrantedCon.Message = fmt.Sprintf("AccessRequest '%s/%s' is not granted or does not reference a secret: [%s] %s", ar.Namespace, ar.Name, arReason, arMessage)
+
+			rr := ctrl.Result{RequeueAfter: 30 * time.Second}
+			if ar.Status.Phase == clustersv1alpha1.REQUEST_DENIED {
+				// a denied request will never become granted (at least that's the idea), so no reason to wait for it
+				rr = ctrl.Result{}
+			}
+			return rr, usf, clusterConditions(false, accessRequestGrantedCon.Reason, accessRequestGrantedCon.Message, clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), nil
+		}
+
+		accessRequestGrantedCon.Status = openmcpv1alpha1.ComponentConditionStatusTrue
+
+		// fetch the secret containing the kubeconfig
+		secret := &corev1.Secret{}
+		secret.Name = ar.Status.SecretRef.Name
+		secret.Namespace = ar.Status.SecretRef.Namespace
+		if err := platformClient.Get(ctx, client.ObjectKeyFromObject(secret), secret); err != nil {
+			rerr := openmcperrors.WithReason(fmt.Errorf("failed to get Secret %s/%s: %w", secret.Namespace, secret.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
+			return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
+		}
+		kcfg, ok := secret.Data["kubeconfig"]
+		if !ok {
+			rerr := openmcperrors.WithReason(fmt.Errorf("kubeconfig not found in secret %s/%s", secret.Namespace, secret.Name), clustersconst.ReasonInternalError)
+			return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
+		}
+		rawCreationTime, ok := secret.Data["creationTimestamp"]
+		if !ok {
+			rerr := openmcperrors.WithReason(fmt.Errorf("creationTimestamp not found in secret %s/%s", secret.Namespace, secret.Name), clustersconst.ReasonInternalError)
+			return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
+		}
+		creationSeconds, err := strconv.ParseInt(string(rawCreationTime), 10, 64)
+		if err != nil {
+			rerr := openmcperrors.WithReason(fmt.Errorf("error parsing creationTimestamp from secret %s/%s to int64: %w", secret.Namespace, secret.Name, err), clustersconst.ReasonInternalError)
+			return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
+		}
+		expirationTime, ok := secret.Data["expirationTimestamp"]
+		if !ok {
+			rerr := openmcperrors.WithReason(fmt.Errorf("expirationTimestamp not found in secret %s/%s", secret.Namespace, secret.Name), clustersconst.ReasonInternalError)
+			return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
+		}
+		expirationSeconds, err := strconv.ParseInt(string(expirationTime), 10, 64)
+		if err != nil {
+			rerr := openmcperrors.WithReason(fmt.Errorf("error parsing expirationTimestamp from secret %s/%s to int64: %w", secret.Namespace, secret.Name, err), clustersconst.ReasonInternalError)
+			return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
+		}
+		apiAccess.Kubeconfig = string(kcfg)
+		apiAccess.CreationTimestamp = &metav1.Time{Time: time.Unix(creationSeconds, 0)}
+		apiAccess.ExpirationTimestamp = &metav1.Time{Time: time.Unix(expirationSeconds, 0)}
+		rr = ctrl.Result{
+			RequeueAfter: time.Until(clusteraccess.ComputeTokenRenewalTimeWithRatio(apiAccess.CreationTimestamp.Time, apiAccess.ExpirationTimestamp.Time, 0.85)),
+		}
 	}
 
-	// fetch the secret containing the kubeconfig
-	secret := &corev1.Secret{}
-	secret.Name = ar.Status.SecretRef.Name
-	secret.Namespace = ar.Status.SecretRef.Namespace
-	if err := platformClient.Get(ctx, client.ObjectKeyFromObject(secret), secret); err != nil {
-		rerr := openmcperrors.WithReason(fmt.Errorf("failed to get Secret %s/%s: %w", secret.Namespace, secret.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
-		return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
-	}
-	kcfg, ok := secret.Data["kubeconfig"]
-	if !ok {
-		rerr := openmcperrors.WithReason(fmt.Errorf("kubeconfig not found in secret %s/%s", secret.Namespace, secret.Name), clustersconst.ReasonInternalError)
-		return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
-	}
-	rawCreationTime, ok := secret.Data["creationTimestamp"]
-	if !ok {
-		rerr := openmcperrors.WithReason(fmt.Errorf("creationTimestamp not found in secret %s/%s", secret.Namespace, secret.Name), clustersconst.ReasonInternalError)
-		return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
-	}
-	creationSeconds, err := strconv.ParseInt(string(rawCreationTime), 10, 64)
-	if err != nil {
-		rerr := openmcperrors.WithReason(fmt.Errorf("error parsing creationTimestamp from secret %s/%s to int64: %w", secret.Namespace, secret.Name, err), clustersconst.ReasonInternalError)
-		return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
-	}
-	expirationTime, ok := secret.Data["expirationTimestamp"]
-	if !ok {
-		rerr := openmcperrors.WithReason(fmt.Errorf("expirationTimestamp not found in secret %s/%s", secret.Namespace, secret.Name), clustersconst.ReasonInternalError)
-		return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
-	}
-	expirationSeconds, err := strconv.ParseInt(string(expirationTime), 10, 64)
-	if err != nil {
-		rerr := openmcperrors.WithReason(fmt.Errorf("error parsing expirationTimestamp from secret %s/%s to int64: %w", secret.Namespace, secret.Name, err), clustersconst.ReasonInternalError)
-		return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
-	}
-	apiAccess.Kubeconfig = string(kcfg)
-	apiAccess.CreationTimestamp = &metav1.Time{Time: time.Unix(creationSeconds, 0)}
-	apiAccess.ExpirationTimestamp = &metav1.Time{Time: time.Unix(expirationSeconds, 0)}
-	rr := ctrl.Result{
-		RequeueAfter: time.Until(clusteraccess.ComputeTokenRenewalTimeWithRatio(apiAccess.CreationTimestamp.Time, apiAccess.ExpirationTimestamp.Time, 0.85)),
-	}
-
-	return rr, usf, clusterConditions(true, "", ""), nil
+	return rr, usf, clusterConditions(true, "", "", clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), nil
 }
 
 func v2HandleDelete(ctx context.Context, as *openmcpv1alpha1.APIServer, platformClient client.Client) (ctrl.Result, handler.UpdateStatusFunc, []openmcpv1alpha1.ComponentCondition, openmcperrors.ReasonableError) {
 	log := logging.FromContextOrPanic(ctx).WithName(openmcpv1alpha1.ArchitectureV2)
 	ctx = logging.NewContext(ctx, log)
+
+	accessRequestDeletedCon := openmcpv1alpha1.ComponentCondition{
+		Type:   cconst.ConditionAccessRequestDeleted,
+		Status: openmcpv1alpha1.ComponentConditionStatusUnknown,
+	}
+	clusterRequestDeletedCon := openmcpv1alpha1.ComponentCondition{
+		Type:   cconst.ConditionClusterRequestDeleted,
+		Status: openmcpv1alpha1.ComponentConditionStatusUnknown,
+	}
 
 	// instead of calling a handler, remove AccessRequest and ClusterRequest
 	nsName := fmt.Sprintf("mcp-%s", ctrlutils.K8sNameHash(as.Namespace))
@@ -234,7 +314,26 @@ func v2HandleDelete(ctx context.Context, as *openmcpv1alpha1.APIServer, platform
 	ar.Namespace = nsName
 	if err := platformClient.Delete(ctx, ar); client.IgnoreNotFound(err) != nil {
 		rerr := openmcperrors.WithReason(fmt.Errorf("failed to delete AccessRequest %s/%s: %w", ar.Namespace, ar.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
-		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
+		accessRequestDeletedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
+		accessRequestDeletedCon.Reason = rerr.Reason()
+		accessRequestDeletedCon.Message = err.Error()
+		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error(), accessRequestDeletedCon, clusterRequestDeletedCon), rerr
+	}
+
+	if err := platformClient.Get(ctx, client.ObjectKeyFromObject(ar), ar); err != nil {
+		if !apierrors.IsNotFound(err) {
+			rerr := openmcperrors.WithReason(fmt.Errorf("failed to verify deletion of AccessRequest '%s/%s': %w", ar.Namespace, ar.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
+			accessRequestDeletedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
+			accessRequestDeletedCon.Reason = rerr.Reason()
+			accessRequestDeletedCon.Message = rerr.Error()
+			return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error(), accessRequestDeletedCon, clusterRequestDeletedCon), rerr
+		}
+		accessRequestDeletedCon.Status = openmcpv1alpha1.ComponentConditionStatusTrue
+	} else {
+		accessRequestDeletedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
+		accessRequestDeletedCon.Reason = cconst.ReasonAccessRequestNotDeleted
+		accessRequestDeletedCon.Message = fmt.Sprintf("AccessRequest '%s/%s' has not been deleted yet", ar.Namespace, ar.Name)
+		return ctrl.Result{RequeueAfter: 30 * time.Second}, nil, clusterConditions(false, accessRequestDeletedCon.Reason, accessRequestDeletedCon.Message, accessRequestDeletedCon, clusterRequestDeletedCon), nil
 	}
 
 	var usf handler.UpdateStatusFunc = func(status *openmcpv1alpha1.APIServerStatus) error {
@@ -248,7 +347,26 @@ func v2HandleDelete(ctx context.Context, as *openmcpv1alpha1.APIServer, platform
 	cr.Namespace = nsName
 	if err := platformClient.Delete(ctx, cr); client.IgnoreNotFound(err) != nil {
 		rerr := openmcperrors.WithReason(fmt.Errorf("failed to delete ClusterRequest %s/%s: %w", cr.Namespace, cr.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
-		return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error()), rerr
+		clusterRequestDeletedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
+		clusterRequestDeletedCon.Reason = rerr.Reason()
+		clusterRequestDeletedCon.Message = err.Error()
+		return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error(), accessRequestDeletedCon, clusterRequestDeletedCon), rerr
+	}
+
+	if err := platformClient.Get(ctx, client.ObjectKeyFromObject(cr), cr); err != nil {
+		if !apierrors.IsNotFound(err) {
+			rerr := openmcperrors.WithReason(fmt.Errorf("failed to verify deletion of ClusterRequest '%s/%s': %w", cr.Namespace, cr.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
+			clusterRequestDeletedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
+			clusterRequestDeletedCon.Reason = rerr.Reason()
+			clusterRequestDeletedCon.Message = rerr.Error()
+			return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error(), accessRequestDeletedCon, clusterRequestDeletedCon), rerr
+		}
+		clusterRequestDeletedCon.Status = openmcpv1alpha1.ComponentConditionStatusTrue
+	} else {
+		clusterRequestDeletedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
+		clusterRequestDeletedCon.Reason = cconst.ReasonClusterRequestNotDeleted
+		clusterRequestDeletedCon.Message = fmt.Sprintf("ClusterRequest '%s/%s' has not been deleted yet", cr.Namespace, cr.Name)
+		return ctrl.Result{RequeueAfter: 30 * time.Second}, usf, clusterConditions(false, clusterRequestDeletedCon.Reason, clusterRequestDeletedCon.Message, accessRequestDeletedCon, clusterRequestDeletedCon), nil
 	}
 
 	usf = func(status *openmcpv1alpha1.APIServerStatus) error {
@@ -257,7 +375,7 @@ func v2HandleDelete(ctx context.Context, as *openmcpv1alpha1.APIServer, platform
 		return nil
 	}
 
-	return ctrl.Result{}, usf, clusterConditions(true, "", ""), nil
+	return ctrl.Result{}, usf, clusterConditions(true, "", "", accessRequestDeletedCon, clusterRequestDeletedCon), nil
 }
 
 type ClusterRequestMutator struct {
@@ -374,9 +492,10 @@ func (m *AccessRequestMutator) String() string {
 	return fmt.Sprintf("AccessRequest %s/%s", m.namespace, m.name)
 }
 
-func clusterConditions(ready bool, reason, message string) []openmcpv1alpha1.ComponentCondition {
+func clusterConditions(ready bool, reason, message string, additionalConditions ...openmcpv1alpha1.ComponentCondition) []openmcpv1alpha1.ComponentCondition {
 	conditions := []openmcpv1alpha1.ComponentCondition{
 		componentutils.NewCondition(openmcpv1alpha1.APIServerComponent.HealthyCondition(), openmcpv1alpha1.ComponentConditionStatusFromBool(ready), reason, message),
 	}
+	conditions = append(conditions, additionalConditions...)
 	return conditions
 }

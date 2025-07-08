@@ -97,3 +97,11 @@ const (
 	// ReasonNotAllComponentsReconciledSuccessfully indicates that not all components have been reconciled successfully.
 	ReasonNotAllComponentsReconciledSuccessfully = "NotAllComponentsReconciledSuccessfully"
 )
+
+const (
+	ReasonClusterRequestNotGranted = "ClusterRequestNotGranted"
+	ReasonClusterNotReady          = "ClusterNotReady"
+	ReasonAccessRequestNotGranted  = "AccessRequestNotGranted"
+	ReasonAccessRequestNotDeleted  = "AccessRequestNotDeleted"
+	ReasonClusterRequestNotDeleted = "ClusterRequestNotDeleted"
+)
