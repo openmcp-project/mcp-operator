@@ -79,6 +79,8 @@ const (
 
 	// Architecture Switch Labels
 	ArchitectureLabelPrefix      = "architecture." + BaseDomain + "/"
+	ArchitectureVersionLabel     = ArchitectureLabelPrefix + "version"
+	ArchitectureV1               = "v1"
 	ArchitectureV2               = "v2"
 	V1MCPReferenceLabelName      = "v1." + BaseDomain + "/mcp-name"
 	V1MCPReferenceLabelNamespace = "v1." + BaseDomain + "/mcp-namespace"

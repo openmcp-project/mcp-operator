@@ -7,6 +7,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/openmcp-project/mcp-operator/internal/architecture"
+	archconfig "github.com/openmcp-project/mcp-operator/internal/architecture/config"
 	"github.com/openmcp-project/mcp-operator/internal/components"
 
 	"github.com/openmcp-project/mcp-operator/internal/controller/core/managedcontrolplane"
@@ -40,9 +42,20 @@ const (
 )
 
 var _ = Describe("CO-1153 ManagedControlPlane Controller", func() {
+
+	BeforeEach(func() {
+		architecture.Config = archconfig.ArchConfig{}
+		architecture.Config.Default()
+		architecture.Config.APIServer.AllowOverride = true
+	})
+
 	It("should create all component resources that are configured in the MCP and delete them again when they are unconfigured", func() {
 		var err error
 		env := testutils.DefaultTestSetupBuilder("testdata", "test-01").WithReconcilerConstructor(mcpReconciler, getReconciler, testutils.CrateCluster).Build()
+
+		architecture.Config.APIServer.Version = openmcpv1alpha1.ArchitectureV1
+		architecture.Config.Landscaper.AllowOverride = true
+		architecture.Config.Landscaper.Version = openmcpv1alpha1.ArchitectureV2
 
 		// get ManagedControlPlane
 		mcp := &openmcpv1alpha1.ManagedControlPlane{}
@@ -68,6 +81,15 @@ var _ = Describe("CO-1153 ManagedControlPlane Controller", func() {
 				Expect(ch.Resource().GetLabels()).To(HaveKeyWithValue(openmcpv1alpha1.ManagedControlPlaneBackReferenceLabelNamespace, mcp.Namespace))
 				Expect(ch.Resource().GetLabels()).To(HaveKeyWithValue(openmcpv1alpha1.ManagedControlPlaneGenerationLabel, fmt.Sprint(mcp.Generation)))
 				Expect(ch.Resource().GetLabels()).ToNot(HaveKey(openmcpv1alpha1.InternalConfigurationGenerationLabel))
+
+				switch ct {
+				case openmcpv1alpha1.APIServerComponent:
+					fallthrough
+				case openmcpv1alpha1.LandscaperComponent:
+					Expect(ch.Resource().GetLabels()).To(HaveKeyWithValue(openmcpv1alpha1.ArchitectureVersionLabel, openmcpv1alpha1.ArchitectureV2))
+				default:
+					Expect(ch.Resource().GetLabels()).To(HaveKeyWithValue(openmcpv1alpha1.ArchitectureVersionLabel, openmcpv1alpha1.ArchitectureV1))
+				}
 			}
 		}
 
@@ -514,6 +536,31 @@ var _ = Describe("CO-1153 ManagedControlPlane Controller", func() {
 		expectProjectLabel = false
 		expectWorkspaceLabel = false
 		reconcileAndTest()
+	})
+
+	It("should throw an error if the MCP has an architecture version label for a component that does not allow overrides", func() {
+		env := testutils.DefaultTestSetupBuilder("testdata", "test-01").WithReconcilerConstructor(mcpReconciler, getReconciler, testutils.CrateCluster).Build()
+		architecture.Config.APIServer.AllowOverride = false
+
+		// get ManagedControlPlane
+		mcp := &openmcpv1alpha1.ManagedControlPlane{}
+		Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, mcp)).To(Succeed())
+
+		req := openmcptesting.RequestFromObject(mcp)
+		env.ShouldNotReconcileWithError(mcpReconciler, req, And(MatchError(ContainSubstring("override")), MatchError(ContainSubstring("APIServer")), MatchError(ContainSubstring("not allowed"))))
+	})
+
+	It("should throw an error if the MCP has an architecture version label with an invalid version", func() {
+		env := testutils.DefaultTestSetupBuilder("testdata", "test-01").WithReconcilerConstructor(mcpReconciler, getReconciler, testutils.CrateCluster).Build()
+
+		// get ManagedControlPlane
+		mcp := &openmcpv1alpha1.ManagedControlPlane{}
+		Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, mcp)).To(Succeed())
+		mcp.Labels[openmcpv1alpha1.APIServerComponent.ArchitectureVersionLabel()] = "invalid"
+		Expect(env.Client(testutils.CrateCluster).Update(env.Ctx, mcp)).To(Succeed())
+
+		req := openmcptesting.RequestFromObject(mcp)
+		env.ShouldNotReconcileWithError(mcpReconciler, req, And(MatchError(ContainSubstring("version")), MatchError(ContainSubstring("APIServer")), MatchError(ContainSubstring("not allowed"))))
 	})
 
 })
