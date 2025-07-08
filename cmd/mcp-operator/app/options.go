@@ -10,6 +10,8 @@ import (
 
 	"github.com/openmcp-project/mcp-operator/internal/components"
 
+	arch "github.com/openmcp-project/mcp-operator/internal/architecture"
+	archconfig "github.com/openmcp-project/mcp-operator/internal/architecture/config"
 	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/config"
 	configauthn "github.com/openmcp-project/mcp-operator/internal/controller/core/authentication/config"
 	configauthz "github.com/openmcp-project/mcp-operator/internal/controller/core/authorization/config"
@@ -56,6 +58,7 @@ type rawOptions struct {
 
 	// raw options that need to be evaluated
 	APIServerConfigPath          string `json:"apiServerConfigPath"`
+	ArchConfigPath               string `json:"v2ConfigPath"`
 	LaaSClusterPath              string `json:"laasClusterConfigPath"`
 	CrateClusterPath             string `json:"crateClusterConfigPath"`
 	CloudOrchestratorClusterPath string `json:"cloudOrchestratorClusterConfigPath"`
@@ -130,6 +133,9 @@ func (o *Options) String(includeHeader bool, includeRawOptions bool) (string, er
 	opts := map[string]any{}
 	// API server config
 	opts["apiServerConfig"] = o.APIServerConfig
+
+	// architecture config
+	opts["archConfig"] = arch.Config
 
 	// clusters
 	opts["crateClusterHost"] = nil
@@ -219,6 +225,7 @@ func (o *Options) AddFlags(fs *flag.FlagSet) {
 	fs.StringVar(&o.AuthzConfigPath, "authz-config", "", "Path to the authorization config file.")
 
 	// common
+	fs.StringVar(&o.ArchConfigPath, "arch-config", "", "Path to the architecture config file.")
 	fs.BoolVar(&o.DryRun, "dry-run", false, "If true, the CLI args are evaluated as usual, but the program exits before the controllers are started.")
 	fs.StringVar(&o.CrateClusterPath, "crate-cluster", "", "Path to the crate cluster kubeconfig file or directory containing either a kubeconfig or host, token, and ca file. Leave empty to use in-cluster config.")
 	fs.StringVar(&o.ControllerList, "controllers", strings.Join([]string{ControllerIDManagedControlPlane, ControllerIDAPIServer, ControllerIDLandscaper, ControllerIDCloudOrchestrator}, ","), "Comma-separated list of controllers that should be active.")
@@ -335,6 +342,19 @@ func (o *Options) Complete() error {
 			// if only a port is given, prepend a colon
 			o.PprofAddr = ":" + o.PprofAddr
 		}
+	}
+
+	// load architecture config
+	if o.ArchConfigPath != "" {
+		cfg, err := archconfig.LoadConfig(o.ArchConfigPath)
+		if err != nil {
+			return err
+		}
+		err = cfg.Validate()
+		if err != nil {
+			return fmt.Errorf("invalid architecture config: %w", err)
+		}
+		arch.Config = *cfg
 	}
 
 	// print options

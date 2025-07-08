@@ -10,6 +10,7 @@ import (
 	"github.com/openmcp-project/mcp-operator/internal/utils"
 	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
+	"github.com/openmcp-project/mcp-operator/internal/architecture"
 	apiserverconfig "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/config"
 	apiserverhandler "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/handler"
 	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/handler/gardener"
@@ -148,7 +149,7 @@ func (r *APIServerProvider) reconcile(ctx context.Context, req ctrl.Request) com
 	var cons []openmcpv1alpha1.ComponentCondition
 	var errr openmcperrors.ReasonableError
 
-	if as.Labels[as.Type().ArchitectureVersionLabel()] == openmcpv1alpha1.ArchitectureV2 {
+	if architecture.DecideVersion(as) == openmcpv1alpha1.ArchitectureV2 {
 		// v2 logic
 		log.Info("Using v2 logic for APIServer")
 		if !deleteAPIServer {
