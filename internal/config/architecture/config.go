@@ -1,15 +1,13 @@
-package config
+package architecture
 
 import (
 	"fmt"
 	"maps"
-	"os"
 	"reflect"
 	"strings"
 
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"sigs.k8s.io/yaml"
 
 	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
 	"github.com/openmcp-project/mcp-operator/internal/components"
@@ -60,7 +58,7 @@ func (cfg *BridgeConfig) Default() {
 	}
 }
 
-func (cfg *ArchConfig) Validate() error {
+func (cfg *ArchConfig) Validate() field.ErrorList {
 	if cfg == nil {
 		return nil
 	}
@@ -72,7 +70,7 @@ func (cfg *ArchConfig) Validate() error {
 		allErrs = append(allErrs, bridgeConfig.validate(field.NewPath(string(ct)))...)
 	}
 
-	return allErrs.ToAggregate()
+	return allErrs
 }
 
 func (cfg *BridgeConfig) validate(fldPath *field.Path) field.ErrorList {
@@ -87,24 +85,6 @@ func (cfg *BridgeConfig) validate(fldPath *field.Path) field.ErrorList {
 	}
 
 	return allErrs
-}
-
-func LoadConfig(path string) (*ArchConfig, error) {
-	data, err := os.ReadFile(path)
-	if err != nil {
-		return nil, fmt.Errorf("error reading config file: %w", err)
-	}
-	return LoadConfigFromBytes(data)
-}
-
-func LoadConfigFromBytes(data []byte) (*ArchConfig, error) {
-	cfg := &ArchConfig{}
-	err := yaml.Unmarshal(data, cfg)
-	if err != nil {
-		return nil, fmt.Errorf("error parsing config file: %w", err)
-	}
-	cfg.Default()
-	return cfg, nil
 }
 
 func (cfg *ArchConfig) Default() {

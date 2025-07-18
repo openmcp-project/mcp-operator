@@ -5,8 +5,8 @@ import (
 	"maps"
 	"slices"
 
-	"github.com/openmcp-project/mcp-operator/internal/architecture"
 	"github.com/openmcp-project/mcp-operator/internal/components"
+	mcpocfg "github.com/openmcp-project/mcp-operator/internal/config"
 	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
 	corev1 "k8s.io/api/core/v1"
@@ -62,7 +62,7 @@ func (*ManagedControlPlaneController) ManagedControlPlaneToSplitInternalResource
 			}
 
 			// take over architecture version label from the MCP resource, if override is allowed for the component
-			bridgeConfig := architecture.Config.GetBridgeConfigForComponent(ct)
+			bridgeConfig := mcpocfg.Config.Architecture.GetBridgeConfigForComponent(ct)
 			cLabels := make(map[string]string, len(labels)+1)
 			maps.Copy(cLabels, labels)
 			v, found := mcp.Labels[ct.ArchitectureVersionLabel()]

@@ -7,7 +7,7 @@ import (
 	"strconv"
 	"time"
 
-	"github.com/openmcp-project/mcp-operator/internal/architecture"
+	mcpocfg "github.com/openmcp-project/mcp-operator/internal/config"
 	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver"
 	apiserverhandler "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/handler"
 
@@ -334,7 +334,7 @@ var _ = Describe("CO-1153 APIServer Controller", func() {
 	Context("v2", func() {
 
 		BeforeEach(func() {
-			architecture.Config.APIServer.Version = openmcpv1alpha1.ArchitectureV2
+			mcpocfg.Config.Architecture.APIServer.Version = openmcpv1alpha1.ArchitectureV2
 		})
 
 		It("should create a ClusterRequest and AccessRequest instead of a Shoot", func() {
