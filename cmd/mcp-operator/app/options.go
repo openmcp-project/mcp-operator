@@ -343,7 +343,7 @@ func (o *Options) Complete() error {
 		}
 	}
 
-	// load architecture config
+	// load config
 	if o.MCPOConfigPath != "" {
 		cfg, err := mcpocfg.LoadConfig(o.MCPOConfigPath)
 		if err != nil {
@@ -351,7 +351,7 @@ func (o *Options) Complete() error {
 		}
 		err = cfg.Validate().ToAggregate()
 		if err != nil {
-			return fmt.Errorf("invalid architecture config: %w", err)
+			return fmt.Errorf("invalid config: %w", err)
 		}
 		mcpocfg.Config = *cfg
 	}
