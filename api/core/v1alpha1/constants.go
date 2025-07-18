@@ -39,6 +39,11 @@ const (
 	// ManagedByLabel is added to resources created by the operator.
 	ManagedByLabel = BaseDomain + "/managed-by"
 
+	// ManagedPurposeLabel holds the purpose of a managed resource.
+	ManagedPurposeLabel = "managed." + BaseDomain + "/purpose"
+	// ManagedPurposeArchitectureImmutability is the value of the managed purpose label for resources that are used to enforce architecture immutability.
+	ManagedPurposeArchitectureImmutability = "architecture-immutability"
+
 	CreatedByAnnotation = BaseDomain + "/created-by"
 
 	DisplayNameAnnotation = BaseDomain + "/display-name"
