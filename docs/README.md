@@ -5,6 +5,10 @@
 
 - [v2 Architecture Bridge](architecture-v2/bridge.md)
 
+## Configuration
+
+- [Configuration](config/config.md)
+
 ## Controllers
 
 - [APIServer Controller](controllers/apiserver.md)

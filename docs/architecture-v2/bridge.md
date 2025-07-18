@@ -7,15 +7,18 @@ The bridge is currently implemented for the following components:
 
 ## Architecture Configuration
 
-To configure for which components the bridge is enabled, the MCP operator now takes a new optional argument `--arch-config` which is expected to point to a YAML file that looks like this:
+To configure for which components the bridge is enabled, set the architecture config in the [general configuration](../config/config.md) file:
 ```yaml
+immutability:
+  policyName: mcp-architecture-immutability
+  disabled: false
 apiServer:
   version: v1
   allowOverride: false
 # more components are to follow
 ```
 
-The configuration should look similar, if not identical, for each component:
+The component configuration should look similar, if not identical, for each component:
 - `version` describes the architecture version that is used for this component by default.
   - Valid values are `v1` (meaning old logic) and `v2` (using the v2 bridge).
   - Defaults to `v1` if not specified for a component.
@@ -39,54 +42,6 @@ To ensure that the architecture version does not change, we use a combination of
   - If the label is missing, it is allowed to be added with `v1` as value.
 - Newly created or updated component resources must have the label set.
 
-### ValidatingAdmissionPolicy
+If `immutability.disabled` in the architecture configuration is not set to `true` (it is `false` by default), the MCP operator will deploy a `ValidatingAdmissionPolicy` and `ValidatingAdmissionPolicyBinding` on startup to ensure the architecture version immutability. `immutability.policyName` specifies the name for both resources and defaults to `mcp-architecture-immutability` if not specified.
 
-To ensure existence and immutability of the architecture version label, we use a `ValidatingAdmissionPolicy` like this:
-
-```yaml
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingAdmissionPolicy
-metadata:
-  name: mcp-architecture-immutability
-spec:
-  failurePolicy: Fail
-  matchConstraints:
-    # matches everything, the actual resource is specified in the binding
-    resourceRules:
-    - apiGroups: ["*"]
-      apiVersions: ["*"]
-      operations: ["CREATE", "UPDATE"]
-      resources: ["*"]
-  variables:
-  - name: archLabel
-    expression: '(has(object.metadata.labels) && "architecture.openmcp.cloud/version" in object.metadata.labels) ? object.metadata.labels["architecture.openmcp.cloud/version"] : ""'
-  - name: oldArchLabel
-    expression: '(oldObject != null && has(oldObject.metadata.labels) && "architecture.openmcp.cloud/version" in oldObject.metadata.labels) ? oldObject.metadata.labels["architecture.openmcp.cloud/version"] : ""'
-  validations:
-  - expression: "variables.archLabel == 'v1' || variables.archLabel == 'v2'"
-    message: 'The label "architecture.openmcp.cloud/version" must be set and its value must be either "v1" or "v2".'
-  - expression: "request.operation == 'CREATE' || (variables.oldArchLabel == '' && variables.archLabel == 'v1') || (variables.oldArchLabel == variables.archLabel)"
-    message: 'The label "architecture.openmcp.cloud/version" is immutable, it may not be changed or removed once set. Adding it to existing resources is only allowed with "v1" as value.'
----
-apiVersion: admissionregistration.k8s.io/v1
-kind: ValidatingAdmissionPolicyBinding
-metadata:
-  name: mcp-architecture-immutability
-spec:
-  policyName: mcp-architecture-immutability
-  validationActions: [Deny]
-  matchResources:
-    resourceRules:
-    - apiGroups: ["core.openmcp.cloud"]
-      apiVersions: ["v1alpha1"]
-      operations: ["CREATE", "UPDATE"]
-      resources:
-      - apiservers
-      - landscapers
-      - cloudorchestrators
-      - authentications
-      - authorizations
-```
-
-⚠️ Note that the creation of these `ValidatingAdmissionPolicy` and `ValidatingAdmissionPolicyBinding` resources is not part of any logic within this repository. Operators of an MCP landscape need to take care of this.
-
+Both resources are removed during startup if `immutability.disabled` is set to `true`.
