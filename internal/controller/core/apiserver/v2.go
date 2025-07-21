@@ -17,12 +17,12 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	"github.com/openmcp-project/controller-utils/pkg/clusteraccess"
-	ctrlutils "github.com/openmcp-project/controller-utils/pkg/controller"
 	"github.com/openmcp-project/controller-utils/pkg/resources"
 
 	gcpv1alpha1 "github.com/openmcp-project/cluster-provider-gardener/api/core/v1alpha1"
 	clustersv1alpha1 "github.com/openmcp-project/openmcp-operator/api/clusters/v1alpha1"
 	clustersconst "github.com/openmcp-project/openmcp-operator/api/clusters/v1alpha1/constants"
+	openmcpclusterutils "github.com/openmcp-project/openmcp-operator/lib/utils"
 
 	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
 
@@ -52,7 +52,7 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 
 	// instead of calling a handler, create a ClusterRequest and an AccessRequest
 	// ensure namespace, because this is created on the platform cluster
-	nsName := fmt.Sprintf("mcp-%s", ctrlutils.K8sNameHash(as.Namespace))
+	nsName := openmcpclusterutils.StableRequestNamespace(as.Namespace)
 	nsm := resources.NewNamespaceMutator(nsName)
 	nsm.MetadataMutator().WithLabels(map[string]string{
 		openmcpv1alpha1.V1MCPReferenceLabelNamespace: as.Namespace,
@@ -306,7 +306,7 @@ func v2HandleDelete(ctx context.Context, as *openmcpv1alpha1.APIServer, platform
 	}
 
 	// instead of calling a handler, remove AccessRequest and ClusterRequest
-	nsName := fmt.Sprintf("mcp-%s", ctrlutils.K8sNameHash(as.Namespace))
+	nsName := openmcpclusterutils.StableRequestNamespace(as.Namespace)
 
 	// remove AccessRequest
 	ar := &clustersv1alpha1.AccessRequest{}
