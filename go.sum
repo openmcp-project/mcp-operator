@@ -115,8 +115,10 @@ github.com/openmcp-project/control-plane-operator v0.1.10 h1:5ticEP3llBmIHQkBzkZ
 github.com/openmcp-project/control-plane-operator v0.1.10/go.mod h1:GNu9LBTPWoE3dKsBo2kS+SeKSLU2qLtu3VjpaznsB2o=
 github.com/openmcp-project/controller-utils v0.13.1 h1:+06c0bs1BIO+hBsTcuiEK5y8vpDFoZPml59WNm8fagM=
 github.com/openmcp-project/controller-utils v0.13.1/go.mod h1:Z1ytVshYcgJq3VQVGqkuZsjO/BCr4UYAaVpHl6JSIMI=
-github.com/openmcp-project/openmcp-operator/api v0.6.0 h1:OUYd2h1vKLBUIk2mnLPgibCvZOAWALQySk9XEsU4wxs=
-github.com/openmcp-project/openmcp-operator/api v0.6.0/go.mod h1:C32sb80ML95+ivrR18yj8v2F5dH6v/540nfnQihyN2k=
+github.com/openmcp-project/openmcp-operator/api v0.7.0 h1:DvaMS3xtAvahGOQm9sI26aotupa8XkwZP52HfOhZ9K0=
+github.com/openmcp-project/openmcp-operator/api v0.7.0/go.mod h1:TuAq8Fbrzuykxw/h589M8+QfHotwero5MPWVzdFAqkw=
+github.com/openmcp-project/openmcp-operator/lib v0.8.3 h1:2bb1zbP6Si7/fUfXT9M5B0xQnd7O4zGJXaUoe9pDmcA=
+github.com/openmcp-project/openmcp-operator/lib v0.8.3/go.mod h1:oydIXRZoNDxtI4DI/JBUB08UPzvfdaKLqHvC4S4HXHQ=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
