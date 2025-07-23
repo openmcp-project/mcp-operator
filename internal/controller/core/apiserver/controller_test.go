@@ -25,9 +25,9 @@ import (
 
 	. "github.com/openmcp-project/mcp-operator/test/matchers"
 
-	ctrlutils "github.com/openmcp-project/controller-utils/pkg/controller"
 	"github.com/openmcp-project/controller-utils/pkg/testing"
 	clustersv1alpha1 "github.com/openmcp-project/openmcp-operator/api/clusters/v1alpha1"
+	openmcpclusterutils "github.com/openmcp-project/openmcp-operator/lib/utils"
 
 	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
 
@@ -350,7 +350,7 @@ var _ = Describe("CO-1153 APIServer Controller", func() {
 
 			cr := &clustersv1alpha1.ClusterRequest{}
 			cr.Name = as.Name
-			cr.Namespace = fmt.Sprintf("mcp-%s", ctrlutils.K8sNameHash(as.Namespace))
+			cr.Namespace = openmcpclusterutils.StableRequestNamespace(as.Namespace)
 			Expect(env.Client(testutils.LaaSCoreCluster).Get(env.Ctx, client.ObjectKeyFromObject(cr), cr)).To(Succeed())
 
 			Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(as), as)).To(Succeed())
