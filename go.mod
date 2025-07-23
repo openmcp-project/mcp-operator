@@ -10,7 +10,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/alitto/pond/v2 v2.5.0
 	github.com/apparentlymart/go-cidr v1.1.0
-	github.com/gardener/landscaper-service v0.131.0
+	github.com/gardener/landscaper-service v0.132.0
 	github.com/onsi/ginkgo/v2 v2.23.4
 	github.com/onsi/gomega v1.38.0
 	github.com/openmcp-project/control-plane-operator v0.1.10
