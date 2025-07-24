@@ -151,7 +151,6 @@ func (o *Options) runInit(ctx context.Context) error {
 	}
 
 	// manage architecture immutability
-	setupLog.Info("Architecture immutability validation disabled, checking for previously deployed ValidatingAdmissionPolicies ...")
 	labelSelector := client.MatchingLabels{
 		openmcpv1alpha1.ManagedByLabel:      OperatorName,
 		openmcpv1alpha1.ManagedPurposeLabel: openmcpv1alpha1.ManagedPurposeArchitectureImmutability,
