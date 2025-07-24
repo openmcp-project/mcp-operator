@@ -30,6 +30,7 @@ spec:
         checksum/co-clusters: {{ include (print $.Template.BasePath "/secrets-cloudorchestrator-clusters.yaml") . | sha256sum }}
         checksum/auth-config: {{ include (print $.Template.BasePath "/secret-auth-config.yaml") . | sha256sum }}
         checksum/authz-config: {{ include (print $.Template.BasePath "/secret-authz-config.yaml") . | sha256sum }}
+        checksum/mcp-operator-config: {{ include (print $.Template.BasePath "/configmap-mcp-operator-config.yaml") . | sha256sum }}
         {{- with .Values.podAnnotations }}
           {{- toYaml . | nindent 8 }}
         {{- end }}
@@ -50,6 +51,7 @@ spec:
         command:
         - /mcp-operator
         - --controllers={{ include "mcp-operator.activeControllersString" .Values }}
+        - --config=/etc/config/mcp-operator/config.yaml
         {{- if .Values.deployment.leaderElection.enabled }}
         - --leader-elect
         - --lease-namespace={{ .Values.deployment.leaderElection.leaseNamespace }}
@@ -140,6 +142,9 @@ spec:
           mountPath: /tmp/k8s-webhook-server/serving-certs/
           readOnly: true
         {{- end }}
+        - name: mcp-operator-config
+          mountPath: /etc/config/mcp-operator
+          readOnly: true
         - name: common
           mountPath: /etc/config/common
           readOnly: true
@@ -247,6 +252,11 @@ spec:
           {{- end }}
           {{- end }}
       {{- end }}
+      - name: mcp-operator-config
+        projected:
+          sources:
+          - configMap:
+              name: mcp-operator-config
       - name: common
         projected:
           sources:

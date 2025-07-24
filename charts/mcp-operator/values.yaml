@@ -32,7 +32,10 @@ clusters:
   #   caData: ...
   #   caConfigMapName: ...
 
-
+# architecture: # architecture configuration
+#   immutability:
+#     policyName: mcp-architecture-immutability # name of the ValidatingAdmissionPolicy to enforce architecture immutability
+#     disabled: false # whether architecture immutability should be enforced (strongly recommended to leave this enabled)
 
 crds:
   manage: true
@@ -53,6 +56,9 @@ managedcontrolplane:
 
 apiserver:
   disabled: false
+  # architecture:
+  #   version: v1
+  #   allowOverride: false
   worker:
     maxWorkers: 10
     intervalTime: 10s
