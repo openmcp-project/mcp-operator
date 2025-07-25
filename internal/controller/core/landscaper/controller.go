@@ -11,6 +11,7 @@ import (
 	"github.com/openmcp-project/mcp-operator/internal/utils/apiserver"
 	"github.com/openmcp-project/mcp-operator/internal/utils/components"
 
+	mcpocfg "github.com/openmcp-project/mcp-operator/internal/config"
 	"github.com/openmcp-project/mcp-operator/internal/controller/core/landscaper/conversion"
 	lsutils "github.com/openmcp-project/mcp-operator/internal/controller/core/landscaper/utils"
 
@@ -181,12 +182,27 @@ func (r *LandscaperConnector) reconcile(ctx context.Context, req ctrl.Request) c
 	var res ctrl.Result
 	var ready bool
 	var reason string
+	var v2cons []openmcpv1alpha1.ComponentCondition
 	var errr openmcperrors.ReasonableError
 	old := ls.DeepCopy()
-	if deleteLandscaper {
-		res, ready, reason, errr = r.handleDelete(ctx, ls, ld)
+	if mcpocfg.Config.Architecture.DecideVersion(ls) == openmcpv1alpha1.ArchitectureV2 {
+		// v2 logic
+		log.Info("Using v2 logic for APIServer")
+		if deleteLandscaper {
+			res, ready, v2cons, errr = r.v2HandleDelete(ctx, ls)
+		} else {
+			res, ready, v2cons, errr = r.v2HandleCreateOrUpdate(ctx, ls)
+		}
+		if !ready {
+			reason = cconst.ReasonWaitingForLaaS
+		}
 	} else {
-		res, ready, reason, errr = r.handleCreateOrUpdate(ctx, ls, ld, as)
+		// v1 logic
+		if deleteLandscaper {
+			res, ready, reason, errr = r.handleDelete(ctx, ls, ld)
+		} else {
+			res, ready, reason, errr = r.handleCreateOrUpdate(ctx, ls, ld, as)
+		}
 	}
 	errs := openmcperrors.NewReasonableErrorList(errr)
 
@@ -221,6 +237,7 @@ func (r *LandscaperConnector) reconcile(ctx context.Context, req ctrl.Request) c
 			cons[0].Message = fmt.Sprintf("[%s] %s - %s", ld.Status.LastError.Operation, ld.Status.LastError.Reason, ld.Status.LastError.Message)
 		}
 	}
+	cons = append(cons, v2cons...)
 	return components.ReconcileResult[*openmcpv1alpha1.Landscaper]{OldComponent: old, Component: ls, Result: res, Reason: reason, ReconcileError: errs.Aggregate(), Conditions: cons}
 }
 

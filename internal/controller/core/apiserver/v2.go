@@ -4,8 +4,10 @@ import (
 	"context"
 	"fmt"
 	"strconv"
+	"strings"
 	"time"
 
+	"github.com/openmcp-project/controller-utils/pkg/collections"
 	"github.com/openmcp-project/controller-utils/pkg/logging"
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -22,6 +24,7 @@ import (
 	gcpv1alpha1 "github.com/openmcp-project/cluster-provider-gardener/api/core/v1alpha1"
 	clustersv1alpha1 "github.com/openmcp-project/openmcp-operator/api/clusters/v1alpha1"
 	clustersconst "github.com/openmcp-project/openmcp-operator/api/clusters/v1alpha1/constants"
+	commonapi "github.com/openmcp-project/openmcp-operator/api/common"
 	openmcpclusterutils "github.com/openmcp-project/openmcp-operator/lib/utils"
 
 	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
@@ -107,7 +110,9 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 		clusterReadyCon.Status = openmcpv1alpha1.ComponentConditionStatusFromBool(cluster.Status.Phase == clustersv1alpha1.CLUSTER_PHASE_READY)
 		if clusterReadyCon.Status != openmcpv1alpha1.ComponentConditionStatusTrue {
 			clusterReadyCon.Reason = cconst.ReasonClusterNotReady
-			clusterReadyCon.Message = cluster.Status.Message
+			clusterReadyCon.Message = strings.Join(collections.ProjectSlice(cluster.Status.Conditions, func(con metav1.Condition) string {
+				return fmt.Sprintf("[%s] %s", con.Reason, con.Message)
+			}), "\n")
 			if clusterReadyCon.Message == "" {
 				clusterReadyCon.Message = "Cluster is not ready yet, no further information available"
 			}
@@ -160,11 +165,10 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 	} else {
 		clusterRequestGrantedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
 		clusterRequestGrantedCon.Reason = cconst.ReasonClusterRequestNotGranted
-		crReason := cr.Status.Reason
-		crMessage := cr.Status.Message
-		if crReason == "" {
-			crReason = "<NoReason>"
-		}
+		crReason := cconst.ReasonClusterRequestNotGranted
+		crMessage := strings.Join(collections.ProjectSlice(cr.Status.Conditions, func(con metav1.Condition) string {
+			return fmt.Sprintf("[%s] %s", con.Reason, con.Message)
+		}), "\n")
 		if crMessage == "" {
 			crMessage = "<NoMessage>"
 		}
@@ -228,11 +232,10 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 		if ar.Status.Phase != clustersv1alpha1.REQUEST_GRANTED && ar.Status.SecretRef == nil {
 			accessRequestGrantedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
 			accessRequestGrantedCon.Reason = cconst.ReasonAccessRequestNotGranted
-			arReason := cr.Status.Reason
-			arMessage := cr.Status.Message
-			if arReason == "" {
-				arReason = "<NoReason>"
-			}
+			arReason := cconst.ReasonAccessRequestNotGranted
+			arMessage := strings.Join(collections.ProjectSlice(ar.Status.Conditions, func(con metav1.Condition) string {
+				return fmt.Sprintf("[%s] %s", con.Reason, con.Message)
+			}), "\n")
 			if arMessage == "" {
 				arMessage = "<NoMessage>"
 			}
@@ -472,11 +475,11 @@ func (m *AccessRequestMutator) MetadataMutator() resources.MetadataMutator {
 // Mutate implements resources.Mutator.
 func (m *AccessRequestMutator) Mutate(r *clustersv1alpha1.AccessRequest) error {
 	if m.isClusterRef && r.Spec.ClusterRef == nil {
-		r.Spec.ClusterRef = &clustersv1alpha1.NamespacedObjectReference{}
+		r.Spec.ClusterRef = &commonapi.ObjectReference{}
 		r.Spec.ClusterRef.Name = m.refName
 		r.Spec.ClusterRef.Namespace = m.refNamespace
 	} else if !m.isClusterRef && r.Spec.RequestRef == nil {
-		r.Spec.RequestRef = &clustersv1alpha1.NamespacedObjectReference{}
+		r.Spec.RequestRef = &commonapi.ObjectReference{}
 		r.Spec.RequestRef.Name = m.refName
 		r.Spec.RequestRef.Namespace = m.refNamespace
 	}
