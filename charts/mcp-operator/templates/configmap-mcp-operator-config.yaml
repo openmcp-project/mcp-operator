@@ -1,0 +1,20 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mcp-operator-config
+  namespace: {{ .Release.Namespace }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+data:
+  config.yaml: |
+    architecture:
+      {{- if and .Values.architecture .Values.architecture.immutability }}
+      immutability:
+      {{- .Values.architecture.immutability | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if and .Values.apiServer .Values.apiServer.architecture }}
+      apiServer:
+        version: {{ .Values.apiServer.architecture.version | default "v1" }}
+        allowOverride: {{ .Values.apiServer.architecture.allowOverride | default false }}
+      {{- end }}

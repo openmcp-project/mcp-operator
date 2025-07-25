@@ -3,21 +3,25 @@ package landscaper_test
 import (
 	"path"
 
+	openmcpls "github.com/openmcp-project/service-provider-landscaper/api/v1alpha1"
+
 	"github.com/openmcp-project/mcp-operator/internal/components"
+	mcpocfg "github.com/openmcp-project/mcp-operator/internal/config"
 	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
 	"github.com/openmcp-project/mcp-operator/internal/controller/core/landscaper"
 
-	lssv1alpha1 "github.com/gardener/landscaper-service/pkg/apis/core/v1alpha1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-	"k8s.io/apimachinery/pkg/api/errors"
+
+	. "github.com/openmcp-project/mcp-operator/test/matchers"
+
+	lssv1alpha1 "github.com/gardener/landscaper-service/pkg/apis/core/v1alpha1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
-
-	. "github.com/openmcp-project/mcp-operator/test/matchers"
 
 	"github.com/openmcp-project/controller-utils/pkg/testing"
 
@@ -349,11 +353,11 @@ var _ = Describe("CO-1153 Landscaper Controller", func() {
 		// now it should be gone
 		err = env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(ls), ls)
 		Expect(err).To(HaveOccurred())
-		Expect(errors.IsNotFound(err)).To(BeTrue())
+		Expect(apierrors.IsNotFound(err)).To(BeTrue())
 
 		err = env.Client(testutils.LaaSCoreCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, &lssv1alpha1.LandscaperDeployment{})
 		Expect(err).To(HaveOccurred())
-		Expect(errors.IsNotFound(err)).To(BeTrue())
+		Expect(apierrors.IsNotFound(err)).To(BeTrue())
 
 		as := &openmcpv1alpha1.APIServer{}
 		Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, as)).To(Succeed())
@@ -437,7 +441,7 @@ var _ = Describe("CO-1153 Landscaper Controller", func() {
 
 		err = env.Client(testutils.LaaSCoreCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, &lssv1alpha1.LandscaperDeployment{})
 		Expect(err).To(HaveOccurred())
-		Expect(errors.IsNotFound(err)).To(BeTrue())
+		Expect(apierrors.IsNotFound(err)).To(BeTrue())
 	})
 
 	It("should handle when landscaper is not found", func() {
@@ -470,7 +474,7 @@ var _ = Describe("CO-1153 Landscaper Controller", func() {
 
 		err = env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(ls), ls)
 		Expect(err).To(HaveOccurred())
-		Expect(errors.IsNotFound(err)).To(BeTrue())
+		Expect(apierrors.IsNotFound(err)).To(BeTrue())
 
 		as := &openmcpv1alpha1.APIServer{}
 		Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, as)).To(Succeed())
@@ -482,6 +486,52 @@ var _ = Describe("CO-1153 Landscaper Controller", func() {
 		Expect(componentutils.HasDepedencyFinalizer(as, lsComp.Type())).To(BeFalse())
 		Expect(componentutils.HasDepedencyFinalizer(auth, lsComp.Type())).To(BeFalse())
 		Expect(componentutils.HasDepedencyFinalizer(authz, lsComp.Type())).To(BeFalse())
+	})
+
+	Context("v2", func() {
+
+		BeforeEach(func() {
+			mcpocfg.Config.Architecture.Landscaper.Version = openmcpv1alpha1.ArchitectureV2
+		})
+
+		It("should create a v2 Landscaper object", func() {
+			env := testEnvSetup(path.Join("testdata", "test-04"), "")
+
+			ls := &openmcpv1alpha1.Landscaper{}
+			ls.SetName("test")
+			ls.SetNamespace("test")
+			err := env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(ls), ls)
+			Expect(err).NotTo(HaveOccurred())
+
+			env.ShouldReconcile(lsReconciler, testing.RequestFromObject(ls))
+
+			lsv2 := &openmcpls.Landscaper{}
+			lsv2.SetName(ls.Name)
+			lsv2.SetNamespace(ls.Namespace)
+			Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(lsv2), lsv2)).To(Succeed())
+
+			// add dummy finalizer to verify that controller waits for the lsv2 object to be deleted
+			lsv2.Finalizers = append(lsv2.Finalizers, "dummy")
+			err = env.Client(testutils.CrateCluster).Update(env.Ctx, lsv2)
+			Expect(err).NotTo(HaveOccurred())
+
+			Expect(env.Client(testutils.CrateCluster).Delete(env.Ctx, ls)).To(Succeed())
+			env.ShouldReconcile(lsReconciler, testing.RequestFromObject(ls))
+			Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(ls), ls)).To(Succeed())
+			Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(lsv2), lsv2)).To(Succeed())
+			Expect(ls.DeletionTimestamp.IsZero()).To(BeFalse())
+			Expect(lsv2.DeletionTimestamp.IsZero()).To(BeFalse())
+
+			lsv2.Finalizers = nil
+			Expect(env.Client(testutils.CrateCluster).Update(env.Ctx, lsv2)).To(Succeed())
+
+			Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(ls), ls)).To(Succeed())
+			Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(lsv2), lsv2)).To(MatchError(apierrors.IsNotFound, "not found"))
+
+			env.ShouldReconcile(lsReconciler, testing.RequestFromObject(ls))
+			Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(ls), ls)).To(MatchError(apierrors.IsNotFound, "not found"))
+		})
+
 	})
 
 })

@@ -9,6 +9,8 @@ import (
 	laasinstall "github.com/gardener/landscaper-service/pkg/apis/core/install"
 	cocorev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
 	"github.com/openmcp-project/controller-utils/pkg/testing"
+	v2install "github.com/openmcp-project/openmcp-operator/api/install"
+	lsv2install "github.com/openmcp-project/service-provider-landscaper/api/install"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	clientgoscheme "k8s.io/client-go/kubernetes/scheme"
@@ -30,6 +32,8 @@ func init() {
 	utilruntime.Must(gardenv1beta1.AddToScheme(Scheme))
 	utilruntime.Must(gardenauthenticationv1alpha1.AddToScheme(Scheme))
 	utilruntime.Must(clientgoscheme.AddToScheme(Scheme))
+	v2install.InstallOperatorAPIs(Scheme)
+	lsv2install.InstallProviderAPIs(Scheme)
 }
 
 const (

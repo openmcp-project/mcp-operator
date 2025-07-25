@@ -9,6 +9,7 @@ import (
 	"github.com/openmcp-project/mcp-operator/internal/releasechannel"
 	"github.com/openmcp-project/mcp-operator/internal/utils/apiserver"
 
+	mcpocfg "github.com/openmcp-project/mcp-operator/internal/config"
 	apiservercontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver"
 	authenticationcontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/authentication"
 	authorizationcontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/authorization"
@@ -17,12 +18,16 @@ import (
 	landscapercontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/landscaper"
 	mcpcontroller "github.com/openmcp-project/mcp-operator/internal/controller/core/managedcontrolplane"
 
+	admissionv1 "k8s.io/api/admissionregistration/v1"
 	"sigs.k8s.io/controller-runtime/pkg/cluster"
+
+	v2install "github.com/openmcp-project/openmcp-operator/api/install"
 
 	laasinstall "github.com/gardener/landscaper-service/pkg/apis/core/install"
 	cocorev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
 	"github.com/openmcp-project/controller-utils/pkg/init/webhooks"
 	"github.com/openmcp-project/controller-utils/pkg/logging"
+	"github.com/openmcp-project/controller-utils/pkg/resources"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -44,6 +49,8 @@ import (
 	crdinstall "github.com/openmcp-project/mcp-operator/api/crds"
 	openmcpinstall "github.com/openmcp-project/mcp-operator/api/install"
 )
+
+const OperatorName = "ManagedControlPlaneOperator"
 
 func NewMCPOperatorCommand(ctx context.Context) *cobra.Command {
 	options := NewOptions()
@@ -143,6 +150,125 @@ func (o *Options) runInit(ctx context.Context) error {
 		}
 	}
 
+	// manage architecture immutability
+	labelSelector := client.MatchingLabels{
+		openmcpv1alpha1.ManagedByLabel:      OperatorName,
+		openmcpv1alpha1.ManagedPurposeLabel: openmcpv1alpha1.ManagedPurposeArchitectureImmutability,
+	}
+	evapbs := &admissionv1.ValidatingAdmissionPolicyBindingList{}
+	if err := crateClient.List(ctx, evapbs, labelSelector); err != nil {
+		return fmt.Errorf("error listing ValidatingAdmissionPolicyBindings: %w", err)
+	}
+	for _, evapb := range evapbs.Items {
+		if mcpocfg.Config.Architecture.Immutability.Disabled || evapb.Name != mcpocfg.Config.Architecture.Immutability.PolicyName {
+			setupLog.Info("Deleting existing ValidatingAdmissionPolicyBinding with architecture immutability purpose", "name", evapb.Name)
+			if err := crateClient.Delete(ctx, &evapb); client.IgnoreNotFound(err) != nil {
+				return fmt.Errorf("error deleting ValidatingAdmissionPolicyBinding '%s': %w", evapb.Name, err)
+			}
+		}
+	}
+	evaps := &admissionv1.ValidatingAdmissionPolicyList{}
+	if err := crateClient.List(ctx, evaps, labelSelector); err != nil {
+		return fmt.Errorf("error listing ValidatingAdmissionPolicies: %w", err)
+	}
+	for _, evap := range evaps.Items {
+		if mcpocfg.Config.Architecture.Immutability.Disabled || evap.Name != mcpocfg.Config.Architecture.Immutability.PolicyName {
+			setupLog.Info("Deleting existing ValidatingAdmissionPolicy with architecture immutability purpose", "name", evap.Name)
+			if err := crateClient.Delete(ctx, &evap); client.IgnoreNotFound(err) != nil {
+				return fmt.Errorf("error deleting ValidatingAdmissionPolicy '%s': %w", evap.Name, err)
+			}
+		}
+	}
+	if !mcpocfg.Config.Architecture.Immutability.Disabled {
+		setupLog.Info("Architecture immutability validation enabled, creating/updating ValidatingAdmissionPolicies ...")
+		vapm := resources.NewValidatingAdmissionPolicyMutator(mcpocfg.Config.Architecture.Immutability.PolicyName, admissionv1.ValidatingAdmissionPolicySpec{
+			FailurePolicy: ptr.To(admissionv1.Fail),
+			MatchConstraints: &admissionv1.MatchResources{
+				ResourceRules: []admissionv1.NamedRuleWithOperations{
+					{
+						RuleWithOperations: admissionv1.RuleWithOperations{
+							Operations: []admissionv1.OperationType{
+								admissionv1.Create,
+								admissionv1.Update,
+							},
+							Rule: admissionv1.Rule{ // match all resources, actual restriction happens in the binding
+								APIGroups:   []string{"*"},
+								APIVersions: []string{"*"},
+								Resources:   []string{"*"},
+							},
+						},
+					},
+				},
+			},
+			Variables: []admissionv1.Variable{
+				{
+					Name:       "archLabel",
+					Expression: fmt.Sprintf(`(has(object.metadata.labels) && "%s" in object.metadata.labels) ? object.metadata.labels["%s"] : ""`, openmcpv1alpha1.ArchitectureVersionLabel, openmcpv1alpha1.ArchitectureVersionLabel),
+				},
+				{
+					Name:       "oldArchLabel",
+					Expression: fmt.Sprintf(`(oldObject != null && has(oldObject.metadata.labels) && "%s" in oldObject.metadata.labels) ? oldObject.metadata.labels["%s"] : ""`, openmcpv1alpha1.ArchitectureVersionLabel, openmcpv1alpha1.ArchitectureVersionLabel),
+				},
+			},
+			Validations: []admissionv1.Validation{
+				{
+					Expression: fmt.Sprintf(`variables.archLabel == "%s" || variables.archLabel == "%s"`, openmcpv1alpha1.ArchitectureV1, openmcpv1alpha1.ArchitectureV2),
+					Message:    fmt.Sprintf(`The label "%s" must be set and its value must be either "%s" or "%s".`, openmcpv1alpha1.ArchitectureVersionLabel, openmcpv1alpha1.ArchitectureV1, openmcpv1alpha1.ArchitectureV2),
+				},
+				{
+					Expression: fmt.Sprintf(`request.operation == "CREATE" || (variables.oldArchLabel == "" && variables.archLabel == "%s") || (variables.oldArchLabel == variables.archLabel)`, openmcpv1alpha1.ArchitectureV1),
+					Message:    fmt.Sprintf(`The label "%s" is immutable, it may not be changed or removed once set. Adding it to existing resources is only allowed with "%s" as value.`, openmcpv1alpha1.ArchitectureVersionLabel, openmcpv1alpha1.ArchitectureV1),
+				},
+			},
+		})
+		vapm.MetadataMutator().WithLabels(map[string]string{
+			openmcpv1alpha1.ManagedByLabel:      OperatorName,
+			openmcpv1alpha1.ManagedPurposeLabel: openmcpv1alpha1.ManagedPurposeArchitectureImmutability,
+		})
+		if err := resources.CreateOrUpdateResource(ctx, crateClient, vapm); err != nil {
+			return fmt.Errorf("error creating/updating ValidatingAdmissionPolicy for architecture immutability: %w", err)
+		}
+
+		vapbm := resources.NewValidatingAdmissionPolicyBindingMutator(mcpocfg.Config.Architecture.Immutability.PolicyName, admissionv1.ValidatingAdmissionPolicyBindingSpec{
+			PolicyName: mcpocfg.Config.Architecture.Immutability.PolicyName,
+			ValidationActions: []admissionv1.ValidationAction{
+				admissionv1.Deny,
+			},
+			MatchResources: &admissionv1.MatchResources{
+				ResourceRules: []admissionv1.NamedRuleWithOperations{
+					{
+						RuleWithOperations: admissionv1.RuleWithOperations{
+							Operations: []admissionv1.OperationType{
+								admissionv1.Create,
+								admissionv1.Update,
+							},
+							Rule: admissionv1.Rule{
+								APIGroups:   []string{openmcpv1alpha1.GroupVersion.Group},
+								APIVersions: []string{openmcpv1alpha1.GroupVersion.Version},
+								Resources: []string{
+									"apiservers",
+									"landscapers",
+									"cloudorchestrators",
+									"authentications",
+									"authorizations",
+								},
+							},
+						},
+					},
+				},
+			},
+		})
+		vapbm.MetadataMutator().WithLabels(map[string]string{
+			openmcpv1alpha1.ManagedByLabel:      OperatorName,
+			openmcpv1alpha1.ManagedPurposeLabel: openmcpv1alpha1.ManagedPurposeArchitectureImmutability,
+		})
+		if err := resources.CreateOrUpdateResource(ctx, crateClient, vapbm); err != nil {
+			return fmt.Errorf("error creating/updating ValidatingAdmissionPolicyBinding for architecture immutability: %w", err)
+		}
+
+		setupLog.Info("ValidatingAdmissionPolicy and ValidatingAdmissionPolicyBinding for architecture immutability created/updated")
+	}
+
 	return nil
 }
 
@@ -219,7 +345,15 @@ func (o *Options) run(ctx context.Context) error {
 
 	if o.ActiveControllers.Has(ControllerIDAPIServer) {
 		// APIServer controller
-		apiServerProvider, err := apiservercontroller.NewAPIServerProvider(ctx, mgr.GetClient(), o.APIServerConfig)
+		// build platform cluster client for v2 path
+		v2scheme := v2install.InstallOperatorAPIs(runtime.NewScheme())
+		platformClient, err := client.New(o.LaaSClusterConfig, client.Options{
+			Scheme: v2scheme,
+		})
+		if err != nil {
+			return fmt.Errorf("error creating platform cluster client: %w", err)
+		}
+		apiServerProvider, err := apiservercontroller.NewAPIServerProvider(ctx, mgr.GetClient(), platformClient, o.APIServerConfig)
 		if err != nil {
 			return fmt.Errorf("error creating %s: %w", apiservercontroller.ControllerName, err)
 		}
