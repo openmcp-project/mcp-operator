@@ -17,8 +17,9 @@ require (
 	github.com/openmcp-project/control-plane-operator v0.1.10
 	github.com/openmcp-project/controller-utils v0.13.1
 	github.com/openmcp-project/mcp-operator/api v0.33.1
-	github.com/openmcp-project/openmcp-operator/api v0.7.0
-	github.com/openmcp-project/openmcp-operator/lib v0.8.3
+	github.com/openmcp-project/openmcp-operator/api v0.9.0
+	github.com/openmcp-project/openmcp-operator/lib v0.9.0
+	github.com/openmcp-project/service-provider-landscaper v0.4.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.7
 	github.com/stretchr/testify v1.10.0
@@ -85,7 +86,7 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
 	go.yaml.in/yaml/v3 v3.0.3 // indirect
-	golang.org/x/exp v0.0.0-20250711185948-6ae5c78190dc // indirect
+	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792 // indirect
 	golang.org/x/mod v0.26.0 // indirect
 	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/oauth2 v0.29.0 // indirect

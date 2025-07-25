@@ -27,6 +27,7 @@ import (
 
 	"github.com/openmcp-project/controller-utils/pkg/testing"
 	clustersv1alpha1 "github.com/openmcp-project/openmcp-operator/api/clusters/v1alpha1"
+	commonapi "github.com/openmcp-project/openmcp-operator/api/common"
 	openmcpclusterutils "github.com/openmcp-project/openmcp-operator/lib/utils"
 
 	gardenv1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
@@ -383,10 +384,8 @@ var _ = Describe("CO-1153 APIServer Controller", func() {
 			Expect(env.Client(testutils.LaaSCoreCluster).Create(env.Ctx, cluster)).To(Succeed())
 
 			cr.Status.Phase = clustersv1alpha1.REQUEST_GRANTED
-			cr.Status.Cluster = &clustersv1alpha1.NamespacedObjectReference{
-				ObjectReference: clustersv1alpha1.ObjectReference{
-					Name: cluster.Name,
-				},
+			cr.Status.Cluster = &commonapi.ObjectReference{
+				Name:      cluster.Name,
 				Namespace: cluster.Namespace,
 			}
 			Expect(env.Client(testutils.LaaSCoreCluster).Status().Update(env.Ctx, cr)).To(Succeed())
@@ -426,11 +425,11 @@ var _ = Describe("CO-1153 APIServer Controller", func() {
 			dummyShootJson, err := json.Marshal(dummyShoot)
 			Expect(err).NotTo(HaveOccurred())
 			cluster.Status = clustersv1alpha1.ClusterStatus{
-				Phase: clustersv1alpha1.CLUSTER_PHASE_READY,
 				ProviderStatus: &runtime.RawExtension{
 					Raw: dummyShootJson,
 				},
 			}
+			cluster.Status.Phase = clustersv1alpha1.CLUSTER_PHASE_READY
 			Expect(env.Client(testutils.LaaSCoreCluster).Status().Update(env.Ctx, cluster)).To(Succeed())
 
 			// reconcile again, should now get further
@@ -472,10 +471,8 @@ var _ = Describe("CO-1153 APIServer Controller", func() {
 			Expect(env.Client(testutils.LaaSCoreCluster).Create(env.Ctx, access)).To(Succeed())
 
 			ar.Status.Phase = clustersv1alpha1.REQUEST_GRANTED
-			ar.Status.SecretRef = &clustersv1alpha1.NamespacedObjectReference{
-				ObjectReference: clustersv1alpha1.ObjectReference{
-					Name: access.Name,
-				},
+			ar.Status.SecretRef = &commonapi.ObjectReference{
+				Name:      access.Name,
 				Namespace: access.Namespace,
 			}
 			Expect(env.Client(testutils.LaaSCoreCluster).Status().Update(env.Ctx, ar)).To(Succeed())
