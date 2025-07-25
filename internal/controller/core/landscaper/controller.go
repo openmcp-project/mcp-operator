@@ -185,7 +185,7 @@ func (r *LandscaperConnector) reconcile(ctx context.Context, req ctrl.Request) c
 	var v2cons []openmcpv1alpha1.ComponentCondition
 	var errr openmcperrors.ReasonableError
 	old := ls.DeepCopy()
-	if mcpocfg.Config.Architecture.DecideVersion(ls) == openmcpv1alpha1.ArchitectureV2 {
+	if mcpocfg.Config.Architecture.Landscaper.Version == openmcpv1alpha1.ArchitectureV2 {
 		// v2 logic
 		log.Info("Using v2 logic for APIServer")
 		if deleteLandscaper {
