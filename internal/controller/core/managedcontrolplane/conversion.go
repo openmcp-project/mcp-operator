@@ -2,9 +2,11 @@ package managedcontrolplane
 
 import (
 	"fmt"
+	"maps"
 	"slices"
 
 	"github.com/openmcp-project/mcp-operator/internal/components"
+	mcpocfg "github.com/openmcp-project/mcp-operator/internal/config"
 	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
 	corev1 "k8s.io/api/core/v1"
@@ -35,8 +37,8 @@ func (*ManagedControlPlaneController) ManagedControlPlaneToSplitInternalResource
 	}
 
 	res := map[openmcpv1alpha1.ComponentType]*components.ComponentHandler{}
-	allCompHandlerss := components.Registry.GetKnownComponents()
-	for ct, ch := range allCompHandlerss {
+	allCompHandlers := components.Registry.GetKnownComponents()
+	for ct, ch := range allCompHandlers {
 		if ch != nil && ch.Resource() != nil && ch.Converter() != nil && ch.Converter().IsConfigured(mcp) {
 			ch.Resource().SetName(mcp.Name)
 			ch.Resource().SetNamespace(mcp.Namespace)
@@ -59,7 +61,26 @@ func (*ManagedControlPlaneController) ManagedControlPlaneToSplitInternalResource
 				})
 			}
 
-			ch.Resource().SetLabels(labels)
+			// take over architecture version label from the MCP resource, if override is allowed for the component
+			bridgeConfig := mcpocfg.Config.Architecture.GetBridgeConfigForComponent(ct)
+			cLabels := make(map[string]string, len(labels)+1)
+			maps.Copy(cLabels, labels)
+			v, found := mcp.Labels[ct.ArchitectureVersionLabel()]
+			if found {
+				// check if version override is allowed for this component
+				if !bridgeConfig.AllowOverride {
+					return nil, fmt.Errorf("architecture version override is not allowed for component '%s', remove the '%s' label", string(ct), ct.ArchitectureVersionLabel())
+				}
+				if !bridgeConfig.IsAllowedVersion(v) {
+					return nil, fmt.Errorf("architecture version '%s' is not allowed for component '%s'", v, string(ct))
+				}
+				cLabels[openmcpv1alpha1.ArchitectureVersionLabel] = v
+			} else {
+				cLabels[openmcpv1alpha1.ArchitectureVersionLabel] = bridgeConfig.Version
+			}
+
+			ch.Resource().SetLabels(cLabels)
+
 			componentutils.SetCreatedFromGeneration(ch.Resource(), mcp, icfg)
 			if err := controllerutil.SetControllerReference(mcp, ch.Resource(), scheme); err != nil {
 				return nil, fmt.Errorf("unable to set owner reference: %w", err)

@@ -154,7 +154,7 @@ func (r *ManagedControlPlaneController) Reconcile(ctx context.Context, req ctrl.
 		cp.Status.Status = openmcpv1alpha1.MCPStatusDeleting
 	}
 
-	errs := []error{}
+	errs := []error{err}
 	if err := r.Client.Status().Update(ctx, cp); err != nil {
 		errs = append(errs, fmt.Errorf("error updating ManagedControlPlane status: %w", err))
 	}

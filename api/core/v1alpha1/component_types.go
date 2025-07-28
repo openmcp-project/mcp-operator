@@ -139,3 +139,15 @@ func (ct ComponentType) ReconciliationCondition() string {
 func (ct ComponentType) HealthyCondition() string {
 	return fmt.Sprintf("%sHealthy", string(ct))
 }
+
+// ArchitectureLabelPrefix returns the component-specific architecture label prefix.
+// Note that this label is only used on the MCP resource itself, on the component resources, the static ArchitectureLabelPrefix is used.
+func (ct ComponentType) ArchitectureLabelPrefix() string {
+	return fmt.Sprintf("%s.%s", strings.ToLower(string(ct)), ArchitectureLabelPrefix)
+}
+
+// ArchitectureVersionLabel returns the component-specific architecture version label.
+// Note that this label is only used on the MCP resource itself, on the component resources, the static ArchitectureVersionLabel is used.
+func (ct ComponentType) ArchitectureVersionLabel() string {
+	return fmt.Sprintf("%s%s", ct.ArchitectureLabelPrefix(), "version")
+}

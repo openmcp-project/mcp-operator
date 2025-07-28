@@ -10,6 +10,7 @@ import (
 	"github.com/openmcp-project/mcp-operator/internal/utils"
 	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
 
+	mcpocfg "github.com/openmcp-project/mcp-operator/internal/config"
 	apiserverconfig "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/config"
 	apiserverhandler "github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/handler"
 	"github.com/openmcp-project/mcp-operator/internal/controller/core/apiserver/handler/gardener"
@@ -42,7 +43,7 @@ func (r *APIServerProvider) GetAPIServerHandlerForType(ctx context.Context, t op
 	return nil, fmt.Errorf("unknown API server type '%s'", string(t))
 }
 
-func NewAPIServerProvider(ctx context.Context, client client.Client, cfg *apiserverconfig.APIServerProviderConfiguration) (*APIServerProvider, error) {
+func NewAPIServerProvider(ctx context.Context, crateClient, platformClient client.Client, cfg *apiserverconfig.APIServerProviderConfiguration) (*APIServerProvider, error) {
 	log, ctx := utils.InitializeControllerLogger(ctx, ControllerName)
 	ccfg, err := cfg.Complete(ctx)
 	if err != nil {
@@ -55,7 +56,8 @@ func NewAPIServerProvider(ctx context.Context, client client.Client, cfg *apiser
 
 	return &APIServerProvider{
 		CompletedAPIServerProviderConfiguration: *ccfg,
-		Client:                                  client,
+		CrateClient:                             crateClient,
+		PlatformClient:                          platformClient,
 	}, nil
 }
 
@@ -63,8 +65,10 @@ func NewAPIServerProvider(ctx context.Context, client client.Client, cfg *apiser
 type APIServerProvider struct {
 	apiserverconfig.CompletedAPIServerProviderConfiguration
 
-	// Client is the registration cluster client.
-	Client client.Client
+	// CrateClient is the registration cluster client.
+	CrateClient client.Client
+	// PlatformClient is the platform cluster client.
+	PlatformClient client.Client
 
 	// FakeHandler is a fake APIServerHandler for testing purposes.
 	// It should only be non-nil in tests.
@@ -84,7 +88,7 @@ func (r *APIServerProvider) Reconcile(ctx context.Context, req ctrl.Request) (ct
 	if rr.Component == nil {
 		return rr.Result, rr.ReconcileError
 	}
-	return componentutils.UpdateStatus(ctx, r.Client, rr)
+	return componentutils.UpdateStatus(ctx, r.CrateClient, rr)
 }
 
 func (r *APIServerProvider) reconcile(ctx context.Context, req ctrl.Request) componentutils.ReconcileResult[*openmcpv1alpha1.APIServer] {
@@ -92,7 +96,7 @@ func (r *APIServerProvider) reconcile(ctx context.Context, req ctrl.Request) com
 
 	// get internal APIServer resource
 	as := &openmcpv1alpha1.APIServer{}
-	if err := r.Client.Get(ctx, req.NamespacedName, as); err != nil {
+	if err := r.CrateClient.Get(ctx, req.NamespacedName, as); err != nil {
 		if apierrors.IsNotFound(err) {
 			log.Debug("Resource not found")
 			return componentutils.ReconcileResult[*openmcpv1alpha1.APIServer]{}
@@ -110,7 +114,7 @@ func (r *APIServerProvider) reconcile(ctx context.Context, req ctrl.Request) com
 				return componentutils.ReconcileResult[*openmcpv1alpha1.APIServer]{}
 			case openmcpv1alpha1.OperationAnnotationValueReconcile:
 				log.Debug("Removing reconcile operation annotation from resource")
-				if err := componentutils.PatchAnnotation(ctx, r.Client, as, openmcpv1alpha1.OperationAnnotation, "", componentutils.ANNOTATION_DELETE); err != nil {
+				if err := componentutils.PatchAnnotation(ctx, r.CrateClient, as, openmcpv1alpha1.OperationAnnotation, "", componentutils.ANNOTATION_DELETE); err != nil {
 					return componentutils.ReconcileResult[*openmcpv1alpha1.APIServer]{ReconcileError: openmcperrors.WithReason(fmt.Errorf("error removing operation annotation: %w", err), cconst.ReasonCrateClusterInteractionProblem)}
 				}
 			}
@@ -133,28 +137,41 @@ func (r *APIServerProvider) reconcile(ctx context.Context, req ctrl.Request) com
 
 		old := as.DeepCopy()
 		if controllerutil.AddFinalizer(as, openmcpv1alpha1.APIServerComponent.Finalizer()) {
-			if err := r.Client.Patch(ctx, as, client.MergeFrom(old)); err != nil {
+			if err := r.CrateClient.Patch(ctx, as, client.MergeFrom(old)); err != nil {
 				return componentutils.ReconcileResult[*openmcpv1alpha1.APIServer]{Component: as, ReconcileError: openmcperrors.WithReason(fmt.Errorf("error patching finalizer on APIServer: %w", err), cconst.ReasonCrateClusterInteractionProblem)}
 			}
 		}
 	}
-
-	apiServerHandler, err := r.GetAPIServerHandlerForType(ctx, as.Spec.Type, r.CompletedAPIServerProviderConfiguration)
-	if err != nil {
-		return componentutils.ReconcileResult[*openmcpv1alpha1.APIServer]{Component: as, ReconcileError: openmcperrors.WithReason(fmt.Errorf("error getting APIServer handler: %w", err), cconst.ReasonConfigurationProblem)}
-	}
-	ctx = logging.NewContext(ctx, log.WithValues("apiServerType", string(as.Spec.Type)))
 
 	old := as.DeepCopy()
 	var res ctrl.Result
 	var usf apiserverhandler.UpdateStatusFunc
 	var cons []openmcpv1alpha1.ComponentCondition
 	var errr openmcperrors.ReasonableError
-	if !deleteAPIServer {
-		res, usf, cons, errr = apiServerHandler.HandleCreateOrUpdate(ctx, as, r.Client)
+
+	if mcpocfg.Config.Architecture.DecideVersion(as) == openmcpv1alpha1.ArchitectureV2 {
+		// v2 logic
+		log.Info("Using v2 logic for APIServer")
+		if !deleteAPIServer {
+			res, usf, cons, errr = v2HandleCreateOrUpdate(ctx, as, r.PlatformClient)
+		} else {
+			res, usf, cons, errr = v2HandleDelete(ctx, as, r.PlatformClient)
+		}
 	} else {
-		res, usf, cons, errr = apiServerHandler.HandleDelete(ctx, as, r.Client)
+		// v1 logic
+		apiServerHandler, err := r.GetAPIServerHandlerForType(ctx, as.Spec.Type, r.CompletedAPIServerProviderConfiguration)
+		if err != nil {
+			return componentutils.ReconcileResult[*openmcpv1alpha1.APIServer]{Component: as, ReconcileError: openmcperrors.WithReason(fmt.Errorf("error getting APIServer handler: %w", err), cconst.ReasonConfigurationProblem)}
+		}
+		ctx = logging.NewContext(ctx, log.WithValues("apiServerType", string(as.Spec.Type)))
+
+		if !deleteAPIServer {
+			res, usf, cons, errr = apiServerHandler.HandleCreateOrUpdate(ctx, as, r.CrateClient)
+		} else {
+			res, usf, cons, errr = apiServerHandler.HandleDelete(ctx, as, r.CrateClient)
+		}
 	}
+
 	errs := openmcperrors.NewReasonableErrorList(errr)
 
 	if usf != nil {
@@ -170,7 +187,7 @@ func (r *APIServerProvider) reconcile(ctx context.Context, req ctrl.Request) com
 		old := as.DeepCopy()
 		changed := controllerutil.RemoveFinalizer(as, openmcpv1alpha1.APIServerComponent.Finalizer())
 		if changed {
-			if err := r.Client.Patch(ctx, as, client.MergeFrom(old)); err != nil {
+			if err := r.CrateClient.Patch(ctx, as, client.MergeFrom(old)); err != nil {
 				errs.Append(fmt.Errorf("error removing finalizer from APIServer: %w", err))
 			}
 		}
