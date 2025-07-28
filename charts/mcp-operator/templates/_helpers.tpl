@@ -45,6 +45,13 @@ Name of the clusterrole(binding) if in-cluster config is used for the cloudorche
 {{- end }}
 
 {{/*
+Name of the clusterrole(binding) if in-cluster config is used for the core cluster.
+*/}}
+{{- define "mcp-operator.v2bridge.clusterrole" -}}
+{{- print "openmcp.cloud:v2:" ( include "mcp-operator.fullname" . ) | trunc 63 | trimSuffix "-" }}
+{{- end }}
+
+{{/*
 Use <image>:<tag> or <image>@<sha256>, depending on which is given.
 */}}
 {{- define "image" -}}

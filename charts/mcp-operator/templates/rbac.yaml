@@ -94,6 +94,12 @@ rules:
     - landscaperdeployments
   verbs:
     - "*"
+- apiGroups:
+    - landscaper.services.openmcp.cloud
+  resources:
+    - landscapers
+  verbs:
+    - "*"
 ---
 kind: ClusterRoleBinding
 apiVersion: {{ include "rbacversion" . }}
@@ -146,7 +152,7 @@ roleRef:
 {{- end }}
 {{- end }}
 {{- if not .Values.webhooks.disabled }}
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "rbacversion" . }}
 kind: Role
 metadata:
   name: {{ include "mcp-operator.fullname" . }}
@@ -159,7 +165,7 @@ rules:
     resourceNames:
       - {{ include "mcp-operator.fullname" . }}-webhooks-tls
 ---
-apiVersion: rbac.authorization.k8s.io/v1
+apiVersion: {{ include "rbacversion" . }}
 kind: RoleBinding
 metadata:
   name: {{ include "mcp-operator.fullname" . }}
@@ -175,3 +181,32 @@ subjects:
   namespace: {{ .Release.Namespace }}
 ---
 {{- end }}
+apiVersion: {{ include "rbacversion" . }}
+kind: ClusterRole
+metadata:
+  name: {{ include "mcp-operator.v2bridge.clusterrole" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+  - clusters.openmcp.cloud
+  resources:
+  - "*"
+  verbs:
+  - "*"
+---
+kind: ClusterRoleBinding
+apiVersion: {{ include "rbacversion" . }}
+metadata:
+  name: {{ include "mcp-operator.v2bridge.clusterrole" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: mcp-operator
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "mcp-operator.v2bridge.clusterrole" . }}
+  apiGroup: rbac.authorization.k8s.io
+---
