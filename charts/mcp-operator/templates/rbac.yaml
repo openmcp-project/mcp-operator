@@ -116,6 +116,43 @@ roleRef:
   name: {{ include "mcp-operator.landscaper.clusterrole" . }}
   apiGroup: rbac.authorization.k8s.io
 ---
+apiVersion: {{ include "rbacversion" . }}
+kind: ClusterRole
+metadata:
+  name: {{ include "mcp-operator.v2bridge.clusterrole" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+rules:
+- apiGroups:
+  - clusters.openmcp.cloud
+  resources:
+  - "*"
+  verbs:
+  - "*"
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - get
+  - list
+  - watch
+---
+kind: ClusterRoleBinding
+apiVersion: {{ include "rbacversion" . }}
+metadata:
+  name: {{ include "mcp-operator.v2bridge.clusterrole" . }}
+  labels:
+    {{- include "mcp-operator.labels" . | nindent 4 }}
+subjects:
+- kind: ServiceAccount
+  name: mcp-operator
+  namespace: {{ .Release.Namespace }}
+roleRef:
+  kind: ClusterRole
+  name: {{ include "mcp-operator.v2bridge.clusterrole" . }}
+  apiGroup: rbac.authorization.k8s.io
+---
 {{- end }}
 {{- end }}
 {{- if has "cloudorchestrator" ( include "mcp-operator.activeControllers" .Values | fromYamlArray ) }}
@@ -181,32 +218,3 @@ subjects:
   namespace: {{ .Release.Namespace }}
 ---
 {{- end }}
-apiVersion: {{ include "rbacversion" . }}
-kind: ClusterRole
-metadata:
-  name: {{ include "mcp-operator.v2bridge.clusterrole" . }}
-  labels:
-    {{- include "mcp-operator.labels" . | nindent 4 }}
-rules:
-- apiGroups:
-  - clusters.openmcp.cloud
-  resources:
-  - "*"
-  verbs:
-  - "*"
----
-kind: ClusterRoleBinding
-apiVersion: {{ include "rbacversion" . }}
-metadata:
-  name: {{ include "mcp-operator.v2bridge.clusterrole" . }}
-  labels:
-    {{- include "mcp-operator.labels" . | nindent 4 }}
-subjects:
-- kind: ServiceAccount
-  name: mcp-operator
-  namespace: {{ .Release.Namespace }}
-roleRef:
-  kind: ClusterRole
-  name: {{ include "mcp-operator.v2bridge.clusterrole" . }}
-  apiGroup: rbac.authorization.k8s.io
----
