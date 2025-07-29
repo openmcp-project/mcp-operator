@@ -9,4 +9,7 @@ const (
 	ConditionAccessRequestGranted  = "AccessRequestGranted"
 	ConditionAccessRequestDeleted  = "AccessRequestDeleted"
 	ConditionClusterRequestDeleted = "ClusterRequestDeleted"
+
+	ConditionLandscaperV2ResourceCreatedOrUpdated = "LandscaperV2ResourceCreatedOrUpdated"
+	ConditionLandscaperV2ResourceDeleted          = "LandscaperV2ResourceDeleted"
 )
