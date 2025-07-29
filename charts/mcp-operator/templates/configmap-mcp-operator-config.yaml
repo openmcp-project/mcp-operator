@@ -13,8 +13,8 @@ data:
       immutability:
       {{- .Values.architecture.immutability | toYaml | nindent 8 }}
       {{- end }}
-      {{- if and .Values.apiServer .Values.apiServer.architecture }}
-      apiServer:
-        version: {{ .Values.apiServer.architecture.version | default "v1" }}
-        allowOverride: {{ .Values.apiServer.architecture.allowOverride | default false }}
+      {{- if and .Values.apiserver .Values.apiserver.architecture }}
+      apiserver:
+        version: {{ .Values.apiserver.architecture.version | default "v1" }}
+        allowOverride: {{ .Values.apiserver.architecture.allowOverride | default false }}
       {{- end }}
