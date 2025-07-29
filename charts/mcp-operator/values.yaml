@@ -109,6 +109,9 @@ apiserver:
 
 landscaper:
   disabled: false
+  # architecture:
+  #   version: v1
+  #   allowOverride: false
   clusters:
     # core:
     #   # specify either kubeconfig or host, audience, and one of caData or caConfigMapName.

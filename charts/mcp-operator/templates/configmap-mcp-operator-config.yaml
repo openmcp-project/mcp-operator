@@ -18,3 +18,7 @@ data:
         version: {{ .Values.apiserver.architecture.version | default "v1" }}
         allowOverride: {{ .Values.apiserver.architecture.allowOverride | default false }}
       {{- end }}
+      landscaper:
+        version: {{ .Values.landscaper.architecture.version | default "v1" }}
+        allowOverride: {{ .Values.landscaper.architecture.allowOverride | default false }}
+      {{- end }}
