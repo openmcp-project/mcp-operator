@@ -118,6 +118,17 @@ func NewCondition(conType string, status openmcpv1alpha1.ComponentConditionStatu
 	}
 }
 
+// ComponentConditionStatusFromMetav1ConditionStatus maps a metav1.ConditionStatus to a ComponentConditionStatus.
+func ComponentConditionStatusFromMetav1ConditionStatus(status metav1.ConditionStatus) openmcpv1alpha1.ComponentConditionStatus {
+	switch status {
+	case metav1.ConditionTrue:
+		return openmcpv1alpha1.ComponentConditionStatusTrue
+	case metav1.ConditionFalse:
+		return openmcpv1alpha1.ComponentConditionStatusFalse
+	}
+	return openmcpv1alpha1.ComponentConditionStatusUnknown
+}
+
 // IsComponentReady returns true if the component's observedGenerations are up-to-date and all of its relevant conditions are "True".
 // If relevantConditions is empty, all of the component's conditions are deemed relevant.
 // Condition types in relevantConditions for which no condition exists on the component are considered "Unknown" and cause the method to return false.

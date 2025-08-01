@@ -4,6 +4,7 @@ In order to migrate an existing MCP landscape to the new v2 architecture step by
 
 The bridge is currently implemented for the following components:
 - `APIServer`
+- `Landscaper`
 
 ## Architecture Configuration
 
@@ -12,7 +13,10 @@ To configure for which components the bridge is enabled, set the architecture co
 immutability:
   policyName: mcp-architecture-immutability
   disabled: false
-apiServer:
+apiserver:
+  version: v1
+  allowOverride: false
+landscaper:
   version: v1
   allowOverride: false
 # more components are to follow

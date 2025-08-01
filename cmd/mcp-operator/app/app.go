@@ -22,6 +22,7 @@ import (
 	"sigs.k8s.io/controller-runtime/pkg/cluster"
 
 	v2install "github.com/openmcp-project/openmcp-operator/api/install"
+	lsv2install "github.com/openmcp-project/service-provider-landscaper/api/install"
 
 	laasinstall "github.com/gardener/landscaper-service/pkg/apis/core/install"
 	cocorev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
@@ -290,6 +291,7 @@ func (o *Options) run(ctx context.Context) error {
 	sc := runtime.NewScheme()
 	openmcpinstall.Install(sc)
 	utilruntime.Must(clientgoscheme.AddToScheme(sc))
+	lsv2install.InstallProviderAPIs(sc)
 	mgr, err := ctrl.NewManager(o.CrateClusterConfig, ctrl.Options{
 		Scheme: sc,
 		Metrics: server.Options{
