@@ -113,8 +113,8 @@ github.com/openmcp-project/cluster-provider-gardener/api v0.2.0 h1:afEPFJe5tSnGB
 github.com/openmcp-project/cluster-provider-gardener/api v0.2.0/go.mod h1:k6YmDIb2Gl13teO9BnfN9a7MVG/4/oJ+FDwK07i8dA8=
 github.com/openmcp-project/control-plane-operator v0.1.10 h1:5ticEP3llBmIHQkBzkZwgTdcHJ7Z9rSaw5BsY3QQ2pM=
 github.com/openmcp-project/control-plane-operator v0.1.10/go.mod h1:GNu9LBTPWoE3dKsBo2kS+SeKSLU2qLtu3VjpaznsB2o=
-github.com/openmcp-project/controller-utils v0.13.1 h1:+06c0bs1BIO+hBsTcuiEK5y8vpDFoZPml59WNm8fagM=
-github.com/openmcp-project/controller-utils v0.13.1/go.mod h1:Z1ytVshYcgJq3VQVGqkuZsjO/BCr4UYAaVpHl6JSIMI=
+github.com/openmcp-project/controller-utils v0.14.0 h1:semDlO6fmEmTp7mT1j2ZmT1cCG3TtNujrMyKBU5Tzic=
+github.com/openmcp-project/controller-utils v0.14.0/go.mod h1:BA5sey3z1ISAqOP5CzgWGVcPeA906XgXEq4uBOpNfg4=
 github.com/openmcp-project/openmcp-operator/api v0.9.0 h1:Ss2XTHci3QDwtVQ9QCpAez68WPJNHpabpwMTpFYn0NE=
 github.com/openmcp-project/openmcp-operator/api v0.9.0/go.mod h1:cqSmw3+8QJ2Va15aeCmISKIqcWnTpPSb8kch6eyfa6U=
 github.com/openmcp-project/openmcp-operator/lib v0.9.0 h1:jbuuZ2HlR0T1wO+Ty8AEaswNeoUK7eGUIw+8zEaicJo=
