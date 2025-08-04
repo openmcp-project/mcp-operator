@@ -144,6 +144,28 @@ func (ar *AuthorizationReconciler) reconcile(ctx context.Context, req ctrl.Reque
 			return componentutils.ReconcileResult[*openmcpv1alpha1.Authorization]{Component: authz, Conditions: authorizationConditions(true, cconst.ReasonDeletionWaitingForDependingComponents, fmt.Sprintf("Deletion is waiting for the following dependencies to be removed: [%s]", depString)), Result: ctrl.Result{RequeueAfter: 60 * time.Second}}
 		}
 
+		// If there is a ClusterAdmin resource with the same name and namespace as the Authorization, we need to delete it first and wait for it to be removed before we can delete the Authorization.
+		log.Info("Deleting Cluster Admin resources")
+		clusterAdmin := &openmcpv1alpha1.ClusterAdmin{}
+		if err = ar.Client.Get(ctx, client.ObjectKey{Name: authz.Name, Namespace: authz.Namespace}, clusterAdmin); err != nil {
+			if !apierrors.IsNotFound(err) {
+				log.Error(err, "error fetching ClusterAdmin resource")
+				return componentutils.ReconcileResult[*openmcpv1alpha1.Authorization]{Component: authz, ReconcileError: openmcperrors.WithReason(fmt.Errorf("error fetching ClusterAdmin resource: %w", err), cconst.ReasonCrateClusterInteractionProblem)}
+			}
+		} else {
+			if !clusterAdmin.DeletionTimestamp.IsZero() {
+				if err = ar.Client.Delete(ctx, clusterAdmin); err != nil {
+					if !apierrors.IsNotFound(err) {
+						log.Error(err, "error deleting ClusterAdmin resource")
+						return componentutils.ReconcileResult[*openmcpv1alpha1.Authorization]{Component: authz, ReconcileError: openmcperrors.WithReason(fmt.Errorf("error deleting ClusterAdmin resource: %w", err), cconst.ReasonCrateClusterInteractionProblem)}
+					}
+				}
+			}
+
+			log.Info("Deletion is waiting for the ClusterAdmin to be removed")
+			return componentutils.ReconcileResult[*openmcpv1alpha1.Authorization]{Component: authz, Conditions: authorizationConditions(true, cconst.ReasonDeletionWaitingForDependingComponents, "Deletion is waiting for the ClusterAdmin to be removed"), Result: ctrl.Result{RequeueAfter: 60 * time.Second}}
+		}
+
 		log.Info("Deleting Authorization")
 		if err = ar.deleteAuthorization(ctx, apiServerClient); err != nil {
 			log.Error(err, "error deleting authorization resources")

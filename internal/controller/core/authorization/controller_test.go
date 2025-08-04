@@ -1032,6 +1032,53 @@ var _ = Describe("CO-1153 Authorization Controller", func() {
 			}))
 	})
 
+	It("should delete the corresponding ClusterAdmin resource when the Authorization is deleted", func() {
+		var err error
+		env := testEnvWithAPIServerAccess("testdata", "test-09")
+
+		authz := &openmcpv1alpha1.Authorization{}
+		err = env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, authz)
+		Expect(err).ToNot(HaveOccurred())
+
+		req := testing.RequestFromObject(authz)
+		_ = env.ShouldReconcile(authzReconciler, req)
+
+		err = env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(authz), authz)
+		Expect(err).ToNot(HaveOccurred())
+		Expect(authz.Status.Conditions).To(ContainElements(
+			MatchComponentCondition(openmcpv1alpha1.ComponentCondition{
+				Type:   openmcpv1alpha1.AuthorizationComponent.ReconciliationCondition(),
+				Status: openmcpv1alpha1.ComponentConditionStatusTrue,
+			}),
+		))
+
+		clusterAdmin := &openmcpv1alpha1.ClusterAdmin{}
+		err = env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, clusterAdmin)
+		Expect(err).ToNot(HaveOccurred())
+
+		err = env.Client(testutils.CrateCluster).Delete(env.Ctx, authz)
+		Expect(err).ToNot(HaveOccurred())
+
+		req = testing.RequestFromObject(authz)
+		_ = env.ShouldReconcile(authzReconciler, req)
+
+		err = env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, authz)
+		Expect(err).ToNot(HaveOccurred())
+
+		err = env.Client(testutils.CrateCluster).Delete(env.Ctx, clusterAdmin)
+		Expect(err).ToNot(HaveOccurred())
+
+		_ = env.ShouldReconcile(authzReconciler, req)
+
+		err = env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, authz)
+		Expect(err).To(HaveOccurred())
+		Expect(errors.IsNotFound(err)).To(BeTrue())
+
+		err = env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, clusterAdmin)
+		Expect(err).To(HaveOccurred())
+		Expect(errors.IsNotFound(err)).To(BeTrue())
+	})
+
 })
 
 func verifyStandardClusterRole(role *rbacv1.ClusterRole) {
