@@ -1,0 +1,9 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: ClusterAdmin
+metadata:
+  name: test
+  namespace: test
+spec:
+  subjects:
+    - kind: User
+      name: admin
