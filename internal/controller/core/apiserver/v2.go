@@ -110,7 +110,7 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 		clusterReadyCon.Status = openmcpv1alpha1.ComponentConditionStatusFromBool(cluster.Status.Phase == clustersv1alpha1.CLUSTER_PHASE_READY)
 		if clusterReadyCon.Status != openmcpv1alpha1.ComponentConditionStatusTrue {
 			clusterReadyCon.Reason = cconst.ReasonClusterNotReady
-			clusterReadyCon.Message = strings.Join(collections.ProjectSlice(cluster.Status.Conditions, func(con metav1.Condition) string {
+			clusterReadyCon.Message = strings.Join(collections.ProjectSliceToSlice(cluster.Status.Conditions, func(con metav1.Condition) string {
 				return fmt.Sprintf("[%s] %s", con.Reason, con.Message)
 			}), "\n")
 			if clusterReadyCon.Message == "" {
@@ -166,7 +166,7 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 		clusterRequestGrantedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
 		clusterRequestGrantedCon.Reason = cconst.ReasonClusterRequestNotGranted
 		crReason := cconst.ReasonClusterRequestNotGranted
-		crMessage := strings.Join(collections.ProjectSlice(cr.Status.Conditions, func(con metav1.Condition) string {
+		crMessage := strings.Join(collections.ProjectSliceToSlice(cr.Status.Conditions, func(con metav1.Condition) string {
 			return fmt.Sprintf("[%s] %s", con.Reason, con.Message)
 		}), "\n")
 		if crMessage == "" {
@@ -233,7 +233,7 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 			accessRequestGrantedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
 			accessRequestGrantedCon.Reason = cconst.ReasonAccessRequestNotGranted
 			arReason := cconst.ReasonAccessRequestNotGranted
-			arMessage := strings.Join(collections.ProjectSlice(ar.Status.Conditions, func(con metav1.Condition) string {
+			arMessage := strings.Join(collections.ProjectSliceToSlice(ar.Status.Conditions, func(con metav1.Condition) string {
 				return fmt.Sprintf("[%s] %s", con.Reason, con.Message)
 			}), "\n")
 			if arMessage == "" {

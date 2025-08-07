@@ -16,7 +16,7 @@ require (
 	github.com/openmcp-project/cluster-provider-gardener/api v0.3.0
 	github.com/openmcp-project/control-plane-operator v0.1.12
 	github.com/openmcp-project/controller-utils v0.16.0
-	github.com/openmcp-project/mcp-operator/api v0.34.1
+	github.com/openmcp-project/mcp-operator/api v0.35.0
 	github.com/openmcp-project/openmcp-operator/api v0.10.0
 	github.com/openmcp-project/openmcp-operator/lib v0.10.0
 	github.com/openmcp-project/service-provider-landscaper v0.4.0

@@ -48,7 +48,7 @@ func (r *LandscaperConnector) v2HandleCreateOrUpdate(ctx context.Context, ls *op
 	}
 
 	ready := lsv2.Status.Phase == commonapi.StatusPhaseReady && lsv2.Status.ObservedGeneration == lsv2.Generation
-	cons := collections.ProjectSlice(lsv2.Status.Conditions, func(v2con metav1.Condition) openmcpv1alpha1.ComponentCondition {
+	cons := collections.ProjectSliceToSlice(lsv2.Status.Conditions, func(v2con metav1.Condition) openmcpv1alpha1.ComponentCondition {
 		return components.NewCondition("LSv2_"+v2con.Type, components.ComponentConditionStatusFromMetav1ConditionStatus(v2con.Status), v2con.Reason, v2con.Message)
 	})
 	con.Status = openmcpv1alpha1.ComponentConditionStatusTrue
@@ -90,7 +90,7 @@ func (r *LandscaperConnector) v2HandleDelete(ctx context.Context, ls *openmcpv1a
 			log.Info("Waiting for Landscaper v2 resource to be deleted", "resourceName", lsv2.Name, "resourceNamespace", lsv2.Namespace)
 		}
 
-		cons := collections.ProjectSlice(lsv2.Status.Conditions, func(v2con metav1.Condition) openmcpv1alpha1.ComponentCondition {
+		cons := collections.ProjectSliceToSlice(lsv2.Status.Conditions, func(v2con metav1.Condition) openmcpv1alpha1.ComponentCondition {
 			return components.NewCondition("LSv2_"+v2con.Type, components.ComponentConditionStatusFromMetav1ConditionStatus(v2con.Status), v2con.Reason, v2con.Message)
 		})
 		con.Status = openmcpv1alpha1.ComponentConditionStatusFalse
