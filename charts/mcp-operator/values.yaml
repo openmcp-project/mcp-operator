@@ -14,7 +14,7 @@ deployment:
 
 image:
   repository: ghcr.io/openmcp-project/images/mcp-operator
-  tag: v0.35.1
+  tag: v0.35.2
   pullPolicy: IfNotPresent
 
 imagePullSecrets: []
