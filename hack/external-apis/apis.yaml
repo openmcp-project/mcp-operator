@@ -66,7 +66,7 @@ apis:
     - name: pkg/apis/extensions/v1alpha1/zz_generated.deepcopy.go
   gardener-extension-provider-aws:
     # renovate: datasource=github-releases
-    base: https://raw.githubusercontent.com/gardener/gardener-extension-provider-aws/v1.60.0
+    base: https://raw.githubusercontent.com/gardener/gardener-extension-provider-aws/v1.62.3
     vendor: github.com/gardener/gardener-extension-provider-aws
     patches:
     - replace: "github.com/gardener/gardener/pkg/apis/extensions/v1alpha1"

@@ -81,6 +81,8 @@ func downloadFile(url, destination string) error {
 		return err
 	}
 
+	//fmt.Println("Downloading", url, "to", destination)
+
 	resp, err := http.Get(url)
 	if resp != nil {
 		defer resp.Body.Close()
