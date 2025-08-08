@@ -83,4 +83,5 @@ apis:
     - name: pkg/apis/aws/v1alpha1/types_infrastructure.go
     - name: pkg/apis/aws/v1alpha1/types_worker.go
     - name: pkg/apis/aws/v1alpha1/zz_generated.deepcopy.go
-      
+    - name: pkg/apis/aws/v1alpha1/types_backupbucket.go
+    - name: pkg/apis/aws/v1alpha1/types_workloadidentity.go      

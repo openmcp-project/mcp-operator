@@ -814,13 +814,6 @@ type VerticalPodAutoscaler struct {
 	// FeatureGates contains information about enabled feature gates.
 	// +optional
 	FeatureGates map[string]bool `json:"featureGates,omitempty" protobuf:"bytes,19,rep,name=featureGates"`
-	// MaxAllowed specifies the global maximum allowed (maximum amount of resources) that vpa-recommender can recommend for a container.
-	// The VerticalPodAutoscaler-level maximum allowed takes precedence over the global maximum allowed.
-	// For more information, see https://github.com/kubernetes/autoscaler/blob/master/vertical-pod-autoscaler/docs/examples.md#specifying-global-maximum-allowed-resources-to-prevent-pods-from-being-unschedulable.
-	//
-	// Defaults to nil (no maximum).
-	// +optional
-	MaxAllowed corev1.ResourceList `json:"maxAllowed,omitempty" protobuf:"bytes,20,rep,name=maxAllowed,casttype=k8s.io/api/core/v1.ResourceList,castkey=k8s.io/api/core/v1.ResourceName"`
 }
 
 const (
@@ -864,11 +857,10 @@ var (
 )
 
 // KubernetesConfig contains common configuration fields for the control plane components.
-//
-// This is a legacy type that should not be used in new API fields or resources.
-// Instead of embedding this type, consider using inline map for feature gates definitions.
 type KubernetesConfig struct {
 	// FeatureGates contains information about enabled feature gates.
+	//
+	// This is a legacy field that should no longer be used. Instead, consider using inline map for feature gates definitions.
 	// +optional
 	FeatureGates map[string]bool `json:"featureGates,omitempty" protobuf:"bytes,1,rep,name=featureGates"`
 }
@@ -1540,7 +1532,7 @@ type Networking struct {
 	// Services is the CIDR of the service network. This field is immutable.
 	// +optional
 	Services *string `json:"services,omitempty" protobuf:"bytes,5,opt,name=services"`
-	// IPFamilies specifies the IP protocol versions to use for shoot networking.
+	// IPFamilies specifies the IP protocol versions to use for shoot networking. This field is immutable.
 	// See https://github.com/gardener/gardener/blob/master/docs/development/ipv6.md.
 	// Defaults to ["IPv4"].
 	// +optional
@@ -1908,12 +1900,12 @@ type SSHAccess struct {
 var (
 	// DefaultWorkerMaxSurge is the default value for Worker MaxSurge.
 	DefaultWorkerMaxSurge = intstr.FromInt32(1)
-	// DefaultAutoInPlaceWorkerMaxSurge is the default value for AutoInPlaceUpdate Worker MaxSurge.
-	DefaultAutoInPlaceWorkerMaxSurge = intstr.FromInt32(0)
+	// DefaultInPlaceWorkerMaxSurge is the default value for In-Place Worker MaxSurge.
+	DefaultInPlaceWorkerMaxSurge = intstr.FromInt32(0)
 	// DefaultWorkerMaxUnavailable is the default value for Worker MaxUnavailable.
 	DefaultWorkerMaxUnavailable = intstr.FromInt32(0)
-	// DefaultAutoInPlaceWorkerMaxUnavailable is the default value for AutoInPlaceUpdate Worker MaxUnavailable.
-	DefaultAutoInPlaceWorkerMaxUnavailable = intstr.FromInt32(1)
+	// DefaultInPlaceWorkerMaxUnavailable is the default value for In-Place Worker MaxUnavailable.
+	DefaultInPlaceWorkerMaxUnavailable = intstr.FromInt32(1)
 	// DefaultWorkerSystemComponentsAllow is the default value for Worker AllowSystemComponents
 	DefaultWorkerSystemComponentsAllow = true
 )
