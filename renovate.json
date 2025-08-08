@@ -30,10 +30,23 @@
     {
       "matchPackageNames": [
         "github.com/gardener/landscaper",
-        "github.com/gardener/landscaper-service",
-        "github.com/openmcp-project/*"
+        "github.com/gardener/landscaper-service"
       ],
-      "description": "Update all components from openmcp-project and landscaper immediately",
+      "description": "Update all components from landscaper immediately",
+      "rebaseWhen": "auto",
+      "minimumReleaseAge": "0 days",
+      "enabled": true
+    },
+    {
+      "description": "Combine openmcp-project updates in a single PR",
+      "matchDatasources": [
+        "go"
+      ],
+      "matchPackageNames": [
+        "^github\\.com/openmcp-project/.*"
+      ],
+      "groupName": "openmcp-project dependencies",
+      "groupSlug": "openmcp-project-dependencies",
       "rebaseWhen": "auto",
       "minimumReleaseAge": "0 days",
       "enabled": true
