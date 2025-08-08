@@ -57,6 +57,5 @@ tasks:
     sources:
     - hack/external-apis/*
     cmds:
-    # - 'go run {{.ROOT_DIR}}/hack/external-apis/main.go'
-      - 'echo "TODO: Temporarily disabled due to github problems."'
+    - 'go run {{.ROOT_DIR}}/hack/external-apis/main.go'
     internal: true
