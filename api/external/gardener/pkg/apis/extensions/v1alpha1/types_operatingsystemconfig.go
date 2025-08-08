@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -29,6 +29,7 @@ type OperatingSystemConfig struct {
 	metav1.TypeMeta `json:",inline"`
 	// +optional
 	metav1.ObjectMeta `json:"metadata,omitempty"`
+
 	// Specification of the OperatingSystemConfig.
 	// If the object's deletion timestamp is set, this field is immutable.
 	Spec OperatingSystemConfigSpec `json:"spec"`
@@ -65,11 +66,12 @@ type OperatingSystemConfigList struct {
 
 // OperatingSystemConfigSpec is the spec for a OperatingSystemConfig resource.
 type OperatingSystemConfigSpec struct {
+	// DefaultSpec is a structure containing common fields used by all extension resources.
+	DefaultSpec `json:",inline"`
+
 	// CRI config is a structure contains configurations of the CRI library
 	// +optional
 	CRIConfig *CRIConfig `json:"criConfig,omitempty"`
-	// DefaultSpec is a structure containing common fields used by all extension resources.
-	DefaultSpec `json:",inline"`
 	// Purpose describes how the result of this OperatingSystemConfig is used by Gardener. Either it
 	// gets sent to the `Worker` extension controller to bootstrap a VM, or it is downloaded by the
 	// gardener-node-agent already running on a bootstrapped VM.
@@ -85,6 +87,9 @@ type OperatingSystemConfigSpec struct {
 	// +patchStrategy=merge
 	// +optional
 	Files []File `json:"files,omitempty" patchStrategy:"merge" patchMergeKey:"path"`
+	// InPlaceUpdates contains the configuration for in-place updates.
+	// +optional
+	InPlaceUpdates *InPlaceUpdates `json:"inPlaceUpdates,omitempty"`
 }
 
 // Unit is a unit for the operating system configuration (usually, a systemd unit).
@@ -188,6 +193,7 @@ type FileContentImageRef struct {
 type OperatingSystemConfigStatus struct {
 	// DefaultStatus is a structure containing common fields used by all extension resources.
 	DefaultStatus `json:",inline"`
+
 	// ExtensionUnits is a list of additional systemd units provided by the extension.
 	// +patchMergeKey=name
 	// +patchStrategy=merge
@@ -203,6 +209,9 @@ type OperatingSystemConfigStatus struct {
 	// After Gardener v1.112, this will be only set for OperatingSystemConfigs with purpose 'provision'.
 	// +optional
 	CloudConfig *CloudConfig `json:"cloudConfig,omitempty"`
+	// InPlaceUpdates contains the configuration for in-place updates.
+	// +optional
+	InPlaceUpdates *InPlaceUpdatesStatus `json:"inPlaceUpdates,omitempty"`
 }
 
 // CloudConfig contains the generated output for the given operating system
@@ -350,3 +359,54 @@ const (
 	// B64FileCodecID is the base64 file codec id.
 	B64FileCodecID FileCodecID = "b64"
 )
+
+// InPlaceUpdates is a structure containing configuration for in-place updates.
+type InPlaceUpdates struct {
+	// OperatingSystemVersion is the version of the operating system.
+	OperatingSystemVersion string `json:"operatingSystemVersion"`
+	// KubeletVersion is the version of the kubelet.
+	KubeletVersion string `json:"kubelet"`
+	// CredentialsRotation is a structure containing information about the last initiation time of the certificate authority and service account key rotation.
+	// +optional
+	CredentialsRotation *CredentialsRotation `json:"credentialsRotation,omitempty"`
+}
+
+// InPlaceUpdatesStatus is a structure containing configuration for in-place updates.
+type InPlaceUpdatesStatus struct {
+	// OSUpdate defines the configuration for the operating system update.
+	// +optional
+	OSUpdate *OSUpdate `json:"osUpdate,omitempty"`
+}
+
+// OSUpdate contains the configuration for the operating system update.
+type OSUpdate struct {
+	// Command defines the command responsible for performing machine image updates.
+	Command string `json:"command"`
+	// Args provides a mechanism to pass additional arguments or flags to the Command.
+	// +optional
+	Args []string `json:"args,omitempty"`
+}
+
+// CredentialsRotation is a structure containing information about the last initiation time of the certificate authority and service account key rotation.
+type CredentialsRotation struct {
+	// CertificateAuthorities contains information about the certificate authority credential rotation.
+	// +optional
+	CertificateAuthorities *CARotation `json:"certificateAuthorities,omitempty"`
+	// ServiceAccountKey contains information about the service account key credential rotation.
+	// +optional
+	ServiceAccountKey *ServiceAccountKeyRotation `json:"serviceAccountKey,omitempty"`
+}
+
+// CARotation contains information about the certificate authority credential rotation.
+type CARotation struct {
+	// LastInitiationTime is the most recent time when the certificate authority credential rotation was initiated.
+	// +optional
+	LastInitiationTime *metav1.Time `json:"lastInitiationTime,omitempty"`
+}
+
+// ServiceAccountKeyRotation contains information about the service account key credential rotation.
+type ServiceAccountKeyRotation struct {
+	// LastInitiationTime is the most recent time when the service account key credential rotation was initiated.
+	// +optional
+	LastInitiationTime *metav1.Time `json:"lastInitiationTime,omitempty"`
+}

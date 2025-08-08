@@ -1,13 +1,19 @@
-// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
 package v1beta1
 
 import (
+	"encoding/json"
+	"fmt"
+
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/utils/ptr"
+
+	"github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1/constants"
 )
 
 // +genclient
@@ -20,6 +26,7 @@ type CloudProfile struct {
 	// Standard object metadata.
 	// +optional
 	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+
 	// Spec defines the provider environment properties.
 	// +optional
 	Spec CloudProfileSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
@@ -33,6 +40,7 @@ type CloudProfileList struct {
 	// Standard list object metadata.
 	// +optional
 	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+
 	// Items is the list of CloudProfiles.
 	Items []CloudProfile `json:"items" protobuf:"bytes,2,rep,name=items"`
 }
@@ -77,6 +85,16 @@ type CloudProfileSpec struct {
 	// Bastion contains the machine and image properties
 	// +optional
 	Bastion *Bastion `json:"bastion,omitempty" protobuf:"bytes,10,opt,name=bastion"`
+	// Limits configures operational limits for Shoot clusters using this CloudProfile.
+	// See https://github.com/gardener/gardener/blob/master/docs/usage/shoot/shoot_limits.md.
+	// +optional
+	Limits *Limits `json:"limits,omitempty" protobuf:"bytes,11,opt,name=limits"`
+	// Capabilities contains the definition of all possible capabilities in the CloudProfile.
+	// Only capabilities and values defined here can be used to describe MachineImages and MachineTypes.
+	// The order of values for a given capability is relevant. The most important value is listed first.
+	// During maintenance upgrades, the image that matches most capabilities will be selected.
+	// +optional
+	Capabilities []CapabilityDefinition `json:"capabilities,omitempty" protobuf:"bytes,12,rep,name=capabilities"`
 }
 
 // SeedSelector contains constraints for selecting seed to be usable for shoots using a profile
@@ -84,6 +102,7 @@ type SeedSelector struct {
 	// LabelSelector is optional and can be used to select seeds by their label settings
 	// +optional
 	metav1.LabelSelector `json:",inline,omitempty" protobuf:"bytes,1,opt,name=labelSelector"`
+
 	// Providers is optional and can be used by restricting seeds by their provider type. '*' can be used to enable seeds regardless of their provider type.
 	// +optional
 	ProviderTypes []string `json:"providerTypes,omitempty" protobuf:"bytes,2,rep,name=providerTypes"`
@@ -117,6 +136,7 @@ type MachineImage struct {
 // MachineImageVersion is an expirable version with list of supported container runtimes and interfaces
 type MachineImageVersion struct {
 	ExpirableVersion `json:",inline" protobuf:"bytes,1,opt,name=expirableVersion"`
+
 	// CRI list of supported container runtime and interfaces supported by this version
 	// +optional
 	CRI []CRI `json:"cri,omitempty" protobuf:"bytes,2,rep,name=cri"`
@@ -130,6 +150,13 @@ type MachineImageVersion struct {
 	// - '< 1.26' - supports only kubelet versions less than 1.26
 	// +optional
 	KubeletVersionConstraint *string `json:"kubeletVersionConstraint,omitempty" protobuf:"bytes,4,opt,name=kubeletVersionConstraint"`
+	// InPlaceUpdates contains the configuration for in-place updates for this machine image version.
+	// +optional
+	InPlaceUpdates *InPlaceUpdates `json:"inPlaceUpdates,omitempty" protobuf:"bytes,5,opt,name=inPlaceUpdates"`
+	// CapabilitySets is an array of capability sets. Each entry represents a combination of capabilities that is provided by
+	// the machine image version.
+	// +optional
+	CapabilitySets []CapabilitySet `json:"capabilitySets,omitempty" protobuf:"bytes,6,rep,name=capabilitySets"`
 }
 
 // ExpirableVersion contains a version and an expiration date.
@@ -139,7 +166,8 @@ type ExpirableVersion struct {
 	// ExpirationDate defines the time at which this version expires.
 	// +optional
 	ExpirationDate *metav1.Time `json:"expirationDate,omitempty" protobuf:"bytes,2,opt,name=expirationDate"`
-	// Classification defines the state of a version (preview, supported, deprecated)
+	// Classification defines the state of a version (preview, supported, deprecated).
+	// To get the currently valid classification, use CurrentLifecycleClassification().
 	// +optional
 	Classification *VersionClassification `json:"classification,omitempty" protobuf:"bytes,3,opt,name=classification,casttype=VersionClassification"`
 }
@@ -163,6 +191,17 @@ type MachineType struct {
 	// Architecture is the CPU architecture of this machine type.
 	// +optional
 	Architecture *string `json:"architecture,omitempty" protobuf:"bytes,7,opt,name=architecture"`
+	// Capabilities contains the machine type capabilities.
+	// +optional
+	Capabilities Capabilities `json:"capabilities,omitempty" protobuf:"bytes,8,rep,name=capabilities,casttype=Capabilities"`
+}
+
+// GetArchitecture returns the architecture of the machine type.
+func (m *MachineType) GetArchitecture() string {
+	if len(m.Capabilities[constants.ArchitectureName]) == 1 {
+		return m.Capabilities[constants.ArchitectureName][0]
+	}
+	return ptr.Deref(m.Architecture, "")
 }
 
 // MachineTypeStorage is the amount of storage associated with the root volume of this machine type.
@@ -250,6 +289,14 @@ type BastionMachineType struct {
 	Name string `json:"name" protobuf:"bytes,1,name=name"`
 }
 
+// Limits configures operational limits for Shoot clusters using this CloudProfile.
+// See https://github.com/gardener/gardener/blob/master/docs/usage/shoot/shoot_limits.md.
+type Limits struct {
+	// MaxNodesTotal configures the maximum node count a Shoot cluster can have during runtime.
+	// +optional
+	MaxNodesTotal *int32 `json:"maxNodesTotal,omitempty" protobuf:"varint,1,opt,name=maxNodesTotal"`
+}
+
 const (
 	// VolumeClassStandard is a constant for the standard volume class.
 	VolumeClassStandard string = "standard"
@@ -260,7 +307,14 @@ const (
 // VersionClassification is the logical state of a version.
 type VersionClassification string
 
+// IsActive returns whether the version can be used.
+func (v VersionClassification) IsActive() bool {
+	return v != ClassificationExpired && v != ClassificationUnavailable
+}
+
 const (
+	// ClassificationUnavailable indicates that a version is currently not available and is planned to become available depending on the classification lifecycle.
+	ClassificationUnavailable VersionClassification = "unavailable"
 	// ClassificationPreview indicates that a version has recently been added and not promoted to "Supported" yet.
 	// ClassificationPreview versions will not be considered for automatic Kubernetes and Machine Image patch version updates.
 	ClassificationPreview VersionClassification = "preview"
@@ -271,6 +325,9 @@ const (
 	// ClassificationDeprecated indicates that a patch version should not be used anymore, should be updated to a new version
 	// and will eventually expire.
 	ClassificationDeprecated VersionClassification = "deprecated"
+	// ClassificationExpired indicates that a version has expired.
+	// New entities with that version cannot be created and existing entities are forcefully migrated to a higher version during the maintenance time.
+	ClassificationExpired VersionClassification = "expired"
 )
 
 // MachineImageUpdateStrategy is the update strategy to use for a machine image
@@ -286,3 +343,52 @@ const (
 	// UpdateStrategyMajor indicates that auto-updates are performed always to the overall latest version.
 	UpdateStrategyMajor MachineImageUpdateStrategy = "major"
 )
+
+// InPlaceUpdates contains the configuration for in-place updates for a machine image version.
+type InPlaceUpdates struct {
+	// Supported indicates whether in-place updates are supported for this machine image version.
+	Supported bool `json:"supported" protobuf:"varint,1,opt,name=supported"`
+	// MinVersionForInPlaceUpdate specifies the minimum supported version from which an in-place update to this machine image version can be performed.
+	// +optional
+	MinVersionForUpdate *string `json:"minVersionForUpdate,omitempty" protobuf:"bytes,2,opt,name=minVersionForUpdate"`
+}
+
+// CapabilityDefinition contains the Name and Values of a capability.
+type CapabilityDefinition struct {
+	Name   string           `json:"name" protobuf:"bytes,1,opt,name=name"`
+	Values CapabilityValues `json:"values" protobuf:"bytes,2,rep,name=values"`
+}
+
+// CapabilityValues contains capability values.
+// This is a workaround as the Protobuf generator can't handle a map with slice values.
+// +protobuf.nullable=true
+// +protobuf.options.(gogoproto.goproto_stringer)=false
+type CapabilityValues []string
+
+func (t CapabilityValues) String() string {
+	return fmt.Sprintf("%v", []string(t))
+}
+
+// Capabilities of a machine type or machine image.
+// +protobuf.options.(gogoproto.goproto_stringer)=false
+type Capabilities map[string]CapabilityValues
+
+func (t Capabilities) String() string {
+	return fmt.Sprintf("%v", map[string]CapabilityValues(t))
+}
+
+// CapabilitySet is a wrapper for Capabilities.
+// This is a workaround as the Protobuf generator can't handle a slice of maps.
+type CapabilitySet struct {
+	Capabilities `json:"-" protobuf:"bytes,1,rep,name=capabilities,casttype=Capabilities"`
+}
+
+// UnmarshalJSON unmarshals the given data to a CapabilitySet.
+func (c *CapabilitySet) UnmarshalJSON(data []byte) error {
+	return json.Unmarshal(data, &c.Capabilities)
+}
+
+// MarshalJSON marshals the CapabilitySet object to JSON.
+func (c *CapabilitySet) MarshalJSON() ([]byte, error) {
+	return json.Marshal(c.Capabilities)
+}
