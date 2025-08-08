@@ -1,17 +1,27 @@
-// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
 package core
 
 import (
+	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 const (
 	// GardenerSeedLeaseNamespace is the namespace in which Gardenlet will report Seeds'
 	// status using Lease resources for each Seed
 	GardenerSeedLeaseNamespace = "gardener-system-seed-lease"
+	// GardenerShootIssuerNamespace is the namespace in which Gardenlet
+	// will sync service account issuer discovery documents
+	// of Shoot clusters which require managed issuer
+	GardenerShootIssuerNamespace = "gardener-system-shoot-issuer"
+	// GardenerSystemPublicNamespace is the namespace which will contain a resources
+	// describing gardener installation itself. The resources in this namespace
+	// may be visible to all authenticated users.
+	GardenerSystemPublicNamespace = "gardener-system-public"
 )
 
 // Object is a core object resource.
@@ -49,7 +59,26 @@ type AccessRestriction struct {
 // allows to specify additional options.
 type AccessRestrictionWithOptions struct {
 	AccessRestriction
+
 	// Options is a map of additional options for the access restriction.
 	// +optional
 	Options map[string]string
+}
+
+// Extension contains type and provider information for extensions.
+type Extension struct {
+	// Type is the type of the extension resource.
+	Type string
+	// ProviderConfig is the configuration passed to extension resource.
+	ProviderConfig *runtime.RawExtension
+	// Disabled allows to disable extensions that were marked as 'automatically enabled' by Gardener administrators.
+	Disabled *bool
+}
+
+// NamedResourceReference is a named reference to a resource.
+type NamedResourceReference struct {
+	// Name of the resource reference.
+	Name string
+	// ResourceRef is a reference to a resource.
+	ResourceRef autoscalingv1.CrossVersionObjectReference
 }

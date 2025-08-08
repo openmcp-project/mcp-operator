@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -20,6 +20,7 @@ type Seed struct {
 	metav1.TypeMeta `json:",inline"`
 	// Standard object metadata.
 	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+
 	// Spec contains the specification of this installation.
 	Spec SeedSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
 	// Status contains the status of this installation.
@@ -34,6 +35,7 @@ type SeedList struct {
 	// Standard list object metadata.
 	// +optional
 	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+
 	// Items is the list of Seeds.
 	Items []Seed `json:"items" protobuf:"bytes,2,rep,name=items"`
 }
@@ -43,6 +45,7 @@ type SeedTemplate struct {
 	// Standard object metadata.
 	// +optional
 	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+
 	// Specification of the desired behavior of the Seed.
 	// +optional
 	Spec SeedSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
@@ -55,7 +58,7 @@ type SeedSpec struct {
 	// If backup field is present in seed, then backups of the etcd from shoot control plane will be stored
 	// under the configured object store.
 	// +optional
-	Backup *SeedBackup `json:"backup,omitempty" protobuf:"bytes,1,opt,name=backup"`
+	Backup *Backup `json:"backup,omitempty" protobuf:"bytes,1,opt,name=backup"`
 	// DNS contains DNS-relevant information about this seed cluster.
 	DNS SeedDNS `json:"dns" protobuf:"bytes,2,opt,name=dns"`
 	// Networks defines the pod, service and worker network of the Seed cluster.
@@ -81,6 +84,12 @@ type SeedSpec struct {
 	// AccessRestrictions describe a list of access restrictions for this seed cluster.
 	// +optional
 	AccessRestrictions []AccessRestriction `json:"accessRestrictions,omitempty" protobuf:"bytes,10,rep,name=accessRestrictions"`
+	// Extensions contain type and provider information for Seed extensions.
+	// +optional
+	Extensions []Extension `json:"extensions,omitempty" protobuf:"bytes,11,rep,name=extensions"`
+	// Resources holds a list of named resource references that can be referred to in extension configs by their names.
+	// +optional
+	Resources []NamedResourceReference `json:"resources,omitempty" protobuf:"bytes,12,rep,name=resources"`
 }
 
 // SeedStatus is the status of a Seed.
@@ -118,8 +127,8 @@ type SeedStatus struct {
 	LastOperation *LastOperation `json:"lastOperation,omitempty" protobuf:"bytes,9,opt,name=lastOperation"`
 }
 
-// SeedBackup contains the object store configuration for backups for shoot (currently only etcd).
-type SeedBackup struct {
+// Backup contains the object store configuration for backups for shoot (currently only etcd).
+type Backup struct {
 	// Provider is a provider name. This field is immutable.
 	Provider string `json:"provider" protobuf:"bytes,1,opt,name=provider"`
 	// ProviderConfig is the configuration passed to BackupBucket resource.
@@ -128,10 +137,16 @@ type SeedBackup struct {
 	// Region is a region name. This field is immutable.
 	// +optional
 	Region *string `json:"region,omitempty" protobuf:"bytes,3,opt,name=region"`
-	// SecretRef is a reference to a Secret object containing the cloud provider credentials for
-	// the object store where backups should be stored. It should have enough privileges to manipulate
-	// the objects as well as buckets.
-	SecretRef corev1.SecretReference `json:"secretRef" protobuf:"bytes,4,opt,name=secretRef"`
+
+	// SecretRef is tombstoned to show why 4 is reserved protobuf tag.
+	// SecretRef corev1.SecretReference `json:"secretRef" protobuf:"bytes,4,opt,name=secretRef"`
+
+	// CredentialsRef is reference to a resource holding the credentials used for
+	// authentication with the object store service where the backups are stored.
+	// Supported referenced resources are v1.Secrets and
+	// security.gardener.cloud/v1alpha1.WorkloadIdentity
+	// +optional
+	CredentialsRef *corev1.ObjectReference `json:"credentialsRef,omitempty" protobuf:"bytes,5,opt,name=credentialsRef"`
 }
 
 // SeedDNS contains DNS-relevant information about this seed cluster.
@@ -344,6 +359,9 @@ type SeedSettingVerticalPodAutoscaler struct {
 	// is enabled by default because Gardener heavily relies on a VPA being deployed. You should only disable this if
 	// your seed cluster already has another, manually/custom managed VPA deployment.
 	Enabled bool `json:"enabled" protobuf:"bytes,1,opt,name=enabled"`
+	// FeatureGates contains information about enabled feature gates.
+	// +optional
+	FeatureGates map[string]bool `json:"featureGates,omitempty" protobuf:"bytes,2,opt,name=featureGates"`
 }
 
 // SeedSettingDependencyWatchdog controls the dependency-watchdog settings for the seed.

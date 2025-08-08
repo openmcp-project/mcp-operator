@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -17,6 +17,7 @@ type ControllerRegistration struct {
 	metav1.TypeMeta `json:",inline"`
 	// Standard object metadata.
 	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+
 	// Spec contains the specification of this registration.
 	// If the object's deletion timestamp is set, this field is immutable.
 	Spec ControllerRegistrationSpec `json:"spec,omitempty" protobuf:"bytes,2,opt,name=spec"`
@@ -30,6 +31,7 @@ type ControllerRegistrationList struct {
 	// Standard list object metadata.
 	// +optional
 	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
+
 	// Items is the list of ControllerRegistrations.
 	Items []ControllerRegistration `json:"items" protobuf:"bytes,2,rep,name=items"`
 }
@@ -45,6 +47,16 @@ type ControllerRegistrationSpec struct {
 	Deployment *ControllerRegistrationDeployment `json:"deployment,omitempty" protobuf:"bytes,2,opt,name=deployment"`
 }
 
+// ClusterType defines the type of cluster.
+type ClusterType string
+
+const (
+	// ClusterTypeShoot represents the shoot cluster type.
+	ClusterTypeShoot ClusterType = "shoot"
+	// ClusterTypeSeed represents the seed cluster type.
+	ClusterTypeSeed ClusterType = "seed"
+)
+
 // ControllerResource is a combination of a kind (DNSProvider, Infrastructure, Generic, ...) and the actual type for this
 // kind (aws-route53, gcp, auditlog, ...).
 type ControllerResource struct {
@@ -52,10 +64,10 @@ type ControllerResource struct {
 	Kind string `json:"kind" protobuf:"bytes,1,opt,name=kind"`
 	// Type is the resource type, for example "coreos" or "ubuntu".
 	Type string `json:"type" protobuf:"bytes,2,opt,name=type"`
-	// GloballyEnabled determines if this ControllerResource is required by all Shoot clusters.
-	// This field is defaulted to false when kind is "Extension".
-	// +optional
-	GloballyEnabled *bool `json:"globallyEnabled,omitempty" protobuf:"varint,3,opt,name=globallyEnabled"`
+
+	// GloballyEnabled is tombstoned to show why 3 is reserved protobuf tag.
+	// GloballyEnabled *bool `json:"globallyEnabled,omitempty" protobuf:"varint,3,opt,name=globallyEnabled"`
+
 	// ReconcileTimeout defines how long Gardener should wait for the resource reconciliation.
 	// This field is defaulted to 3m0s when kind is "Extension".
 	// +optional
@@ -76,6 +88,15 @@ type ControllerResource struct {
 	// This field is only relevant when kind is "Extension".
 	// +optional
 	WorkerlessSupported *bool `json:"workerlessSupported,omitempty" protobuf:"varint,7,opt,name=workerlessSupported"`
+	// AutoEnable determines if this resource is automatically enabled for shoot or seed clusters, or both.
+	// This field can only be set for resources of kind "Extension".
+	// +optional
+	AutoEnable []ClusterType `json:"autoEnable,omitempty" protobuf:"bytes,8,rep,name=autoEnable,casttype=ClusterType"`
+	// ClusterCompatibility defines the compatibility of this resource with different cluster types.
+	// If compatibility is not specified, it will be defaulted to 'shoot'.
+	// This field can only be set for resources of kind "Extension".
+	// +optional
+	ClusterCompatibility []ClusterType `json:"clusterCompatibility,omitempty" protobuf:"bytes,9,rep,name=clusterCompatibility,casttype=ClusterType"`
 }
 
 // DeploymentRef contains information about `ControllerDeployment` references.
