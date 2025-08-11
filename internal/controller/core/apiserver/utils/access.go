@@ -283,7 +283,7 @@ func CreateOIDCKubeconfig(ctx context.Context, crateClient client.Client, cluste
 	contexts := make(map[string]*clientcmdapi.Context)
 
 	flags := map[string]openmcpv1alpha1.SingleOrMultiStringValue{
-		openmcpv1alpha1.OIDCParameterUsePKCE:    {},
+		openmcpv1alpha1.OIDCParameterPKCEMethod: {Value: openmcpv1alpha1.OIDCDefaultPKCEMethod},
 		openmcpv1alpha1.OIDCParameterGrantType:  {Value: openmcpv1alpha1.OIDCDefaultGrantType},
 		openmcpv1alpha1.OIDCParameterExtraScope: {Values: strings.Split(openmcpv1alpha1.OIDCDefaultExtraScopes, ",")},
 	}

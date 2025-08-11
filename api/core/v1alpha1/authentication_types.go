@@ -9,10 +9,11 @@ const (
 	OIDCParameterClientID     = "oidc-client-id"
 	OIDCParameterClientSecret = "oidc-client-secret"
 	OIDCParameterExtraScope   = "oidc-extra-scope"
-	OIDCParameterUsePKCE      = "oidc-use-pkce"
+	OIDCParameterPKCEMethod   = "oidc-pkce-method"
 	OIDCParameterGrantType    = "grant-type"
 
 	OIDCDefaultExtraScopes = "offline_access,email,profile"
+	OIDCDefaultPKCEMethod  = "auto"
 	OIDCDefaultGrantType   = "auto"
 )
 
