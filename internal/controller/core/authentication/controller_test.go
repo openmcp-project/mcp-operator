@@ -268,7 +268,7 @@ var _ = Describe("CO-1153 Authentication Controller", func() {
 		Expect(systemIdP.Exec.Args).To(ContainElements("--oidc-extra-scope=email"))
 		Expect(systemIdP.Exec.Args).To(ContainElements("--oidc-extra-scope=profile"))
 		Expect(systemIdP.Exec.Args).To(ContainElements("--oidc-extra-scope=offline_access"))
-		Expect(systemIdP.Exec.Args).To(ContainElements("--oidc-use-pkce"))
+		Expect(systemIdP.Exec.Args).To(ContainElements("--oidc-pkce-method=auto"))
 		Expect(systemIdP.Exec.Args).To(ContainElements("--grant-type=auto"))
 
 		openIdConnect := getOpenIDConnect()
@@ -550,7 +550,7 @@ var _ = Describe("CO-1153 Authentication Controller", func() {
 		Expect(systemIdP.Exec.Args).To(ContainElements("--oidc-client-secret=myclientsecret"))
 		Expect(systemIdP.Exec.Args).To(ContainElements("--oidc-extra-scope=scope1"))
 		Expect(systemIdP.Exec.Args).To(ContainElements("--oidc-extra-scope=scope2"))
-		Expect(systemIdP.Exec.Args).To(ContainElements("--oidc-use-pkce"))
+		Expect(systemIdP.Exec.Args).To(ContainElements("--oidc-pkce-method=auto"))
 		Expect(systemIdP.Exec.Args).To(ContainElements("--grant-type=auto"))
 		Expect(systemIdP.Exec.Args).To(ContainElements("--extra-param=foo"))
 		Expect(systemIdP.Exec.Args).To(ContainElements("--extra-repeatable=bar1"))
