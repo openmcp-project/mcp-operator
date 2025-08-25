@@ -15,19 +15,19 @@ require (
 	github.com/onsi/gomega v1.38.0
 	github.com/openmcp-project/cluster-provider-gardener/api v0.3.0
 	github.com/openmcp-project/control-plane-operator v0.1.12
-	github.com/openmcp-project/controller-utils v0.16.0
+	github.com/openmcp-project/controller-utils v0.17.0
 	github.com/openmcp-project/mcp-operator/api v0.35.2
-	github.com/openmcp-project/openmcp-operator/api v0.10.0
-	github.com/openmcp-project/openmcp-operator/lib v0.10.0
+	github.com/openmcp-project/openmcp-operator/api v0.11.0
+	github.com/openmcp-project/openmcp-operator/lib v0.11.0
 	github.com/openmcp-project/service-provider-landscaper v0.4.0
 	github.com/spf13/cobra v1.9.1
 	github.com/spf13/pflag v1.0.7
 	github.com/stretchr/testify v1.10.0
 	gopkg.in/yaml.v3 v3.0.1
-	k8s.io/api v0.33.3
-	k8s.io/apiextensions-apiserver v0.33.3
-	k8s.io/apimachinery v0.33.3
-	k8s.io/client-go v0.33.3
+	k8s.io/api v0.33.4
+	k8s.io/apiextensions-apiserver v0.33.4
+	k8s.io/apimachinery v0.33.4
+	k8s.io/client-go v0.33.4
 	k8s.io/utils v0.0.0-20250604170112-4c0f3b243397
 	sigs.k8s.io/controller-runtime v0.21.0
 	sigs.k8s.io/yaml v1.6.0
@@ -71,7 +71,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.2 // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
-	github.com/openmcp-project/controller-utils/api v0.16.0 // indirect
+	github.com/openmcp-project/controller-utils/api v0.17.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.22.0 // indirect
@@ -88,7 +88,7 @@ require (
 	go.uber.org/zap v1.27.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
 	go.yaml.in/yaml/v3 v3.0.3 // indirect
-	golang.org/x/exp v0.0.0-20250718183923-645b1fa84792 // indirect
+	golang.org/x/exp v0.0.0-20250811191247-51f88131bc50 // indirect
 	golang.org/x/mod v0.27.0 // indirect
 	golang.org/x/net v0.43.0 // indirect
 	golang.org/x/oauth2 v0.30.0 // indirect
