@@ -11,7 +11,7 @@ require (
 	github.com/alitto/pond/v2 v2.5.0
 	github.com/apparentlymart/go-cidr v1.1.0
 	github.com/gardener/landscaper-service v0.133.0
-	github.com/onsi/ginkgo/v2 v2.25.1
+	github.com/onsi/ginkgo/v2 v2.25.2
 	github.com/onsi/gomega v1.38.2
 	github.com/openmcp-project/cluster-provider-gardener/api v0.3.0
 	github.com/openmcp-project/control-plane-operator v0.1.12
