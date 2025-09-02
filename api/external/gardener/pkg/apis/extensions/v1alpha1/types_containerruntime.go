@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -32,7 +32,6 @@ type ContainerRuntime struct {
 	metav1.TypeMeta `json:",inline"`
 	// +optional
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-
 	// Specification of the ContainerRuntime.
 	// If the object's deletion timestamp is set, this field is immutable.
 	Spec ContainerRuntimeSpec `json:"spec"`
@@ -63,14 +62,13 @@ type ContainerRuntimeList struct {
 
 // ContainerRuntimeSpec is the spec for a ContainerRuntime resource.
 type ContainerRuntimeSpec struct {
-	// DefaultSpec is a structure containing common fields used by all extension resources.
-	DefaultSpec `json:",inline"`
-
 	// BinaryPath is the Worker's machine path where container runtime extensions should copy the binaries to.
 	BinaryPath string `json:"binaryPath"`
 	// WorkerPool identifies the worker pool of the Shoot.
 	// For each worker pool and type, Gardener deploys a ContainerRuntime CRD.
 	WorkerPool ContainerRuntimeWorkerPool `json:"workerPool"`
+	// DefaultSpec is a structure containing common fields used by all extension resources.
+	DefaultSpec `json:",inline"`
 }
 
 // ContainerRuntimeWorkerPool identifies a Shoot worker pool by its name and selector.

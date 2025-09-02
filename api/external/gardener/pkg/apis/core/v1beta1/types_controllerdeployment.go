@@ -1,11 +1,10 @@
-// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
 package v1beta1
 
 import (
-	corev1 "k8s.io/api/core/v1"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -20,15 +19,10 @@ type ControllerDeployment struct {
 	metav1.TypeMeta `json:",inline"`
 	// Standard object metadata.
 	metav1.ObjectMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-
 	// Type is the deployment type.
 	Type string `json:"type" protobuf:"bytes,2,opt,name=type"`
 	// ProviderConfig contains type-specific configuration. It contains assets that deploy the controller.
 	ProviderConfig runtime.RawExtension `json:"providerConfig" protobuf:"bytes,3,opt,name=providerConfig"`
-	// InjectGardenKubeconfig controls whether a kubeconfig to the garden cluster should be injected into workload
-	// resources.
-	// +optional
-	InjectGardenKubeconfig *bool `json:"injectGardenKubeconfig,omitempty" protobuf:"varint,4,opt,name=injectGardenKubeconfig"`
 }
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
@@ -39,7 +33,6 @@ type ControllerDeploymentList struct {
 	// Standard list object metadata.
 	// +optional
 	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-
 	// Items is the list of ControllerDeployments.
 	Items []ControllerDeployment `json:"items" protobuf:"bytes,2,rep,name=items"`
 }
@@ -79,8 +72,4 @@ type OCIRepository struct {
 	// Digest of the image to pull, takes precedence over tag.
 	// +optional
 	Digest *string `json:"digest,omitempty" protobuf:"bytes,4,opt,name=digest"`
-	// PullSecretRef is a reference to a secret containing the pull secret.
-	// The secret must be of type `kubernetes.io/dockerconfigjson` and must be located in the `garden` namespace.
-	// +optional
-	PullSecretRef *corev1.LocalObjectReference `json:"pullSecretRef,omitempty" protobuf:"bytes,5,opt,name=pullSecretRef"`
 }

@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -29,7 +29,6 @@ type Bastion struct {
 	metav1.TypeMeta `json:",inline"`
 	// +optional
 	metav1.ObjectMeta `json:"metadata,omitempty"`
-
 	// Spec is the specification of this Bastion.
 	// If the object's deletion timestamp is set, this field is immutable.
 	Spec BastionSpec `json:"spec"`
@@ -52,7 +51,6 @@ func (b *Bastion) GetExtensionStatus() Status {
 type BastionSpec struct {
 	// DefaultSpec is a structure containing common fields used by all extension resources.
 	DefaultSpec `json:",inline"`
-
 	// UserData is the base64-encoded user data for the bastion instance. This should
 	// contain code to provision the SSH key on the bastion instance.
 	// This field is immutable.
@@ -71,7 +69,6 @@ type BastionIngressPolicy struct {
 type BastionStatus struct {
 	// DefaultStatus is a structure containing common fields used by all extension resources.
 	DefaultStatus `json:",inline"`
-
 	// Ingress is the external IP and/or hostname of the bastion host.
 	// +optional
 	Ingress *corev1.LoadBalancerIngress `json:"ingress,omitempty"`
@@ -84,7 +81,6 @@ type BastionList struct {
 	metav1.TypeMeta
 	// Standard list object metadata.
 	metav1.ListMeta
-
 	// Items is the list of Bastions.
 	Items []Bastion
 }
