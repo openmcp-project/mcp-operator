@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -19,7 +19,6 @@ type BackupBucket struct {
 	metav1.TypeMeta `json:",inline"`
 	// Standard object metadata.
 	metav1.ObjectMeta `json:"metadata" protobuf:"bytes,1,opt,name=metadata"`
-
 	// Specification of the Backup Bucket.
 	Spec BackupBucketSpec `json:"spec" protobuf:"bytes,2,opt,name=spec"`
 	// Most recently observed status of the Backup Bucket.
@@ -34,7 +33,6 @@ type BackupBucketList struct {
 	// Standard list object metadata.
 	// +optional
 	metav1.ListMeta `json:"metadata,omitempty" protobuf:"bytes,1,opt,name=metadata"`
-
 	// Items is the list of BackupBucket.
 	Items []BackupBucket `json:"items" protobuf:"bytes,2,rep,name=items"`
 }
@@ -46,20 +44,12 @@ type BackupBucketSpec struct {
 	// ProviderConfig is the configuration passed to BackupBucket resource.
 	// +optional
 	ProviderConfig *runtime.RawExtension `json:"providerConfig,omitempty" protobuf:"bytes,2,opt,name=providerConfig"`
-
-	// SecretRef is tombstoned to show why 3 is reserved protobuf tag.
-	// SecretRef corev1.SecretReference `json:"secretRef" protobuf:"bytes,3,opt,name=secretRef"`
-
+	// SecretRef is a reference to a secret that contains the credentials to access object store.
+	SecretRef corev1.SecretReference `json:"secretRef" protobuf:"bytes,3,opt,name=secretRef"`
 	// SeedName holds the name of the seed allocated to BackupBucket for running controller.
 	// This field is immutable.
 	// +optional
 	SeedName *string `json:"seedName,omitempty" protobuf:"bytes,4,opt,name=seedName"`
-	// CredentialsRef is reference to a resource holding the credentials used for
-	// authentication with the object store service where the backups are stored.
-	// Supported referenced resources are v1.Secrets and
-	// security.gardener.cloud/v1alpha1.WorkloadIdentity
-	// +optional
-	CredentialsRef *corev1.ObjectReference `json:"credentialsRef,omitempty" protobuf:"bytes,5,opt,name=credentialsRef"`
 }
 
 // BackupBucketStatus holds the most recently observed status of the Backup Bucket.

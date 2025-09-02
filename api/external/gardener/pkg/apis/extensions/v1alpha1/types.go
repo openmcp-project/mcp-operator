@@ -1,4 +1,4 @@
-// SPDX-FileCopyrightText: SAP SE or an SAP affiliate company and Gardener contributors
+// SPDX-FileCopyrightText: 2024 SAP SE or an SAP affiliate company and Gardener contributors
 //
 // SPDX-License-Identifier: Apache-2.0
 
@@ -7,24 +7,8 @@ package v1alpha1
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/apimachinery/pkg/util/sets"
 
 	gardencorev1beta1 "github.com/openmcp-project/mcp-operator/api/external/gardener/pkg/apis/core/v1beta1"
-)
-
-// AllExtensionKinds contains all supported extension kinds.
-var AllExtensionKinds = sets.New(
-	BackupBucketResource,
-	BackupEntryResource,
-	BastionResource,
-	ContainerRuntimeResource,
-	ControlPlaneResource,
-	DNSRecordResource,
-	ExtensionResource,
-	InfrastructureResource,
-	NetworkResource,
-	OperatingSystemConfigResource,
-	WorkerResource,
 )
 
 // Status is the status of an Object.
