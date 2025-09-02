@@ -35,20 +35,25 @@
       "description": "Update all components from landscaper immediately",
       "rebaseWhen": "auto",
       "minimumReleaseAge": "0 days",
+      "automerge": true,
       "enabled": true
     },
     {
-      "description": "Combine openmcp-project updates in a single PR",
+      "description": "Automerge submodule update",
+      "automerge": true,
+      "matchPackageNames": ["hack/common"]
+    },
+    {
+      "description": "Automerge all updates from openmcp-project/*",
       "matchDatasources": [
         "go"
       ],
       "matchPackageNames": [
-        "^github\\.com/openmcp-project/.*"
+        "openmcp-project/*"
       ],
-      "groupName": "openmcp-project dependencies",
-      "groupSlug": "openmcp-project-dependencies",
       "rebaseWhen": "auto",
       "minimumReleaseAge": "0 days",
+      "automerge": true,
       "enabled": true
     },
     {
