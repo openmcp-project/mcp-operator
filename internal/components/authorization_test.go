@@ -146,11 +146,11 @@ var _ = Describe("AuthorizationConverter", func() {
 		It("should inject the status", func() {
 			conv := &components.AuthorizationConverter{}
 			mcpStatus := &openmcpv1alpha1.ManagedControlPlaneStatus{}
-			status := &openmcpv1alpha1.ExternalAuthorizationStatus{}
+			status := openmcpv1alpha1.ExternalAuthorizationStatus{}
 
 			err := conv.InjectStatus(status, mcpStatus)
 			Expect(err).ToNot(HaveOccurred())
-			Expect(mcpStatus.Components.Authorization).To(Equal(status))
+			Expect(*mcpStatus.Components.Authorization).To(Equal(status))
 		})
 
 		It("should fail to inject the status", func() {

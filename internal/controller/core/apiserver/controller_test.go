@@ -276,7 +276,7 @@ var _ = Describe("CO-1153 APIServer Controller", func() {
 						Raw: []byte(`{"apiVersion":"garden.sapcloud.io/v1beta1","kind":"Shoot","metadata":{"name":"foo","namespace":"bar"}}`),
 					},
 				}
-				dps.ExternalAPIServerStatus = &openmcpv1alpha1.ExternalAPIServerStatus{
+				dps.ExternalAPIServerStatus = openmcpv1alpha1.ExternalAPIServerStatus{
 					Endpoint:             "https://k8s-external.ondemand.com",
 					ServiceAccountIssuer: "https://k8s-sa.ondemand.com",
 				}
@@ -311,7 +311,7 @@ var _ = Describe("CO-1153 APIServer Controller", func() {
 						Raw: []byte(`{"apiVersion":"garden.sapcloud.io/v1beta1","kind":"Shoot","metadata":{"name":"foo","namespace":"bar"}}`),
 					},
 				}
-				dps.ExternalAPIServerStatus = &openmcpv1alpha1.ExternalAPIServerStatus{
+				dps.ExternalAPIServerStatus = openmcpv1alpha1.ExternalAPIServerStatus{
 					Endpoint:             "https://k8s-external.ondemand.com",
 					ServiceAccountIssuer: "https://k8s-sa.ondemand.com",
 				}

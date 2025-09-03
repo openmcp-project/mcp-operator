@@ -17,8 +17,8 @@ type ExternalLandscaperStatus struct {
 
 // LandscaperStatus contains the landscaper status and potentially other fields which should not be exposed to the customer.
 type LandscaperStatus struct {
-	CommonComponentStatus     `json:",inline"`
-	*ExternalLandscaperStatus `json:",inline"`
+	CommonComponentStatus    `json:",inline"`
+	ExternalLandscaperStatus `json:",inline"`
 
 	// LandscaperDeploymentInfo contains information about the corresponding LandscaperDeployment resource.
 	// +optional

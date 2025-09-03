@@ -45,7 +45,7 @@ func (*APIServerConverter) ConvertToResourceSpec(mcp *openmcpv1alpha1.ManagedCon
 
 // InjectStatus implements ComponentConverter.
 func (*APIServerConverter) InjectStatus(raw any, mcpStatus *openmcpv1alpha1.ManagedControlPlaneStatus) error {
-	status, ok := raw.(*openmcpv1alpha1.ExternalAPIServerStatus)
+	status, ok := raw.(openmcpv1alpha1.ExternalAPIServerStatus)
 	if !ok {
 		return openmcperrors.ErrWrongComponentStatusType
 	}

@@ -112,14 +112,14 @@ var _ = Describe("APIServerConverter", func() {
 	Context("InjectStatus", func() {
 		It("should inject the status", func() {
 			conv := &components.APIServerConverter{}
-			status := &openmcpv1alpha1.ExternalAPIServerStatus{}
+			status := openmcpv1alpha1.ExternalAPIServerStatus{}
 
 			mcpStatus := &openmcpv1alpha1.ManagedControlPlaneStatus{}
 
 			err := conv.InjectStatus(status, mcpStatus)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(mcpStatus.Components.APIServer).ToNot(BeNil())
-			Expect(mcpStatus.Components.APIServer).To(Equal(status))
+			Expect(*mcpStatus.Components.APIServer).To(Equal(status))
 		})
 
 		It("should not inject an incompatible status", func() {

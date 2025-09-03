@@ -362,7 +362,7 @@ var _ = Describe("CO-1153 ManagedControlPlane Controller", func() {
 		time.Sleep(1 * time.Second) // without this, it cannot be verified that the lastTransitionTime is not updated if nothing changes, because the test is too fast for the second precision of the timestamps
 
 		// verify status
-		Expect(mcp.Status.Components.Authentication).To(Equal(auth.Status.ExternalAuthenticationStatus))
+		Expect(*mcp.Status.Components.Authentication).To(Equal(auth.Status.ExternalAuthenticationStatus))
 
 		// verify conditions
 		Expect(mcp.Status.Conditions).To(ConsistOf(

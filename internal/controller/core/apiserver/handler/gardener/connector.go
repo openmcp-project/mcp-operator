@@ -204,9 +204,6 @@ func (gc *GardenerConnector) HandleCreateOrUpdate(ctx context.Context, as *openm
 			}
 		}
 
-		if status.ExternalAPIServerStatus == nil {
-			status.ExternalAPIServerStatus = &openmcpv1alpha1.ExternalAPIServerStatus{}
-		}
 		for _, endpoint := range sh.Status.AdvertisedAddresses {
 			switch endpoint.Name {
 			case constants.AdvertisedAddressExternal:

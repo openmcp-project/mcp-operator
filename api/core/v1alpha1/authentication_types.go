@@ -40,8 +40,8 @@ type ExternalAuthenticationStatus struct {
 
 // AuthenticationStatus contains the status of the authentication component
 type AuthenticationStatus struct {
-	CommonComponentStatus         `json:",inline"`
-	*ExternalAuthenticationStatus `json:",inline"`
+	CommonComponentStatus        `json:",inline"`
+	ExternalAuthenticationStatus `json:",inline"`
 }
 
 // IdentityProvider contains the configuration for an OpenID Connect identity provider

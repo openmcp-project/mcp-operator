@@ -185,9 +185,6 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 	// build the UpdateStatusFunc
 	apiAccess := &openmcpv1alpha1.APIServerAccess{}
 	var usf handler.UpdateStatusFunc = func(status *openmcpv1alpha1.APIServerStatus) error {
-		if status.ExternalAPIServerStatus == nil {
-			status.ExternalAPIServerStatus = &openmcpv1alpha1.ExternalAPIServerStatus{}
-		}
 		if setShootInStatus != nil {
 			if err := setShootInStatus(status); err != nil {
 				return fmt.Errorf("error setting shoot in status: %w", err)

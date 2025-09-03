@@ -479,10 +479,6 @@ func (ar *AuthenticationReconciler) ensureAccessSecret(ctx context.Context, expe
 // updateExternalStatus updates the external status of the Authentication resource
 // by creating a kubeconfig for the user access to the APIServer
 func (ar *AuthenticationReconciler) updateExternalStatus(ctx context.Context, auth *openmcpv1alpha1.Authentication) error {
-	if auth.Status.ExternalAuthenticationStatus == nil {
-		auth.Status.ExternalAuthenticationStatus = &openmcpv1alpha1.ExternalAuthenticationStatus{}
-	}
-
 	// try to get access secret
 	accessSecret := getSecretAccessor(auth)
 

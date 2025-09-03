@@ -82,11 +82,11 @@ var _ = Describe("LandscaperConverter", func() {
 		It("should inject the status", func() {
 			conv := &components.LandscaperConverter{}
 			mcpStatus := &openmcpv1alpha1.ManagedControlPlaneStatus{}
-			status := &openmcpv1alpha1.ExternalLandscaperStatus{}
+			status := openmcpv1alpha1.ExternalLandscaperStatus{}
 
 			err := conv.InjectStatus(status, mcpStatus)
 			Expect(err).ToNot(HaveOccurred())
-			Expect(mcpStatus.Components.Landscaper).To(Equal(status))
+			Expect(*mcpStatus.Components.Landscaper).To(Equal(status))
 		})
 
 		It("should not inject an incompatible status", func() {
