@@ -38,8 +38,8 @@ type ExternalCloudOrchestratorStatus struct {
 
 // CloudOrchestratorStatus defines the observed state of CloudOrchestrator
 type CloudOrchestratorStatus struct {
-	CommonComponentStatus            `json:",inline"`
-	*ExternalCloudOrchestratorStatus `json:",inline"`
+	CommonComponentStatus           `json:",inline"`
+	ExternalCloudOrchestratorStatus `json:",inline"`
 
 	// Number of enabled components.
 	// +kubebuilder:validation:Optional

@@ -77,11 +77,11 @@ var _ = Describe("CloudOrchestratorConverter", func() {
 		It("should inject the status", func() {
 			conv := &components.CloudOrchestratorConverter{}
 			mcpStatus := &openmcpv1alpha1.ManagedControlPlaneStatus{}
-			status := &openmcpv1alpha1.ExternalCloudOrchestratorStatus{}
+			status := openmcpv1alpha1.ExternalCloudOrchestratorStatus{}
 
 			err := conv.InjectStatus(status, mcpStatus)
 			Expect(err).ToNot(HaveOccurred())
-			Expect(mcpStatus.Components.CloudOrchestrator).To(Equal(status))
+			Expect(*mcpStatus.Components.CloudOrchestrator).To(Equal(status))
 		})
 
 		It("should fail to inject the status", func() {

@@ -33,7 +33,7 @@ func (ac *AuthenticationConverter) ConvertToResourceSpec(mcp *openmcpv1alpha1.Ma
 
 // InjectStatus implements ComponentConverter.
 func (ac *AuthenticationConverter) InjectStatus(raw any, mcpStatus *openmcpv1alpha1.ManagedControlPlaneStatus) error {
-	status, ok := raw.(*openmcpv1alpha1.ExternalAuthenticationStatus)
+	status, ok := raw.(openmcpv1alpha1.ExternalAuthenticationStatus)
 	if !ok {
 		return openmcperrors.ErrWrongComponentStatusType
 	}

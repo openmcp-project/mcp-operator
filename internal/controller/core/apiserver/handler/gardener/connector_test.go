@@ -154,10 +154,8 @@ var _ = Describe("APIServer Gardener Conversion", func() {
 					_, usf, _, err := gc.HandleCreateOrUpdate(env.Ctx, as, nil)
 					Expect(err).ToNot(HaveOccurred())
 					Expect(usf).ToNot(BeNil())
-					if as.Status.ExternalAPIServerStatus != nil {
-						Expect(as.Status.ExternalAPIServerStatus.Endpoint).To(BeEmpty())
-						Expect(as.Status.ExternalAPIServerStatus.ServiceAccountIssuer).To(BeEmpty())
-					}
+					Expect(as.Status.ExternalAPIServerStatus.Endpoint).To(BeEmpty())
+					Expect(as.Status.ExternalAPIServerStatus.ServiceAccountIssuer).To(BeEmpty())
 					Expect(usf(&as.Status)).To(Succeed())
 					Expect(as.Status.ExternalAPIServerStatus.Endpoint).To(Equal(expectedEndpoint))
 					Expect(as.Status.ExternalAPIServerStatus.ServiceAccountIssuer).To(Equal(expectedServiceAccountIssuer))

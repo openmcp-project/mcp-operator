@@ -105,7 +105,7 @@ var _ = Describe("AuthenticationConverter", func() {
 	Context("InjectStatus", func() {
 		It("should inject the status", func() {
 			conv := &components.AuthenticationConverter{}
-			status := &openmcpv1alpha1.ExternalAuthenticationStatus{
+			status := openmcpv1alpha1.ExternalAuthenticationStatus{
 				UserAccess: &openmcpv1alpha1.SecretReference{
 					NamespacedObjectReference: openmcpv1alpha1.NamespacedObjectReference{
 						Name:      "test",
@@ -120,7 +120,7 @@ var _ = Describe("AuthenticationConverter", func() {
 			err := conv.InjectStatus(status, mcpStatus)
 			Expect(err).ToNot(HaveOccurred())
 			Expect(mcpStatus.Components.Authentication).ToNot(BeNil())
-			Expect(mcpStatus.Components.Authentication).To(Equal(status))
+			Expect(*mcpStatus.Components.Authentication).To(Equal(status))
 		})
 
 		It("should not inject an incompatible status", func() {

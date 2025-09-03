@@ -113,7 +113,7 @@ type ExternalAuthorizationStatus struct {
 type AuthorizationStatus struct {
 	CommonComponentStatus `json:",inline"`
 	// ExternalAuthorizationStatus contains the status of the external authorization component
-	*ExternalAuthorizationStatus `json:",inline"`
+	ExternalAuthorizationStatus `json:",inline"`
 
 	// UserNamespaces is a list of namespaces that have been created by the user and
 	// must be managed by the authorization component.

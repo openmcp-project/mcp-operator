@@ -32,7 +32,7 @@ func (*CloudOrchestratorConverter) ConvertToResourceSpec(mcp *openmcpv1alpha1.Ma
 
 // InjectStatus implements ComponentConverter.
 func (*CloudOrchestratorConverter) InjectStatus(raw any, mcpStatus *openmcpv1alpha1.ManagedControlPlaneStatus) error {
-	status, ok := raw.(*openmcpv1alpha1.ExternalCloudOrchestratorStatus)
+	status, ok := raw.(openmcpv1alpha1.ExternalCloudOrchestratorStatus)
 	if !ok {
 		return openmcperrors.ErrWrongComponentStatusType
 	}

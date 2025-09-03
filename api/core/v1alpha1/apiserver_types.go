@@ -71,7 +71,7 @@ type APIServerStatus struct {
 	CommonComponentStatus `json:",inline"`
 
 	// ExternalAPIServerStatus contains the status of the external API server
-	*ExternalAPIServerStatus `json:",inline"`
+	ExternalAPIServerStatus `json:",inline"`
 
 	// AdminAccess is an admin kubeconfig for accessing the API server.
 	// +optional

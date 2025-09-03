@@ -35,7 +35,7 @@ func (*LandscaperConverter) ConvertToResourceSpec(mcp *openmcpv1alpha1.ManagedCo
 
 // InjectStatus implements ComponentConverter.
 func (*LandscaperConverter) InjectStatus(raw any, mcpStatus *openmcpv1alpha1.ManagedControlPlaneStatus) error {
-	status, ok := raw.(*openmcpv1alpha1.ExternalLandscaperStatus)
+	status, ok := raw.(openmcpv1alpha1.ExternalLandscaperStatus)
 	if !ok {
 		return openmcperrors.ErrWrongComponentStatusType
 	}
