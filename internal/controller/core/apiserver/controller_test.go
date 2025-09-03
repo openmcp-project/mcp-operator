@@ -351,7 +351,8 @@ var _ = Describe("CO-1153 APIServer Controller", func() {
 
 			cr := &clustersv1alpha1.ClusterRequest{}
 			cr.Name = as.Name
-			cr.Namespace = openmcpclusterutils.StableRequestNamespace(as.Namespace)
+			cr.Namespace, err = openmcpclusterutils.StableMCPNamespace(as.Name, as.Namespace)
+			Expect(err).NotTo(HaveOccurred())
 			Expect(env.Client(testutils.LaaSCoreCluster).Get(env.Ctx, client.ObjectKeyFromObject(cr), cr)).To(Succeed())
 
 			Expect(env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(as), as)).To(Succeed())
