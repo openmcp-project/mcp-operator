@@ -55,7 +55,11 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 
 	// instead of calling a handler, create a ClusterRequest and an AccessRequest
 	// ensure namespace, because this is created on the platform cluster
-	nsName := openmcpclusterutils.StableRequestNamespace(as.Namespace)
+	nsName, err := openmcpclusterutils.StableMCPNamespace(as.Name, as.Namespace)
+	if err != nil {
+		rerr := openmcperrors.WithReason(fmt.Errorf("failed to compute stable namespace for APIServer %s/%s: %w", as.Namespace, as.Name, err), clustersconst.ReasonInternalError)
+		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
+	}
 	nsm := resources.NewNamespaceMutator(nsName)
 	nsm.MetadataMutator().WithLabels(map[string]string{
 		openmcpv1alpha1.V1MCPReferenceLabelNamespace: as.Namespace,
@@ -306,7 +310,14 @@ func v2HandleDelete(ctx context.Context, as *openmcpv1alpha1.APIServer, platform
 	}
 
 	// instead of calling a handler, remove AccessRequest and ClusterRequest
-	nsName := openmcpclusterutils.StableRequestNamespace(as.Namespace)
+	nsName, err := openmcpclusterutils.StableMCPNamespace(as.Name, as.Namespace)
+	if err != nil {
+		rerr := openmcperrors.WithReason(fmt.Errorf("failed to compute stable namespace for APIServer %s/%s: %w", as.Namespace, as.Name, err), clustersconst.ReasonInternalError)
+		accessRequestDeletedCon.Status = openmcpv1alpha1.ComponentConditionStatusFalse
+		accessRequestDeletedCon.Reason = rerr.Reason()
+		accessRequestDeletedCon.Message = err.Error()
+		return ctrl.Result{}, nil, clusterConditions(false, rerr.Reason(), rerr.Error(), accessRequestDeletedCon, clusterRequestDeletedCon), rerr
+	}
 
 	// remove AccessRequest
 	ar := &clustersv1alpha1.AccessRequest{}
@@ -480,9 +491,12 @@ func (m *AccessRequestMutator) Mutate(r *clustersv1alpha1.AccessRequest) error {
 		r.Spec.RequestRef.Name = m.refName
 		r.Spec.RequestRef.Namespace = m.refNamespace
 	}
-	r.Spec.Permissions = make([]clustersv1alpha1.PermissionsRequest, len(m.permissions))
+	if r.Spec.Token == nil {
+		r.Spec.Token = &clustersv1alpha1.TokenConfig{}
+	}
+	r.Spec.Token.Permissions = make([]clustersv1alpha1.PermissionsRequest, len(m.permissions))
 	for i, perm := range m.permissions {
-		r.Spec.Permissions[i] = *perm.DeepCopy()
+		r.Spec.Token.Permissions[i] = *perm.DeepCopy()
 	}
 	return m.meta.Mutate(r)
 }
