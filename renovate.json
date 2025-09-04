@@ -44,12 +44,9 @@
       "matchPackageNames": ["hack/common"]
     },
     {
-      "description": "Automerge all updates from openmcp-project/*",
-      "matchDatasources": [
-        "go"
-      ],
+      "description": "Update and automerge all components from openmcp-project immediately",
       "matchPackageNames": [
-        "openmcp-project/*"
+        "github.com/openmcp-project/*"
       ],
       "rebaseWhen": "auto",
       "minimumReleaseAge": "0 days",
