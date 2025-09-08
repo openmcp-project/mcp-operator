@@ -116,8 +116,8 @@ github.com/openmcp-project/controller-utils v0.19.0 h1:D4Ht3LI/Ue5yk2wdAnJEpChUV
 github.com/openmcp-project/controller-utils v0.19.0/go.mod h1:zxcbcmedLdlQ//X/nwdPvq/nM3ikyR13DbOivou2I4Y=
 github.com/openmcp-project/controller-utils/api v0.19.0 h1:2wOiLtHLVYeCSDxWJrCqCiFAxircAQ2EONIwq3QuZSI=
 github.com/openmcp-project/controller-utils/api v0.19.0/go.mod h1:qsvVfsL3xeeJ9keiKVMa50VOWmr+uR0VVejmQ7FCH18=
-github.com/openmcp-project/openmcp-operator/api v0.12.0 h1:g3Q0VFNsggDmMD4r+RmtiNwGohzu2JfEqp4RtlT5b1A=
-github.com/openmcp-project/openmcp-operator/api v0.12.0/go.mod h1:malWxgwCmDPeNklWe23rw9f9cvmq6LdIxlKmvqcYMqw=
+github.com/openmcp-project/openmcp-operator/api v0.13.1 h1:Gmk4Cr9gdnGCfamdGs1WEdklpTCqE0tfwtZ7kL32ks8=
+github.com/openmcp-project/openmcp-operator/api v0.13.1/go.mod h1:WkZ3N57ohZ1DA9o8pCjbAJCX6V6itA91e9itwVS3PxQ=
 github.com/openmcp-project/openmcp-operator/lib v0.12.0 h1:lPvuPH7dqgcPmw58bL5eUJ4+/kcFYEPFP5OHcmYxljg=
 github.com/openmcp-project/openmcp-operator/lib v0.12.0/go.mod h1:fsuMuyBanhyh7zYdgxLxIvbM3iEFnF7MsLRQjSx3SCk=
 github.com/openmcp-project/service-provider-landscaper v0.5.0 h1:NE1mScJg1BFJwsgCFJE5DCfZbPIsRhddV+0UiCPu08s=
