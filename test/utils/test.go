@@ -32,7 +32,8 @@ func init() {
 	utilruntime.Must(gardenv1beta1.AddToScheme(Scheme))
 	utilruntime.Must(gardenauthenticationv1alpha1.AddToScheme(Scheme))
 	utilruntime.Must(clientgoscheme.AddToScheme(Scheme))
-	v2install.InstallOperatorAPIs(Scheme)
+	v2install.InstallOperatorAPIsPlatform(Scheme)
+	v2install.InstallOperatorAPIsOnboarding(Scheme)
 	lsv2install.InstallProviderAPIs(Scheme)
 }
 

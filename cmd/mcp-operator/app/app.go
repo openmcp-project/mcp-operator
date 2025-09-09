@@ -348,7 +348,7 @@ func (o *Options) run(ctx context.Context) error {
 	if o.ActiveControllers.Has(ControllerIDAPIServer) {
 		// APIServer controller
 		// build platform cluster client for v2 path
-		v2scheme := v2install.InstallOperatorAPIs(runtime.NewScheme())
+		v2scheme := v2install.InstallOperatorAPIsPlatform(runtime.NewScheme())
 		platformClient, err := client.New(o.LaaSClusterConfig, client.Options{
 			Scheme: v2scheme,
 		})
