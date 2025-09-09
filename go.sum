@@ -120,8 +120,8 @@ github.com/openmcp-project/openmcp-operator/api v0.14.0 h1:/Ogg13b/IBBmAVQEuFnOK
 github.com/openmcp-project/openmcp-operator/api v0.14.0/go.mod h1:mgckJa59TpgTjta8+BWHwbOxlY1zVasqQTDFQLCs6M8=
 github.com/openmcp-project/openmcp-operator/lib v0.14.0 h1:PgfqV1LMsK+zZS293cF4xvFxPiulN4IBqQaax33NMC4=
 github.com/openmcp-project/openmcp-operator/lib v0.14.0/go.mod h1:q3vb/BR9idvd0akkKHsjA5WkR38Lj378F8iFgiOSWs0=
-github.com/openmcp-project/service-provider-landscaper v0.5.0 h1:NE1mScJg1BFJwsgCFJE5DCfZbPIsRhddV+0UiCPu08s=
-github.com/openmcp-project/service-provider-landscaper v0.5.0/go.mod h1:31LnF/qB5vRZwv6IaVY2J3bCPd6i0pDaXvRLrMbX630=
+github.com/openmcp-project/service-provider-landscaper v0.6.0 h1:4OdEcy4h9eIvL3TLCNmomiT+J84yZiQEV3IgCdy3fFo=
+github.com/openmcp-project/service-provider-landscaper v0.6.0/go.mod h1:c2R9qd+SbC6GNMPdQZyyTkn2/Hdla7Tfq0lceUNS6RY=
 github.com/pkg/errors v0.9.1 h1:FEBLx1zS214owpjy7qsBeixbURkuhQAwrK5UwLGTwt4=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
