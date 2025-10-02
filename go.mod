@@ -14,7 +14,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.26.0
 	github.com/onsi/gomega v1.38.2
 	github.com/openmcp-project/cluster-provider-gardener/api v0.7.0
-	github.com/openmcp-project/control-plane-operator v0.1.14
+	github.com/openmcp-project/control-plane-operator v0.1.16
 	github.com/openmcp-project/controller-utils v0.22.0
 	github.com/openmcp-project/mcp-operator/api v0.40.0
 	github.com/openmcp-project/openmcp-operator/api v0.14.0
@@ -37,7 +37,7 @@ require (
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/crossplane/crossplane v1.20.0 // indirect
+	github.com/crossplane/crossplane v1.20.1 // indirect
 	github.com/crossplane/crossplane-runtime v1.20.0 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/emicklei/go-restful/v3 v3.12.2 // indirect
