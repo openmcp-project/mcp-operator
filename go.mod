@@ -17,8 +17,8 @@ require (
 	github.com/openmcp-project/control-plane-operator v0.1.16
 	github.com/openmcp-project/controller-utils v0.23.1
 	github.com/openmcp-project/mcp-operator/api v0.41.0
-	github.com/openmcp-project/openmcp-operator/api v0.15.1
-	github.com/openmcp-project/openmcp-operator/lib v0.15.1
+	github.com/openmcp-project/openmcp-operator/api v0.15.2
+	github.com/openmcp-project/openmcp-operator/lib v0.15.2
 	github.com/openmcp-project/service-provider-landscaper v0.7.0
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/pflag v1.0.10
