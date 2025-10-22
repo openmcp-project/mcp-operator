@@ -7,10 +7,8 @@ import (
 
 	"github.com/openmcp-project/controller-utils/pkg/collections"
 	"github.com/openmcp-project/controller-utils/pkg/logging"
-
 	commonapi "github.com/openmcp-project/openmcp-operator/api/common"
-	openmcpls "github.com/openmcp-project/service-provider-landscaper/api/v1alpha1"
-
+	openmcpls "github.com/openmcp-project/service-provider-landscaper/api/v1alpha2"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	ctrl "sigs.k8s.io/controller-runtime"

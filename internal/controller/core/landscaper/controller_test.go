@@ -3,30 +3,24 @@ package landscaper_test
 import (
 	"path"
 
-	openmcpls "github.com/openmcp-project/service-provider-landscaper/api/v1alpha1"
-
-	"github.com/openmcp-project/mcp-operator/internal/components"
-	mcpocfg "github.com/openmcp-project/mcp-operator/internal/config"
-	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
-
-	"github.com/openmcp-project/mcp-operator/internal/controller/core/landscaper"
-
+	lssv1alpha1 "github.com/gardener/landscaper-service/pkg/apis/core/v1alpha1"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
-
-	. "github.com/openmcp-project/mcp-operator/test/matchers"
-
-	lssv1alpha1 "github.com/gardener/landscaper-service/pkg/apis/core/v1alpha1"
+	"github.com/openmcp-project/controller-utils/pkg/testing"
+	openmcpls "github.com/openmcp-project/service-provider-landscaper/api/v1alpha2"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
-	"github.com/openmcp-project/controller-utils/pkg/testing"
-
 	cconst "github.com/openmcp-project/mcp-operator/api/constants"
 	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"
+	"github.com/openmcp-project/mcp-operator/internal/components"
+	mcpocfg "github.com/openmcp-project/mcp-operator/internal/config"
+	"github.com/openmcp-project/mcp-operator/internal/controller/core/landscaper"
+	componentutils "github.com/openmcp-project/mcp-operator/internal/utils/components"
+	. "github.com/openmcp-project/mcp-operator/test/matchers"
 	testutils "github.com/openmcp-project/mcp-operator/test/utils"
 )
 
