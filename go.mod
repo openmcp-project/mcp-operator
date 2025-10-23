@@ -11,14 +11,14 @@ require (
 	github.com/alitto/pond/v2 v2.5.0
 	github.com/apparentlymart/go-cidr v1.1.0
 	github.com/gardener/landscaper-service v0.138.0
-	github.com/onsi/ginkgo/v2 v2.26.0
+	github.com/onsi/ginkgo/v2 v2.27.1
 	github.com/onsi/gomega v1.38.2
 	github.com/openmcp-project/cluster-provider-gardener/api v0.9.0
 	github.com/openmcp-project/control-plane-operator v0.1.17
 	github.com/openmcp-project/controller-utils v0.23.1
 	github.com/openmcp-project/mcp-operator/api v0.42.0
-	github.com/openmcp-project/openmcp-operator/api v0.15.2
-	github.com/openmcp-project/openmcp-operator/lib v0.15.2
+	github.com/openmcp-project/openmcp-operator/api v0.16.0
+	github.com/openmcp-project/openmcp-operator/lib v0.16.0
 	github.com/openmcp-project/service-provider-landscaper v0.7.0
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/pflag v1.0.10
