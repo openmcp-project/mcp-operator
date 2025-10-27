@@ -428,4 +428,75 @@ var _ = Describe("CO-1153 CloudOrchestrator Controller", func() {
 		Expect(cp.Spec.Target.Kubeconfig).NotTo(BeNil())
 		Expect(cp.Spec.Crossplane).To(BeNil())
 	})
+
+	It("should update the ControlPlane resource even when in deletion", func() {
+		var err error
+
+		env := testEnvSetup(path.Join("testdata", "test-09"), "")
+
+		co := &openmcpv1alpha1.CloudOrchestrator{}
+		err = env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, co)
+		Expect(err).NotTo(HaveOccurred())
+
+		req := testing.RequestFromObject(co)
+		_ = env.ShouldReconcile(coReconciler, req)
+
+		err = env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(co), co)
+		Expect(err).NotTo(HaveOccurred())
+
+		Expect(co.Status.Conditions).To(ConsistOf(
+			MatchComponentCondition(openmcpv1alpha1.ComponentCondition{
+				Type:   openmcpv1alpha1.CloudOrchestratorComponent.HealthyCondition(),
+				Status: openmcpv1alpha1.ComponentConditionStatusFalse,
+				Reason: cconst.ReasonWaitingForCloudOrchestrator,
+			}),
+			MatchComponentCondition(openmcpv1alpha1.ComponentCondition{
+				Type:   openmcpv1alpha1.CloudOrchestratorComponent.ReconciliationCondition(),
+				Status: openmcpv1alpha1.ComponentConditionStatusTrue,
+			}),
+		))
+
+		cp := &corev1beta1.ControlPlane{}
+		err = env.Client(testutils.COCoreCluster).Get(env.Ctx, types.NamespacedName{
+			Namespace: "",
+			Name:      "test--test",
+		}, cp)
+		Expect(err).NotTo(HaveOccurred())
+		Expect(cp.Spec.Target.Kubeconfig).NotTo(BeNil())
+		// set a finalizer to simulate deletion
+		controllerutil.AddFinalizer(cp, "core.orchestrate.cloud.sap")
+		err = env.Client(testutils.COCoreCluster).Update(env.Ctx, cp)
+		Expect(err).NotTo(HaveOccurred())
+
+		// Delete CO resource
+		err = env.Client(testutils.CrateCluster).Delete(env.Ctx, co)
+		Expect(err).ToNot(HaveOccurred())
+		_ = env.ShouldReconcile(coReconciler, req)
+
+		// check that the ControlPlane resource has a deletion timestamp
+		err = env.Client(testutils.COCoreCluster).Get(env.Ctx, types.NamespacedName{
+			Namespace: "",
+			Name:      "test--test",
+		}, cp)
+		Expect(err).NotTo(HaveOccurred())
+		Expect(cp.DeletionTimestamp).ToNot(BeNil())
+
+		// Update CO resource to trigger an update on the ControlPlane resource
+		err = env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, co)
+		Expect(err).NotTo(HaveOccurred())
+		co.Spec.Kyverno = &openmcpv1alpha1.KyvernoConfig{
+			Version: "8.8.8",
+		}
+		err = env.Client(testutils.CrateCluster).Update(env.Ctx, co)
+		Expect(err).NotTo(HaveOccurred())
+		_ = env.ShouldReconcile(coReconciler, req)
+
+		err = env.Client(testutils.COCoreCluster).Get(env.Ctx, types.NamespacedName{
+			Namespace: "",
+			Name:      "test--test",
+		}, cp)
+		Expect(err).NotTo(HaveOccurred())
+		Expect(cp.Spec.Kyverno).ToNot(BeNil())
+		Expect(cp.Spec.Kyverno.Version).To(Equal("8.8.8"))
+	})
 })
