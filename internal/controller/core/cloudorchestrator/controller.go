@@ -163,6 +163,43 @@ func (r *CloudOrchestratorReconciler) reconcile(ctx context.Context, req ctrl.Re
 		return components.ReconcileResult[*openmcpv1alpha1.CloudOrchestrator]{Component: co, ReconcileError: openmcperrors.WithReason(fmt.Errorf("APIServer dependency is ready, but no kubeconfig could be found in its status"), cconst.ReasonDependencyStatusInvalid)}, coreControlPlane, "", ""
 	}
 
+	// only create the ControlPlane resource if it doesn't exist yet and the CO resource is not being deleted
+	if co.DeletionTimestamp.IsZero() && coreControlPlane == nil {
+		// ControlPlane from Core Cluster
+		coreControlPlane = &corev1beta1.ControlPlane{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: utils.PrefixWithNamespace(co.Namespace, co.Name),
+			},
+		}
+	}
+
+	// create or update the ControlPlane resource in the Core Cluster
+	// this will handle both creation and update scenarios
+	// it is not being called when in deletion and the control plane doesn't exist anymore
+	if coreControlPlane != nil {
+		// create or update the CO ControlPlane with the configuration from the openmcpv1alpha1.CloudOrchestrator CR
+		_, err = controllerutil.CreateOrUpdate(ctx, r.CoreClient, coreControlPlane, func() error {
+			spec, err := convertToControlPlaneSpec(&co.Spec, &as.Status)
+			if err != nil {
+				return err
+			}
+			coreControlPlane.Spec = *spec
+
+			// update labels
+			labels, err := r.copyLabels(ctx, co)
+			if err != nil {
+				return err
+			}
+			coreControlPlane.Labels = labels
+			return nil
+		})
+		errs := openmcperrors.NewReasonableErrorList()
+		if err != nil {
+			errs = errs.Append(openmcperrors.Join(errModifyingControlPlane, err))
+			return components.ReconcileResult[*openmcpv1alpha1.CloudOrchestrator]{Component: co, ReconcileError: errs.Aggregate()}, coreControlPlane, "", ""
+		}
+	}
+
 	if !co.DeletionTimestamp.IsZero() {
 		// handle deletion
 		log.Info("Deleting CloudOrchestrator")
@@ -229,34 +266,9 @@ func (r *CloudOrchestratorReconciler) reconcile(ctx context.Context, req ctrl.Re
 	if err := components.EnsureDependencyFinalizer(ctx, r.CrateClient, authz, co, true); err != nil {
 		return components.ReconcileResult[*openmcpv1alpha1.CloudOrchestrator]{Component: co, ReconcileError: openmcperrors.WithReason(fmt.Errorf("error setting dependency finalizer on Authorization component resource: %w", err), cconst.ReasonCrateClusterInteractionProblem)}, coreControlPlane, "", ""
 	}
-
-	// ControlPlane from Core Cluster
-	coreControlPlane = &corev1beta1.ControlPlane{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: utils.PrefixWithNamespace(co.Namespace, co.Name),
-		},
-	}
-
-	// create or update the CO ControlPlane with the configuration from the openmcpv1alpha1.CloudOrchestrator CR
-	_, err = controllerutil.CreateOrUpdate(ctx, r.CoreClient, coreControlPlane, func() error {
-		spec, err := convertToControlPlaneSpec(&co.Spec, &as.Status)
-		if err != nil {
-			return err
-		}
-		coreControlPlane.Spec = *spec
-
-		// update labels
-		labels, err := r.copyLabels(ctx, co)
-		if err != nil {
-			return err
-		}
-		coreControlPlane.Labels = labels
-		return nil
-	})
-	errs := openmcperrors.NewReasonableErrorList()
-	if err != nil {
-		errs = errs.Append(openmcperrors.Join(errModifyingControlPlane, err))
-		return components.ReconcileResult[*openmcpv1alpha1.CloudOrchestrator]{Component: co, ReconcileError: errs.Aggregate()}, coreControlPlane, "", ""
+	
+	if coreControlPlane == nil {
+		return components.ReconcileResult[*openmcpv1alpha1.CloudOrchestrator]{Component: co, ReconcileError: openmcperrors.WithReason(fmt.Errorf("CloudOrchestrator ControlPlane resource not found"), cconst.ReasonCOCoreClusterInteractionProblem)}, nil, "", ""
 	}
 
 	// find out if the CO ControlPlane resource is Ready
