@@ -266,7 +266,7 @@ func (r *CloudOrchestratorReconciler) reconcile(ctx context.Context, req ctrl.Re
 	if err := components.EnsureDependencyFinalizer(ctx, r.CrateClient, authz, co, true); err != nil {
 		return components.ReconcileResult[*openmcpv1alpha1.CloudOrchestrator]{Component: co, ReconcileError: openmcperrors.WithReason(fmt.Errorf("error setting dependency finalizer on Authorization component resource: %w", err), cconst.ReasonCrateClusterInteractionProblem)}, coreControlPlane, "", ""
 	}
-	
+
 	if coreControlPlane == nil {
 		return components.ReconcileResult[*openmcpv1alpha1.CloudOrchestrator]{Component: co, ReconcileError: openmcperrors.WithReason(fmt.Errorf("CloudOrchestrator ControlPlane resource not found"), cconst.ReasonCOCoreClusterInteractionProblem)}, nil, "", ""
 	}
