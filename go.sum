@@ -122,8 +122,8 @@ github.com/onsi/ginkgo/v2 v2.27.2 h1:LzwLj0b89qtIy6SSASkzlNvX6WktqurSHwkk2ipF/Ns
 github.com/onsi/ginkgo/v2 v2.27.2/go.mod h1:ArE1D/XhNXBXCBkKOLkbsb2c81dQHCRcF5zwn/ykDRo=
 github.com/onsi/gomega v1.38.2 h1:eZCjf2xjZAqe+LeWvKb5weQ+NcPwX84kqJ0cZNxok2A=
 github.com/onsi/gomega v1.38.2/go.mod h1:W2MJcYxRGV63b418Ai34Ud0hEdTVXq9NW9+Sx6uXf3k=
-github.com/openmcp-project/cluster-provider-gardener/api v0.9.0 h1:YzUcum7z1ndCG9Qily2B0Y2DmvwnRAcLaQ6GXumUq8o=
-github.com/openmcp-project/cluster-provider-gardener/api v0.9.0/go.mod h1:aCKg5HxZI7wIzLY+7mGe4w+XNWEHUk04Tpq3X1gPXQ0=
+github.com/openmcp-project/cluster-provider-gardener/api v0.9.1 h1:9o+y6553tHra6i3kZehqbVk8T6w9RIzKKIXFTzPakMQ=
+github.com/openmcp-project/cluster-provider-gardener/api v0.9.1/go.mod h1:aCKg5HxZI7wIzLY+7mGe4w+XNWEHUk04Tpq3X1gPXQ0=
 github.com/openmcp-project/control-plane-operator v0.1.17 h1:9PIFhzw86hSTsVpKodvHoRap9oonXUbcXlZbzjvEyXE=
 github.com/openmcp-project/control-plane-operator v0.1.17/go.mod h1:CjwEOqQWPPhyGXyJCaGu/cRjandTp48DK5qTG6JIfq4=
 github.com/openmcp-project/controller-utils v0.23.1 h1:suuZ9UWJbSE/LbpZCtzpHg6FOqU7BkR4bq6cEAYykyc=
