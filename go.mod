@@ -19,7 +19,7 @@ require (
 	github.com/openmcp-project/mcp-operator/api v0.42.1
 	github.com/openmcp-project/openmcp-operator/api v0.15.2
 	github.com/openmcp-project/openmcp-operator/lib v0.15.2
-	github.com/openmcp-project/service-provider-landscaper v0.7.0
+	github.com/openmcp-project/service-provider-landscaper v0.10.0
 	github.com/spf13/cobra v1.10.1
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.11.1
