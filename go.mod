@@ -11,7 +11,7 @@ require (
 	github.com/alitto/pond/v2 v2.5.0
 	github.com/apparentlymart/go-cidr v1.1.0
 	github.com/gardener/landscaper-service v0.138.0
-	github.com/onsi/ginkgo/v2 v2.27.1
+	github.com/onsi/ginkgo/v2 v2.27.2
 	github.com/onsi/gomega v1.38.2
 	github.com/openmcp-project/cluster-provider-gardener/api v0.9.0
 	github.com/openmcp-project/control-plane-operator v0.1.17
@@ -82,7 +82,6 @@ require (
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
-	go.uber.org/automaxprocs v1.6.0 // indirect
 	go.uber.org/multierr v1.11.0 // indirect
 	go.uber.org/zap v1.27.0 // indirect
 	go.yaml.in/yaml/v2 v2.4.2 // indirect
