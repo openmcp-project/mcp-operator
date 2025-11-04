@@ -17,9 +17,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@08c6903cd8c0fde910a37f88322edcfb5dd907a8 # v5
         with:
           fetch-depth: 0
+
+      - name: Install Task
+        run: |
+          sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
 
       - name: Get last commit author
         id: last_author
@@ -42,7 +46,7 @@ jobs:
 
       - name: Find GitHub username by email
         id: find_user
-        uses: actions/github-script@v7
+        uses: actions/github-script@ed597411d8f924073f98dfc5c65a23a2325f34cd # v8
         with:
           script: |
             const email = process.env['AUTHOR_EMAIL'] || '${{ steps.last_author.outputs.author_email }}';
@@ -54,7 +58,7 @@ jobs:
             }
 
       - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v5
+        uses: peter-evans/create-pull-request@271a8d0340265f705b14b6d32b9829c1cb33d45e # v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           branch: ${{ env.RELEASE_BRANCH }}
