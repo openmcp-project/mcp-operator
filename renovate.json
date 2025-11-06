@@ -44,14 +44,22 @@
       "matchPackageNames": ["hack/common"]
     },
     {
-      "description": "Update and automerge all components from openmcp-project immediately",
-      "matchPackageNames": [
-        "github.com/openmcp-project/*"
+      "description": "Update and automerge all components from openmcp-project immediately in one singe PR",
+      "matchManagers": [
+        "gomod"
       ],
+      "groupName": "openmcp-project Go dependencies",
+      "groupSlug": "openmcp-go-deps",
+      "automerge": true,
+      "automergeType": "pr",
+      "prPriority": 10,
+      "semanticCommitType": "chore",
       "rebaseWhen": "auto",
       "minimumReleaseAge": "0 days",
-      "automerge": true,
-      "enabled": true
+      "enabled": true,
+      "matchPackageNames": [
+        "/^github.com/openmcp-project//"
+      ]
     },
     {
       "description": "Ignore our own image in chart as it will be updated on release",
