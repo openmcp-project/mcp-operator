@@ -472,9 +472,8 @@ var _ = Describe("CO-1153 APIServer Controller", func() {
 			Expect(env.Client(testutils.LaaSCoreCluster).Create(env.Ctx, access)).To(Succeed())
 
 			ar.Status.Phase = clustersv1alpha1.REQUEST_GRANTED
-			ar.Status.SecretRef = &commonapi.ObjectReference{
-				Name:      access.Name,
-				Namespace: access.Namespace,
+			ar.Status.SecretRef = &commonapi.LocalObjectReference{
+				Name: access.Name,
 			}
 			Expect(env.Client(testutils.LaaSCoreCluster).Status().Update(env.Ctx, ar)).To(Succeed())
 

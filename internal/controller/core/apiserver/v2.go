@@ -255,7 +255,7 @@ func v2HandleCreateOrUpdate(ctx context.Context, as *openmcpv1alpha1.APIServer, 
 		// fetch the secret containing the kubeconfig
 		secret := &corev1.Secret{}
 		secret.Name = ar.Status.SecretRef.Name
-		secret.Namespace = ar.Status.SecretRef.Namespace
+		secret.Namespace = ar.Namespace
 		if err := platformClient.Get(ctx, client.ObjectKeyFromObject(secret), secret); err != nil {
 			rerr := openmcperrors.WithReason(fmt.Errorf("failed to get Secret %s/%s: %w", secret.Namespace, secret.Name, err), clustersconst.ReasonPlatformClusterInteractionProblem)
 			return ctrl.Result{}, usf, clusterConditions(false, rerr.Reason(), rerr.Error(), clusterRequestGrantedCon, clusterReadyCon, accessRequestGrantedCon), rerr
