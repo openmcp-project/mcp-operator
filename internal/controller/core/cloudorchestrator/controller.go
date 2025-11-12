@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"os"
 	"strings"
 	"time"
 
@@ -42,6 +43,43 @@ import (
 const (
 	defaultNamespace string = "openmcp-system" // TODO make this configurable
 	ControllerName   string = "CloudOrchestrator"
+
+	envEnableKyvernoDefaultValues string = "ENABLE_KYVERNO_DEFAULT_VALUES"
+	kyvernoDefaultValues          string = `{
+  "config": {
+    "excludeGroups": [
+      "system:nodes"
+    ],
+    "preserve": false,
+    "resourceFilters": [
+      "[*/*,kyverno,*]",
+      "[*/*,istio-system,*]",
+      "[*/*,kyma-system,*]",
+      "[*/*,kube-system,*]",
+      "[*/*,kube-public,*]",
+      "[*/*,neo-core,*]"
+    ],
+    "updateRequestThreshold": 5000,
+    "webhooks": {
+      "namespaceSelector": {
+        "matchExpressions": [
+          {
+            "key": "kubernetes.io/metadata.name",
+            "operator": "NotIn",
+            "values": [
+              "kube-system",
+              "kyverno",
+              "istio-system",
+              "kube-public",
+              "kyma-system",
+              "neo-core"
+            ]
+          }
+        ]
+      }
+    }
+  }
+}`
 )
 
 var (
@@ -367,8 +405,14 @@ func convertToControlPlaneSpec(coSpec *openmcpv1alpha1.CloudOrchestratorSpec, ap
 	}
 
 	if coSpec.Kyverno != nil {
+		var values *apiextensionsv1.JSON
+		if os.Getenv(envEnableKyvernoDefaultValues) == "true" {
+			values = &apiextensionsv1.JSON{Raw: []byte(kyvernoDefaultValues)}
+		}
+
 		controlPlaneSpec.Kyverno = &corev1beta1.KyvernoConfig{
 			Version: coSpec.Kyverno.Version,
+			Values:  values,
 		}
 	}
 
