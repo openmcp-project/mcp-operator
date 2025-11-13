@@ -136,14 +136,20 @@ func (o *Options) runInit(ctx context.Context) error {
 		installOptions := o.WebhooksFlags.InstallOptions
 		installOptions = append(installOptions, webhooks.WithRemoteClient{Client: crateClient})
 
+		webhookTypes := []webhooks.APITypes{
+			{
+				Obj:       &openmcpv1alpha1.ManagedControlPlane{},
+				Validator: true,
+				Defaulter: true,
+			},
+		}
+
 		// Install webhooks
 		err = webhooks.Install(
 			ctx,
 			hostClient,
 			sc,
-			[]client.Object{
-				&openmcpv1alpha1.ManagedControlPlane{},
-			},
+			webhookTypes,
 			installOptions...,
 		)
 		if err != nil {
