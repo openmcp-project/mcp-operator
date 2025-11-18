@@ -91,6 +91,10 @@ spec:
         {{- if .Values.apiserver.worker.intervalTime }}
         - --apiserver-worker-interval={{ .Values.apiserver.worker.intervalTime }}
         {{- end }}
+        env:
+        {{- with .Values.managedcontrolplane.extraEnv }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
         ports:
         {{- if not .Values.webhooks.disabled }}
           - name: webhooks-https
