@@ -72,7 +72,7 @@ const (
               "istio-system",
               "kube-public",
               "kyma-system",
-              "neo-core"
+              
             ]
           }
         ]
