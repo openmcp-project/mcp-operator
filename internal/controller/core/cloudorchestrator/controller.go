@@ -57,7 +57,7 @@ const (
       "[*/*,kyma-system,*]",
       "[*/*,kube-system,*]",
       "[*/*,kube-public,*]",
-      "[*/*,neo-core,*]"
+      
     ],
     "updateRequestThreshold": 5000,
     "webhooks": {
