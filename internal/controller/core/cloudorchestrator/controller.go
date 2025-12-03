@@ -56,8 +56,7 @@ const (
       "[*/*,istio-system,*]",
       "[*/*,kyma-system,*]",
       "[*/*,kube-system,*]",
-      "[*/*,kube-public,*]",
-      
+      "[*/*,kube-public,*]"
     ],
     "updateRequestThreshold": 5000,
     "webhooks": {
@@ -71,8 +70,7 @@ const (
               "kyverno",
               "istio-system",
               "kube-public",
-              "kyma-system",
-              
+              "kyma-system"
             ]
           }
         ]
