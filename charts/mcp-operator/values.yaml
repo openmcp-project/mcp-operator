@@ -54,8 +54,9 @@ webhooks:
 managedcontrolplane:
   disabled: false
 
-  # Extra environment variables to add to the init container.
-  extraEnv: [ ]
+container:
+  # Extra environment variables to add to the container.
+  extraEnv: []
 
 apiserver:
   disabled: false
