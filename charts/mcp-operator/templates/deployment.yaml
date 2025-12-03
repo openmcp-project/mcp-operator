@@ -92,7 +92,7 @@ spec:
         - --apiserver-worker-interval={{ .Values.apiserver.worker.intervalTime }}
         {{- end }}
         env:
-        {{- with .Values.managedcontrolplane.extraEnv }}
+        {{- with .Values.container.extraEnv }}
           {{- toYaml . | nindent 10 }}
         {{- end }}
         ports:
