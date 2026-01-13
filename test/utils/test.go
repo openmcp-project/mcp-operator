@@ -6,9 +6,9 @@ import (
 
 	"github.com/openmcp-project/mcp-operator/internal/utils/apiserver"
 
-	laasinstall "github.com/gardener/landscaper-service/pkg/apis/core/install"
 	cocorev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
 	"github.com/openmcp-project/controller-utils/pkg/testing"
+	laasinstall "github.com/openmcp-project/landscaper-service/pkg/apis/core/install"
 	v2install "github.com/openmcp-project/openmcp-operator/api/install"
 	lsv2install "github.com/openmcp-project/service-provider-landscaper/api/install"
 	"k8s.io/apimachinery/pkg/runtime"

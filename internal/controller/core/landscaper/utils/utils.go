@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	laasv1alpha1 "github.com/gardener/landscaper-service/pkg/apis/core/v1alpha1"
 	"github.com/openmcp-project/controller-utils/pkg/logging"
+	laasv1alpha1 "github.com/openmcp-project/landscaper-service/pkg/apis/core/v1alpha1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
 
 	openmcpv1alpha1 "github.com/openmcp-project/mcp-operator/api/core/v1alpha1"

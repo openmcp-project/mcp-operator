@@ -24,11 +24,11 @@ import (
 	v2install "github.com/openmcp-project/openmcp-operator/api/install"
 	lsv2install "github.com/openmcp-project/service-provider-landscaper/api/install"
 
-	laasinstall "github.com/gardener/landscaper-service/pkg/apis/core/install"
 	cocorev1beta1 "github.com/openmcp-project/control-plane-operator/api/v1beta1"
 	"github.com/openmcp-project/controller-utils/pkg/init/webhooks"
 	"github.com/openmcp-project/controller-utils/pkg/logging"
 	"github.com/openmcp-project/controller-utils/pkg/resources"
+	laasinstall "github.com/openmcp-project/landscaper-service/pkg/apis/core/install"
 	"github.com/spf13/cobra"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"

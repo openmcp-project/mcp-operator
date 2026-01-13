@@ -1,7 +1,7 @@
 package conversion
 
 import (
-	laasv1alpha1 "github.com/gardener/landscaper-service/pkg/apis/core/v1alpha1"
+	laasv1alpha1 "github.com/openmcp-project/landscaper-service/pkg/apis/core/v1alpha1"
 
 	"github.com/openmcp-project/mcp-operator/internal/utils"
 
