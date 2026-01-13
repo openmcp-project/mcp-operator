@@ -15,9 +15,9 @@ import (
 	"github.com/openmcp-project/mcp-operator/internal/controller/core/landscaper/conversion"
 	lsutils "github.com/openmcp-project/mcp-operator/internal/controller/core/landscaper/utils"
 
-	laasv1alpha1 "github.com/gardener/landscaper-service/pkg/apis/core/v1alpha1"
 	"github.com/openmcp-project/controller-utils/pkg/collections/maps"
 	"github.com/openmcp-project/controller-utils/pkg/logging"
+	laasv1alpha1 "github.com/openmcp-project/landscaper-service/pkg/apis/core/v1alpha1"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/util/sets"

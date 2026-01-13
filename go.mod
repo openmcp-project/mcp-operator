@@ -10,13 +10,13 @@ require (
 	github.com/Masterminds/semver/v3 v3.4.0
 	github.com/alitto/pond/v2 v2.6.0
 	github.com/apparentlymart/go-cidr v1.1.0
-	github.com/gardener/landscaper-service v0.141.0
 	github.com/onsi/ginkgo/v2 v2.27.5
 	github.com/onsi/gomega v1.39.0
 	github.com/openmcp-project/cluster-provider-gardener/api v0.9.1
 	github.com/openmcp-project/control-plane-operator v0.1.19
 	github.com/openmcp-project/controller-utils v0.24.0
-	github.com/openmcp-project/mcp-operator/api v0.49.0
+	github.com/openmcp-project/landscaper-service v1.0.8
+	github.com/openmcp-project/mcp-operator/api v0.50.0
 	github.com/openmcp-project/openmcp-operator/api v0.17.1
 	github.com/openmcp-project/openmcp-operator/lib v0.17.1
 	github.com/openmcp-project/service-provider-landscaper v0.12.0
@@ -46,8 +46,6 @@ require (
 	github.com/fluxcd/pkg/apis/kustomize v1.13.0 // indirect
 	github.com/fsnotify/fsnotify v1.9.0 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.0 // indirect
-	github.com/gardener/landscaper/apis v0.152.0 // indirect
-	github.com/gardener/landscaper/legacy-component-spec/bindings-go v0.152.0 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
 	github.com/go-logr/zapr v1.3.0 // indirect
 	github.com/go-openapi/jsonpointer v0.22.1 // indirect
@@ -79,6 +77,8 @@ require (
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/openmcp-project/controller-utils/api v0.24.0 // indirect
+	github.com/openmcp-project/landscaper/apis v1.0.5 // indirect
+	github.com/openmcp-project/landscaper/legacy-component-spec/bindings-go v1.0.5 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.23.2 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
