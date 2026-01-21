@@ -526,8 +526,8 @@ func validateShootTemplate(st *gardenv1beta1.ShootTemplate, fldPath *field.Path)
 		}
 	}
 
-	if st.Spec.SecretBindingName == nil {
-		allErrs = append(allErrs, field.Required(specPath.Child("secretBindingName"), "secretBindingName must not be empty"))
+	if st.Spec.SecretBindingName == nil && st.Spec.CredentialsBindingName == nil {
+		allErrs = append(allErrs, field.Required(specPath, "either secretBindingName or credentialsBindingName must be set"))
 	}
 
 	return allErrs
