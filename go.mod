@@ -1,6 +1,6 @@
 module github.com/openmcp-project/mcp-operator
 
-go 1.25.5
+go 1.25.6
 
 replace github.com/openmcp-project/mcp-operator/api => ./api
 
