@@ -257,9 +257,20 @@ func (gc *GardenerConnector) Shoot_v1beta1_from_APIServer_v1alpha1(ctx context.C
 
 		builder.adjustWorkers(log, &sh.Spec.Provider)
 
-		if sh.Spec.SecretBindingName == nil {
-			log.Debug("Setting shoot.Spec.SecretBindingName", "value", gcfg.ShootTemplate.Spec.SecretBindingName)
-			sh.Spec.SecretBindingName = gcfg.ShootTemplate.Spec.SecretBindingName
+		// If the shoot has a CredentialsBindingName already set, we keep it.
+		// If the shoot has no CredentialsBindingName set, but the template has, then we take it from the template and clear the SecretBindingName.
+		// (This means, if possible we migrate from secret bindings to credential bindings.)
+		// In all remaining cases, neither the shoot nor the template has a CredentialsBindingName.
+		// So we fall back to setting the SecretBindingName from the template (if not already set in the shoot).
+		if sh.Spec.CredentialsBindingName == nil {
+			if gcfg.ShootTemplate.Spec.CredentialsBindingName != nil {
+				log.Debug("Setting shoot.Spec.CredentialsBindingName", "value", gcfg.ShootTemplate.Spec.CredentialsBindingName)
+				sh.Spec.CredentialsBindingName = gcfg.ShootTemplate.Spec.CredentialsBindingName
+				sh.Spec.SecretBindingName = nil
+			} else if sh.Spec.SecretBindingName == nil {
+				log.Debug("Setting shoot.Spec.SecretBindingName", "value", gcfg.ShootTemplate.Spec.SecretBindingName)
+				sh.Spec.SecretBindingName = gcfg.ShootTemplate.Spec.SecretBindingName
+			}
 		}
 	}
 
