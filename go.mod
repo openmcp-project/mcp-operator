@@ -11,7 +11,7 @@ require (
 	github.com/alitto/pond/v2 v2.6.0
 	github.com/apparentlymart/go-cidr v1.1.0
 	github.com/onsi/ginkgo/v2 v2.28.1
-	github.com/onsi/gomega v1.39.0
+	github.com/onsi/gomega v1.39.1
 	github.com/openmcp-project/cluster-provider-gardener/api v0.9.1
 	github.com/openmcp-project/control-plane-operator v0.1.19
 	github.com/openmcp-project/controller-utils v0.24.0
