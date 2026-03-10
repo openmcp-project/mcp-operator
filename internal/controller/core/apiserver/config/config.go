@@ -55,7 +55,7 @@ func (cfg *APIServerProviderConfiguration) Complete(ctx context.Context) (*Compl
 	res := &CompletedAPIServerProviderConfiguration{
 		ConfiguredTypes: sets.New[openmcpv1alpha1.APIServerType](),
 	}
-	errs := []error{}
+	errs := []error{} //nolint:prealloc
 	var err error
 
 	res.GardenerConfig, err = cfg.GardenerConfig.complete(ctx)
