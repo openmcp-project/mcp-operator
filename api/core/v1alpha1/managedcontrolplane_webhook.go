@@ -6,11 +6,9 @@ import (
 
 	admissionv1 "k8s.io/api/admission/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/runtime"
 	apierrors "k8s.io/apimachinery/pkg/util/errors"
 	ctrl "sigs.k8s.io/controller-runtime"
 	logf "sigs.k8s.io/controller-runtime/pkg/log"
-	"sigs.k8s.io/controller-runtime/pkg/webhook"
 	"sigs.k8s.io/controller-runtime/pkg/webhook/admission"
 )
 
@@ -19,8 +17,7 @@ var managedcontrolplanelog = logf.Log.WithName("managedcontrolplane-resource")
 
 // SetupWebhookWithManager will setup the manager to manage the webhooks
 func (r *ManagedControlPlane) SetupWebhookWithManager(mgr ctrl.Manager) error {
-	return ctrl.NewWebhookManagedBy(mgr).
-		For(r).
+	return ctrl.NewWebhookManagedBy(mgr, r).
 		WithDefaulter(r).
 		WithValidator(r).
 		Complete()
@@ -28,50 +25,36 @@ func (r *ManagedControlPlane) SetupWebhookWithManager(mgr ctrl.Manager) error {
 
 // +kubebuilder:webhook:path=/mutate-core-openmcp-cloud-v1alpha1-managedcontrolplane,mutating=true,failurePolicy=fail,sideEffects=None,groups=core.openmcp.cloud,resources=managedcontrolplanes,verbs=create;update,versions=v1alpha1,name=vmanagedcontrolplane.kb.io,admissionReviewVersions=v1
 
-var _ webhook.CustomDefaulter = &ManagedControlPlane{}
+var _ admission.Defaulter[*ManagedControlPlane] = &ManagedControlPlane{}
 
-// Default implements webhook.CustomDefaulter so a webhook will be registered for the type
-func (r *ManagedControlPlane) Default(ctx context.Context, obj runtime.Object) error {
-	mcp, ok := obj.(*ManagedControlPlane)
-	if !ok {
-		return fmt.Errorf("object not supported")
-	}
-
-	managedcontrolplanelog.Info("default", "name", mcp.Name)
+// Default implements admission.Defaulter so a webhook will be registered for the type
+func (r *ManagedControlPlane) Default(ctx context.Context, obj *ManagedControlPlane) error {
+	managedcontrolplanelog.Info("default", "name", obj.Name)
 
 	req, err := admission.RequestFromContext(ctx)
 	if err != nil {
 		return err
 	}
 
-	setCreatedBy(mcp, req)
+	setCreatedBy(obj, req)
 
 	return nil
 }
 
 // +kubebuilder:webhook:path=/validate-core-openmcp-cloud-v1alpha1-managedcontrolplane,mutating=false,failurePolicy=fail,sideEffects=None,groups=core.openmcp.cloud,resources=managedcontrolplanes,verbs=delete,versions=v1alpha1,name=vmanagedcontrolplane.kb.io,admissionReviewVersions=v1
 
-var _ webhook.CustomValidator = &ManagedControlPlane{}
+var _ admission.Validator[*ManagedControlPlane] = &ManagedControlPlane{}
 
-// ValidateCreate implements webhook.Validator so a webhook will be registered for the type
-func (r *ManagedControlPlane) ValidateCreate(_ context.Context, _ runtime.Object) (admission.Warnings, error) {
+// ValidateCreate implements admission.Validator so a webhook will be registered for the type
+func (r *ManagedControlPlane) ValidateCreate(_ context.Context, _ *ManagedControlPlane) (admission.Warnings, error) {
 	managedcontrolplanelog.Info("validate create - this should never be triggered", "name", r.Name)
 
 	// no-op
 	return nil, nil
 }
 
-// ValidateUpdate implements webhook.Validator so a webhook will be registered for the type
-func (r *ManagedControlPlane) ValidateUpdate(_ context.Context, old runtime.Object, newObj runtime.Object) (admission.Warnings, error) {
-	oldMcp, ok := old.(*ManagedControlPlane)
-	if !ok {
-		return nil, fmt.Errorf("object not supported")
-	}
-
-	newMcp, ok := newObj.(*ManagedControlPlane)
-	if !ok {
-		return nil, fmt.Errorf("object not supported")
-	}
+// ValidateUpdate implements admission.Validator so a webhook will be registered for the type
+func (r *ManagedControlPlane) ValidateUpdate(_ context.Context, oldMcp *ManagedControlPlane, newMcp *ManagedControlPlane) (admission.Warnings, error) {
 	var errorList []error
 
 	// Add update validators here when needed
@@ -89,16 +72,11 @@ func (r *ManagedControlPlane) ValidateUpdate(_ context.Context, old runtime.Obje
 	return nil, apierrors.NewAggregate(errorList)
 }
 
-// ValidateDelete implements webhook.Validator so a webhook will be registered for the type
-func (r *ManagedControlPlane) ValidateDelete(_ context.Context, obj runtime.Object) (admission.Warnings, error) {
+// ValidateDelete implements admission.Validator so a webhook will be registered for the type
+func (r *ManagedControlPlane) ValidateDelete(_ context.Context, obj *ManagedControlPlane) (admission.Warnings, error) {
 	managedcontrolplanelog.Info("validate delete", "name", r.Name)
 
-	mcp, ok := obj.(*ManagedControlPlane)
-	if !ok {
-		return nil, fmt.Errorf("object not supported")
-	}
-
-	if mcp.Annotations[ManagedControlPlaneDeletionConfirmationAnnotation] == "true" {
+	if obj.Annotations[ManagedControlPlaneDeletionConfirmationAnnotation] == "true" {
 		return nil, nil
 	}
 	return nil, fmt.Errorf("ManagedControlPlane %q requires annotation %q to be set to true, before it can be deleted", r.Name, ManagedControlPlaneDeletionConfirmationAnnotation)
