@@ -226,7 +226,7 @@ func (gc *GardenerConnector) HandleCreateOrUpdate(ctx context.Context, as *openm
 	conRsn := ""
 	conMsg := strings.Builder{}
 	if sh.Status.LastOperation != nil {
-		conMsg.WriteString(fmt.Sprintf("[%s: %s] %s", sh.Status.LastOperation.Type, sh.Status.LastOperation.State, sh.Status.LastOperation.Description))
+		fmt.Fprintf(&conMsg, "[%s: %s] %s", sh.Status.LastOperation.Type, sh.Status.LastOperation.State, sh.Status.LastOperation.Description)
 	}
 	if !shootReady {
 		conRsn = cconst.ReasonWaitingForGardenerShoot

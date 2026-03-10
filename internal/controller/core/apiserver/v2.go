@@ -507,7 +507,7 @@ func (m *AccessRequestMutator) String() string {
 }
 
 func clusterConditions(ready bool, reason, message string, additionalConditions ...openmcpv1alpha1.ComponentCondition) []openmcpv1alpha1.ComponentCondition {
-	conditions := []openmcpv1alpha1.ComponentCondition{
+	conditions := []openmcpv1alpha1.ComponentCondition{ //nolint:prealloc
 		componentutils.NewCondition(openmcpv1alpha1.APIServerComponent.HealthyCondition(), openmcpv1alpha1.ComponentConditionStatusFromBool(ready), reason, message),
 	}
 	conditions = append(conditions, additionalConditions...)
