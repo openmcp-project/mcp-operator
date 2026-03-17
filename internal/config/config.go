@@ -52,9 +52,9 @@ func (cfg *MCPOperatorConfig) Validate() field.ErrorList {
 		return nil
 	}
 
-	allErrs := field.ErrorList{}
-
-	allErrs = append(allErrs, cfg.Architecture.Validate()...)
+	archErrs := cfg.Architecture.Validate()
+	allErrs := make(field.ErrorList, 0, len(archErrs))
+	allErrs = append(allErrs, archErrs...)
 
 	return allErrs
 }
