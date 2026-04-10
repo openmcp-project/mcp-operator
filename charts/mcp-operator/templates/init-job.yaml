@@ -6,7 +6,7 @@ metadata:
     app: cola-onboarding
     role: mcp-operator
     chart-name: "{{ .Chart.Name }}"
-    chart-version: "{{ .Chart.Version }}"
+    chart-version: "{{ .Chart.Version | replace "+" "_" }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
   annotations:
@@ -20,7 +20,7 @@ spec:
         app: cola-onboarding
         role: mcp-operator
         chart-name: "{{ .Chart.Name }}"
-        chart-version: "{{ .Chart.Version }}"
+        chart-version: "{{ .Chart.Version | replace "+" "_" }}"
         release: "{{ .Release.Name }}"
         heritage: "{{ .Release.Service }}"
     spec:
