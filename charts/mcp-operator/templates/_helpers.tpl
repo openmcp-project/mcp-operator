@@ -94,7 +94,7 @@ Common labels
 */}}
 {{- define "mcp-operator.labels" -}}
 helm.sh/chart-name: {{ .Chart.Name }}
-helm.sh/chart-version: {{ .Chart.Version | quote }}
+helm.sh/chart-version: {{ .Chart.Version | replace "+" "_" | quote }}
 {{ include "mcp-operator.selectorLabels" . }}
 {{- if .Chart.AppVersion }}
 app.kubernetes.io/version: {{ .Chart.AppVersion | quote }}
