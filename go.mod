@@ -10,7 +10,7 @@ replace github.com/crossplane/crossplane => github.com/crossplane/crossplane/v2 
 
 require (
 	github.com/Masterminds/semver/v3 v3.4.0
-	github.com/alitto/pond/v2 v2.7.0
+	github.com/alitto/pond/v2 v2.7.1
 	github.com/apparentlymart/go-cidr v1.1.0
 	github.com/onsi/ginkgo/v2 v2.28.1
 	github.com/onsi/gomega v1.39.1
