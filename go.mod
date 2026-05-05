@@ -12,8 +12,8 @@ require (
 	github.com/Masterminds/semver/v3 v3.5.0
 	github.com/alitto/pond/v2 v2.7.1
 	github.com/apparentlymart/go-cidr v1.1.0
-	github.com/onsi/ginkgo/v2 v2.28.1
-	github.com/onsi/gomega v1.39.1
+	github.com/onsi/ginkgo/v2 v2.28.3
+	github.com/onsi/gomega v1.40.0
 	github.com/openmcp-project/cluster-provider-gardener/api v0.12.0
 	github.com/openmcp-project/control-plane-operator v0.1.19
 	github.com/openmcp-project/controller-utils v0.27.1
@@ -70,7 +70,7 @@ require (
 	github.com/google/btree v1.1.3 // indirect
 	github.com/google/gnostic-models v0.7.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/pprof v0.0.0-20260115054156-294ebfa9ad83 // indirect
+	github.com/google/pprof v0.0.0-20260402051712-545e8a4df936 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/json-iterator/go v1.1.13-0.20220915233716-71ac16282d12 // indirect
