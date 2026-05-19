@@ -12,7 +12,7 @@ require (
 	github.com/Masterminds/semver/v3 v3.5.0
 	github.com/alitto/pond/v2 v2.7.1
 	github.com/apparentlymart/go-cidr v1.1.1
-	github.com/onsi/ginkgo/v2 v2.28.3
+	github.com/onsi/ginkgo/v2 v2.29.0
 	github.com/onsi/gomega v1.40.0
 	github.com/openmcp-project/cluster-provider-gardener/api v0.12.0
 	github.com/openmcp-project/control-plane-operator v0.1.19
