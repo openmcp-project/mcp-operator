@@ -15,13 +15,13 @@ require (
 	github.com/onsi/ginkgo/v2 v2.28.3
 	github.com/onsi/gomega v1.40.0
 	github.com/openmcp-project/cluster-provider-gardener/api v0.12.0
-	github.com/openmcp-project/control-plane-operator v0.1.19
-	github.com/openmcp-project/controller-utils v0.27.1
+	github.com/openmcp-project/control-plane-operator v0.4.0
+	github.com/openmcp-project/controller-utils v0.28.0
 	github.com/openmcp-project/landscaper-service v1.2.0
 	github.com/openmcp-project/mcp-operator/api v0.55.0
 	github.com/openmcp-project/openmcp-operator/api v0.19.1
 	github.com/openmcp-project/openmcp-operator/lib v0.19.1
-	github.com/openmcp-project/service-provider-landscaper v0.18.0
+	github.com/openmcp-project/service-provider-landscaper v0.20.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.11.1
@@ -79,7 +79,7 @@ require (
 	github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd // indirect
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
-	github.com/openmcp-project/controller-utils/api v0.27.1 // indirect
+	github.com/openmcp-project/controller-utils/api v0.28.0 // indirect
 	github.com/openmcp-project/landscaper/apis v1.2.0 // indirect
 	github.com/openmcp-project/landscaper/legacy-component-spec/bindings-go v1.2.0 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
