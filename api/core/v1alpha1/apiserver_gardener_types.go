@@ -54,7 +54,6 @@ type GardenerInternalConfiguration struct {
 	// The expected format is "<landscape-name>/<config-name>".
 	// +kubebuilder:validation:Optional
 	// +kubebuilder:validation:Pattern="^[a-z0-9-]+/[a-z0-9-]+$"
-	// +kubebuilder:validation:XValidation:rule="self == oldSelf",message="Value is immutable"
 	LandscapeConfiguration string `json:"landscapeConfiguration,omitempty"`
 }
 
