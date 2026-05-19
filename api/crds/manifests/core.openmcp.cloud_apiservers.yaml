@@ -205,9 +205,6 @@ spec:
                           The expected format is "<landscape-name>/<config-name>".
                         pattern: ^[a-z0-9-]+/[a-z0-9-]+$
                         type: string
-                        x-kubernetes-validations:
-                        - message: Value is immutable
-                          rule: self == oldSelf
                       shootOverwrite:
                         description: ShootOverwrite allows to overwrite the shoot
                           to be used. This could be useful for migration tasks.
