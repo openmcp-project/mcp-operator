@@ -9,7 +9,8 @@
     "config:best-practices",
     "security:openssf-scorecard",
     "helpers:pinGitHubActionDigests",
-    ":rebaseStalePrs"
+    ":rebaseStalePrs",
+    ":enableVulnerabilityAlerts"
   ],
   "postUpdateOptions": [
     "gomodTidy"
