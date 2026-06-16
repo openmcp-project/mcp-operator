@@ -41,8 +41,9 @@ func testEnvWithAPIServerAccess(testDataPathSegments ...string) *testing.Complex
 		WithReconcilerConstructor(clusterAdminReconciler, getReconciler, testutils.CrateCluster).
 		WithDynamicObjectsWithStatus(testutils.CrateCluster).
 		Build()
-	env.Reconcilers[clusterAdminReconciler].(*clusteradmin.ClusterAdminReconciler).
-		SetAPIServerAccess(&testutils.TestAPIServerAccess{Client: env.Client(testutils.APIServerCluster)})
+	controller, err := testing.ReconcilerAs[*clusteradmin.ClusterAdminReconciler](env.Reconciler(clusterAdminReconciler))
+	Expect(err).ToNot(HaveOccurred())
+	controller.SetAPIServerAccess(&testutils.TestAPIServerAccess{Client: env.Client(testutils.APIServerCluster)})
 
 	return env
 }
