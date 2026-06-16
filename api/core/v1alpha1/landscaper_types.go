@@ -2,6 +2,7 @@ package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // LandscaperConfiguration contains the configuration which is required for setting up a LaaS instance.
@@ -64,5 +65,8 @@ type LandscaperList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Landscaper{}, &LandscaperList{})
+	SchemeBuilder.Register(func(scheme *runtime.Scheme) error {
+		scheme.AddKnownTypes(GroupVersion, &Landscaper{}, &LandscaperList{})
+		return nil
+	})
 }

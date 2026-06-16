@@ -84,13 +84,18 @@ const (
 
 func testEnvWithAPIServerAccess(testDataPathSegments ...string) *testing.ComplexEnvironment {
 	env := testutils.DefaultTestSetupBuilder(testDataPathSegments...).WithFakeClient(testutils.APIServerCluster, testutils.Scheme).WithReconcilerConstructor(authReconciler, getReconciler, testutils.CrateCluster).Build()
-	env.Reconcilers[authReconciler].(*authentication.AuthenticationReconciler).SetAPIServerAccess(&testutils.TestAPIServerAccess{Client: env.Client(testutils.APIServerCluster)})
+	controller, err := testing.ReconcilerAs[*authentication.AuthenticationReconciler](env.Reconciler(authReconciler))
+	Expect(err).ToNot(HaveOccurred())
+	controller.SetAPIServerAccess(&testutils.TestAPIServerAccess{Client: env.Client(testutils.APIServerCluster)})
+
 	return env
 }
 
 func testEnvWithAPIServerAccessWithCrateIdentityProvider(testDataPathSegments ...string) *testing.ComplexEnvironment {
 	env := testutils.DefaultTestSetupBuilder(testDataPathSegments...).WithFakeClient(testutils.APIServerCluster, testutils.Scheme).WithReconcilerConstructor(authReconciler, getReconcilerWithCrateIdentityProvider, testutils.CrateCluster).Build()
-	env.Reconcilers[authReconciler].(*authentication.AuthenticationReconciler).SetAPIServerAccess(&testutils.TestAPIServerAccess{Client: env.Client(testutils.APIServerCluster)})
+	controller, err := testing.ReconcilerAs[*authentication.AuthenticationReconciler](env.Reconciler(authReconciler))
+	Expect(err).ToNot(HaveOccurred())
+	controller.SetAPIServerAccess(&testutils.TestAPIServerAccess{Client: env.Client(testutils.APIServerCluster)})
 	return env
 }
 
@@ -446,7 +451,9 @@ var _ = Describe("CO-1153 Authentication Controller", func() {
 
 		env := testEnvWithAPIServerAccess("testdata", "test-08")
 		apiServerAccess := &testutils.TestAPIServerAccess{Client: env.Client(testutils.APIServerCluster)}
-		env.Reconcilers[authReconciler].(*authentication.AuthenticationReconciler).SetAPIServerAccess(apiServerAccess)
+		controller, err := testing.ReconcilerAs[*authentication.AuthenticationReconciler](env.Reconciler(authReconciler))
+		Expect(err).ToNot(HaveOccurred())
+		controller.SetAPIServerAccess(apiServerAccess)
 
 		auth := &openmcpv1alpha1.Authentication{}
 		err = env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, auth)

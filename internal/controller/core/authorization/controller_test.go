@@ -149,7 +149,9 @@ func getReconciler(c ...client.Client) reconcile.Reconciler {
 
 func testEnvWithAPIServerAccess(testDataPathSegments ...string) *testing.ComplexEnvironment {
 	env := testutils.DefaultTestSetupBuilder(testDataPathSegments...).WithFakeClient(testutils.APIServerCluster, testutils.Scheme).WithReconcilerConstructor(authzReconciler, getReconciler, testutils.CrateCluster).Build()
-	env.Reconcilers[authzReconciler].(*authorization.AuthorizationReconciler).SetAPIServerAccess(&testutils.TestAPIServerAccess{Client: env.Client(testutils.APIServerCluster)})
+	controller, err := testing.ReconcilerAs[*authorization.AuthorizationReconciler](env.Reconciler(authzReconciler))
+	Expect(err).ToNot(HaveOccurred())
+	controller.SetAPIServerAccess(&testutils.TestAPIServerAccess{Client: env.Client(testutils.APIServerCluster)})
 	return env
 }
 
@@ -507,7 +509,8 @@ var _ = Describe("CO-1153 Authorization Controller", func() {
 		_ = env.ShouldReconcile(authzReconciler, req)
 
 		testWorker := testutils.NewTestWorker(env.Client(testutils.CrateCluster), env.Client(testutils.APIServerCluster))
-		controller := env.Reconciler(authzReconciler).(*authorization.AuthorizationReconciler)
+		controller, err := testing.ReconcilerAs[*authorization.AuthorizationReconciler](env.Reconciler(authzReconciler))
+		Expect(err).ToNot(HaveOccurred())
 		controller.RegisterTasks(testWorker)
 
 		as := &openmcpv1alpha1.APIServer{}
@@ -603,7 +606,8 @@ var _ = Describe("CO-1153 Authorization Controller", func() {
 		_ = env.ShouldReconcile(authzReconciler, req)
 
 		testWorker := testutils.NewTestWorker(env.Client(testutils.CrateCluster), env.Client(testutils.APIServerCluster))
-		controller := env.Reconciler(authzReconciler).(*authorization.AuthorizationReconciler)
+		controller, err := testing.ReconcilerAs[*authorization.AuthorizationReconciler](env.Reconciler(authzReconciler))
+		Expect(err).ToNot(HaveOccurred())
 		controller.RegisterTasks(testWorker)
 
 		as := &openmcpv1alpha1.APIServer{}
@@ -667,7 +671,8 @@ var _ = Describe("CO-1153 Authorization Controller", func() {
 		_ = env.ShouldReconcile(authzReconciler, req)
 
 		testWorker := testutils.NewTestWorker(env.Client(testutils.CrateCluster), env.Client(testutils.APIServerCluster))
-		controller := env.Reconciler(authzReconciler).(*authorization.AuthorizationReconciler)
+		controller, err := testing.ReconcilerAs[*authorization.AuthorizationReconciler](env.Reconciler(authzReconciler))
+		Expect(err).ToNot(HaveOccurred())
 		controller.RegisterTasks(testWorker)
 
 		as := &openmcpv1alpha1.APIServer{}
@@ -762,7 +767,8 @@ var _ = Describe("CO-1153 Authorization Controller", func() {
 		_ = env.ShouldReconcile(authzReconciler, req)
 
 		testWorker := testutils.NewTestWorker(env.Client(testutils.CrateCluster), env.Client(testutils.APIServerCluster))
-		controller := env.Reconciler(authzReconciler).(*authorization.AuthorizationReconciler)
+		controller, err := testing.ReconcilerAs[*authorization.AuthorizationReconciler](env.Reconciler(authzReconciler))
+		Expect(err).ToNot(HaveOccurred())
 		controller.RegisterTasks(testWorker)
 
 		as := &openmcpv1alpha1.APIServer{}
@@ -914,7 +920,8 @@ var _ = Describe("CO-1153 Authorization Controller", func() {
 		_ = env.ShouldReconcile(authzReconciler, req)
 
 		testWorker := testutils.NewTestWorker(env.Client(testutils.CrateCluster), env.Client(testutils.APIServerCluster))
-		controller := env.Reconciler(authzReconciler).(*authorization.AuthorizationReconciler)
+		controller, err := testing.ReconcilerAs[*authorization.AuthorizationReconciler](env.Reconciler(authzReconciler))
+		Expect(err).ToNot(HaveOccurred())
 		controller.RegisterTasks(testWorker)
 
 		as := &openmcpv1alpha1.APIServer{}
