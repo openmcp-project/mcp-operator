@@ -2,6 +2,7 @@ package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 // CloudOrchestratorConfiguration contains the configuration for setting up the CloudOrchestrator component in a ManagedControlPlane.
@@ -76,7 +77,10 @@ type CloudOrchestratorList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&CloudOrchestrator{}, &CloudOrchestratorList{})
+	SchemeBuilder.Register(func(scheme *runtime.Scheme) error {
+		scheme.AddKnownTypes(GroupVersion, &CloudOrchestrator{}, &CloudOrchestratorList{})
+		return nil
+	})
 }
 
 // CrossplaneConfig defines the configuration of Crossplane

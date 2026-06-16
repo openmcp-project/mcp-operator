@@ -2,6 +2,7 @@ package v1alpha1
 
 import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 )
 
 const (
@@ -188,5 +189,8 @@ type ClusterAdminList struct {
 }
 
 func init() {
-	SchemeBuilder.Register(&Authorization{}, &AuthorizationList{}, &ClusterAdmin{}, &ClusterAdminList{})
+	SchemeBuilder.Register(func(scheme *runtime.Scheme) error {
+		scheme.AddKnownTypes(GroupVersion, &Authorization{}, &AuthorizationList{}, &ClusterAdmin{}, &ClusterAdminList{})
+		return nil
+	})
 }
