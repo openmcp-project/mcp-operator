@@ -19,8 +19,8 @@ require (
 	github.com/openmcp-project/controller-utils v0.31.0
 	github.com/openmcp-project/landscaper-service v1.2.2
 	github.com/openmcp-project/mcp-operator/api v0.56.0
-	github.com/openmcp-project/openmcp-operator/api v1.2.0
-	github.com/openmcp-project/openmcp-operator/lib v1.2.0
+	github.com/openmcp-project/openmcp-operator/api v1.3.0
+	github.com/openmcp-project/openmcp-operator/lib v1.3.0
 	github.com/openmcp-project/service-provider-landscaper v1.1.1
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
@@ -42,11 +42,11 @@ require (
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/emicklei/go-restful/v3 v3.13.0 // indirect
 	github.com/evanphx/json-patch/v5 v5.9.11 // indirect
-	github.com/fluxcd/helm-controller/api v1.5.5 // indirect
+	github.com/fluxcd/helm-controller/api v1.6.2 // indirect
 	github.com/fluxcd/pkg/apis/acl v0.10.0 // indirect
 	github.com/fluxcd/pkg/apis/kustomize v1.20.0 // indirect
-	github.com/fluxcd/pkg/apis/meta v1.30.0 // indirect
-	github.com/fluxcd/source-controller/api v1.9.0 // indirect
+	github.com/fluxcd/pkg/apis/meta v1.30.1 // indirect
+	github.com/fluxcd/source-controller/api v1.9.3 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
 	github.com/gardener/gardener/pkg/apis v1.145.0 // indirect
