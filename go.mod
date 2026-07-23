@@ -6,7 +6,7 @@ replace github.com/openmcp-project/mcp-operator/api => ./api
 
 replace github.com/imdario/mergo v1.0.0 => github.com/imdario/mergo v0.3.16
 
-replace github.com/crossplane/crossplane => github.com/crossplane/crossplane/v2 v2.3.3
+replace github.com/crossplane/crossplane => github.com/crossplane/crossplane/v2 v2.3.4
 
 require (
 	github.com/Masterminds/semver/v3 v3.5.0
