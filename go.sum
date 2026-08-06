@@ -134,8 +134,8 @@ github.com/openmcp-project/controller-utils v0.31.0 h1:eFMUUoMT3rTV6xJaX9br13paV
 github.com/openmcp-project/controller-utils v0.31.0/go.mod h1:QU2JeLMb01XEpLYx5TBI3Nihkg82k07/vNIBmGpHal0=
 github.com/openmcp-project/controller-utils/api v0.31.0 h1:SFMsTsuK9K1+HUhwVE7Shs91yCxwNxbf0RwduF63Zz4=
 github.com/openmcp-project/controller-utils/api v0.31.0/go.mod h1:T92QHt8Rt/Sv3zIG1CrtmNhDetADYt0SOqJZvQU+zDs=
-github.com/openmcp-project/landscaper-service v1.4.0 h1:gxpi9l8ONZElsLlSGsanP+udWZEzx/vQ/YzrZYjwhRY=
-github.com/openmcp-project/landscaper-service v1.4.0/go.mod h1:0gzKcFsFSUaFCB4cg0oiY/9iq+KpwiOJbVXWctGwTcY=
+github.com/openmcp-project/landscaper-service v1.4.1 h1:jgUVS8kcnyBkcIWv10EmOOF9Ro//QIj6UQk6ZIt91Is=
+github.com/openmcp-project/landscaper-service v1.4.1/go.mod h1:0gzKcFsFSUaFCB4cg0oiY/9iq+KpwiOJbVXWctGwTcY=
 github.com/openmcp-project/landscaper/apis v1.4.0 h1:caLLVlK9iulXndiPnlZVRahqxrGt3sM/gvn9N6FOqMk=
 github.com/openmcp-project/landscaper/apis v1.4.0/go.mod h1:LHCV8cr2s44lrERv1kzPgwaehYrVGyAKdy9XELOYNDs=
 github.com/openmcp-project/landscaper/legacy-component-spec/bindings-go v1.4.0 h1:4sBQ04Gl8SVNdvI53La03AFu5NSWbgCXkJ8GmyJ3Lo0=
