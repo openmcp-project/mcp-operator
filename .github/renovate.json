@@ -1,32 +1,13 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>openmcp-project/.github:renovate-config"
+  ],
   "git-submodules": {
     "enabled": true
   },
   "minimumReleaseAge": "0 days",
-  "extends": [
-    "config:recommended",
-    "config:best-practices",
-    "security:openssf-scorecard",
-    "helpers:pinGitHubActionDigests",
-    ":rebaseStalePrs"
-  ],
-  "postUpdateOptions": [
-    "gomodTidy"
-  ],
   "packageRules": [
-    {
-      "matchManagers": [
-        "gomod"
-      ],
-      "matchDepNames": [
-        "go"
-      ],
-      "matchDepTypes": [
-        "golang"
-      ],
-      "rangeStrategy": "bump"
-    },
     {
       "matchPackageNames": [
         "github.com/gardener/landscaper",
