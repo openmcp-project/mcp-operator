@@ -67,6 +67,7 @@ func (gc *GardenerConnector) Shoot_v1beta1_from_APIServer_v1alpha1(ctx context.C
 	enforcedAnnotations := maps.Merge(gcfg.ShootTemplate.Annotations, map[string]string{
 		"shoot.gardener.cloud/cleanup-extended-apis-finalize-grace-period-seconds": "30",
 		gardenconstants.AnnotationAuthenticationIssuer:                             gardenconstants.AnnotationAuthenticationIssuerManaged,
+		"authentication.gardener.cloud/trusted":                                    "true",
 	})
 	existingAnnotations := sh.GetAnnotations()
 	if existingAnnotations == nil {
