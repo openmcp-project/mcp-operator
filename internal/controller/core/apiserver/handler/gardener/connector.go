@@ -170,7 +170,7 @@ func (gc *GardenerConnector) HandleCreateOrUpdate(ctx context.Context, as *openm
 		if err := gls.Client.Update(ctx, sh); err != nil {
 			if apierrors.IsConflict(err) {
 				log.Error(err, "Conflict updating shoot")
-				return ctrl.Result{Requeue: true}, updateShootManifestInStatusFunc, gardenerConditions(false, cconst.ReasonGardenClusterInteractionProblem, err.Error()), openmcperrors.WithReason(err, cconst.ReasonGardenClusterInteractionProblem)
+				return ctrl.Result{RequeueAfter: time.Second}, updateShootManifestInStatusFunc, gardenerConditions(false, cconst.ReasonGardenClusterInteractionProblem, err.Error()), openmcperrors.WithReason(err, cconst.ReasonGardenClusterInteractionProblem)
 			}
 
 			log.Error(err, "Error updating shoot")
