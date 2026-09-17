@@ -75,67 +75,65 @@ func (car *ClusterAdminReconciler) SetupWithManager(mgr ctrl.Manager) error {
 
 // Reconcile reconciles the ClusterAdmin object
 func (car *ClusterAdminReconciler) Reconcile(ctx context.Context, req ctrl.Request) (ctrl.Result, error) {
+	var err error
+
+	// get the logger
 	log := logging.FromContextOrPanic(ctx)
 
 	ca := &openmcpv1alpha1.ClusterAdmin{}
-	if err := car.Client.Get(ctx, req.NamespacedName, ca); err != nil {
+	if err = car.Client.Get(ctx, req.NamespacedName, ca); err != nil {
 		log.Error(err, "unable to fetch ClusterAdmin")
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
+	// When deleting, skip fetching Authorization/APIServer — they may already be gone.
+	// handleDelete only needs to remove the ClusterRoleBinding from the MCP cluster and
+	// clear the finalizer; it does not require either sibling resource.
 	if !ca.DeletionTimestamp.IsZero() {
-		return ctrl.Result{}, car.OnDelete(ctx, ca)
-	}
-	return car.OnCreateOrUpdate(ctx, ca)
-}
+		log.Debug("ClusterAdmin is being deleted")
 
-// OnDelete handles deletion of a ClusterAdmin. APIServer may already be gone; in that case
-// ClusterRoleBinding cleanup is skipped (MCP cluster already unreachable).
-func (car *ClusterAdminReconciler) OnDelete(ctx context.Context, ca *openmcpv1alpha1.ClusterAdmin) error {
-	log := logging.FromContextOrPanic(ctx)
-	log.Debug("ClusterAdmin is being deleted")
-
-	apiServer := &openmcpv1alpha1.APIServer{}
-	err := car.Client.Get(ctx, client.ObjectKey{Name: ca.Name, Namespace: ca.Namespace}, apiServer)
-	if err != nil {
-		if !apierrors.IsNotFound(err) {
-			log.Error(err, "unable to fetch APIServer for ClusterAdmin")
-			return err
-		}
-		apiServer = nil
-	}
-
-	var apiServerClient client.Client
-	if apiServer != nil && apiServer.Status.AdminAccess != nil && apiServer.Status.AdminAccess.Kubeconfig != "" {
-		apiServerClient, err = car.APIServerAccess.GetAdminAccessClient(apiServer, client.Options{})
+		apiServer := &openmcpv1alpha1.APIServer{}
+		err = car.Client.Get(ctx, client.ObjectKey{Name: ca.Name, Namespace: ca.Namespace}, apiServer)
 		if err != nil {
-			log.Error(err, "unable to get APIServer admin access client")
-			return err
+			if !apierrors.IsNotFound(err) {
+				log.Error(err, "unable to fetch APIServer for ClusterAdmin")
+				return ctrl.Result{}, err
+			}
+			// APIServer already gone — nothing to clean up on the MCP cluster.
+			apiServer = nil
 		}
+
+		var apiServerClient client.Client
+		if apiServer != nil && apiServer.Status.AdminAccess != nil && apiServer.Status.AdminAccess.Kubeconfig != "" {
+			apiServerClient, err = car.APIServerAccess.GetAdminAccessClient(apiServer, client.Options{})
+			if err != nil {
+				log.Error(err, "unable to get APIServer admin access client")
+				return ctrl.Result{}, err
+			}
+		}
+
+		return ctrl.Result{}, car.handleDelete(ctx, ca, apiServerClient)
 	}
-
-	return car.handleDelete(ctx, ca, apiServerClient)
-}
-
-// OnCreateOrUpdate handles creation and update of a ClusterAdmin.
-func (car *ClusterAdminReconciler) OnCreateOrUpdate(ctx context.Context, ca *openmcpv1alpha1.ClusterAdmin) (ctrl.Result, error) {
-	log := logging.FromContextOrPanic(ctx)
 
 	authz := &openmcpv1alpha1.Authorization{}
-	if err := car.Client.Get(ctx, client.ObjectKey{Name: ca.Name, Namespace: ca.Namespace}, authz); err != nil {
+	err = car.Client.Get(ctx, client.ObjectKey{Name: ca.Name, Namespace: ca.Namespace}, authz)
+	if err != nil {
 		log.Error(err, "unable to fetch Authorization for ClusterAdmin")
 		return ctrl.Result{}, err
 	}
 
 	apiServer := &openmcpv1alpha1.APIServer{}
-	if err := car.Client.Get(ctx, client.ObjectKey{Name: ca.Name, Namespace: ca.Namespace}, apiServer); err != nil {
+	err = car.Client.Get(ctx, client.ObjectKey{Name: ca.Name, Namespace: ca.Namespace}, apiServer)
+	if err != nil {
 		log.Error(err, "unable to fetch APIServer for ClusterAdmin")
 		return ctrl.Result{}, err
 	}
 
 	if apiServer.Status.AdminAccess == nil || apiServer.Status.AdminAccess.Kubeconfig == "" {
 		log.Debug("APIServer admin access not ready yet")
-		return ctrl.Result{RequeueAfter: 10 * time.Second}, nil
+		return ctrl.Result{
+			RequeueAfter: 10 * time.Second,
+		}, nil
 	}
 
 	apiServerClient, err := car.APIServerAccess.GetAdminAccessClient(apiServer, client.Options{})
