@@ -86,6 +86,35 @@ func (car *ClusterAdminReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		return ctrl.Result{}, client.IgnoreNotFound(err)
 	}
 
+	// When deleting, skip fetching Authorization/APIServer — they may already be gone.
+	// handleDelete only needs to remove the ClusterRoleBinding from the MCP cluster and
+	// clear the finalizer; it does not require either sibling resource.
+	if !ca.DeletionTimestamp.IsZero() {
+		log.Debug("ClusterAdmin is being deleted")
+
+		apiServer := &openmcpv1alpha1.APIServer{}
+		err = car.Client.Get(ctx, client.ObjectKey{Name: ca.Name, Namespace: ca.Namespace}, apiServer)
+		if err != nil {
+			if !apierrors.IsNotFound(err) {
+				log.Error(err, "unable to fetch APIServer for ClusterAdmin")
+				return ctrl.Result{}, err
+			}
+			// APIServer already gone — nothing to clean up on the MCP cluster.
+			apiServer = nil
+		}
+
+		var apiServerClient client.Client
+		if apiServer != nil && apiServer.Status.AdminAccess != nil && apiServer.Status.AdminAccess.Kubeconfig != "" {
+			apiServerClient, err = car.APIServerAccess.GetAdminAccessClient(apiServer, client.Options{})
+			if err != nil {
+				log.Error(err, "unable to get APIServer admin access client")
+				return ctrl.Result{}, err
+			}
+		}
+
+		return ctrl.Result{}, car.handleDelete(ctx, ca, apiServerClient)
+	}
+
 	authz := &openmcpv1alpha1.Authorization{}
 	err = car.Client.Get(ctx, client.ObjectKey{Name: ca.Name, Namespace: ca.Namespace}, authz)
 	if err != nil {
@@ -113,15 +142,8 @@ func (car *ClusterAdminReconciler) Reconcile(ctx context.Context, req ctrl.Reque
 		return ctrl.Result{}, err
 	}
 
-	if !ca.DeletionTimestamp.IsZero() {
-		log.Debug("ClusterAdmin is being deleted")
-		// deletion
-		return ctrl.Result{}, car.handleDelete(ctx, ca, apiServerClient)
-	} else {
-		log.Debug("ClusterAdmin is being created/updated")
-		// creation/update
-		return car.handleCreateUpdate(ctx, ca, apiServerClient)
-	}
+	log.Debug("ClusterAdmin is being created/updated")
+	return car.handleCreateUpdate(ctx, ca, apiServerClient)
 }
 
 // emitActivatedEvent emits a K8S event when the cluster admin is activated
@@ -272,20 +294,24 @@ func (car *ClusterAdminReconciler) handleCreateUpdate(ctx context.Context, ca *o
 	return reconcile.Result{}, nil
 }
 
-// handleDelete handles the deletion of the ClusterAdmin object
+// handleDelete handles the deletion of the ClusterAdmin object.
+// apiServerClient may be nil when the APIServer resource is already gone; in that case
+// the ClusterRoleBinding cleanup is skipped (the MCP cluster is already unreachable).
 func (car *ClusterAdminReconciler) handleDelete(ctx context.Context, ca *openmcpv1alpha1.ClusterAdmin, apiServerClient client.Client) error {
 	var err error
 
-	clusterRoleBinding := &rbacv1.ClusterRoleBinding{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: openmcpv1alpha1.ClusterAdminRoleBinding,
-		},
-	}
+	if apiServerClient != nil {
+		clusterRoleBinding := &rbacv1.ClusterRoleBinding{
+			ObjectMeta: metav1.ObjectMeta{
+				Name: openmcpv1alpha1.ClusterAdminRoleBinding,
+			},
+		}
 
-	err = apiServerClient.Delete(ctx, clusterRoleBinding)
-	if err != nil {
-		if !apierrors.IsNotFound(err) {
-			return err
+		err = apiServerClient.Delete(ctx, clusterRoleBinding)
+		if err != nil {
+			if !apierrors.IsNotFound(err) {
+				return err
+			}
 		}
 	}
 
