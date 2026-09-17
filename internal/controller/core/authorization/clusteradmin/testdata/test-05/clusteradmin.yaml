@@ -1,0 +1,12 @@
+apiVersion: core.openmcp.cloud/v1alpha1
+kind: ClusterAdmin
+metadata:
+  name: test
+  namespace: test
+  finalizers:
+    - authorization.openmcp.cloud
+  deletionTimestamp: "2025-03-27T08:09:57Z"
+spec:
+  subjects:
+    - kind: User
+      name: admin

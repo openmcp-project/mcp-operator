@@ -17,6 +17,7 @@ import (
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"sigs.k8s.io/controller-runtime/pkg/client"
+	"sigs.k8s.io/controller-runtime/pkg/controller/controllerutil"
 	"sigs.k8s.io/controller-runtime/pkg/reconcile"
 
 	. "github.com/onsi/ginkgo/v2"
@@ -197,5 +198,31 @@ var _ = Describe("CO-1153 ClusterAdmin Controller", func() {
 		Expect(err).ToNot(HaveOccurred())
 
 		Expect(ca.Status.Active).To(BeFalse())
+	})
+
+	It("should remove finalizer when ClusterAdmin is deleted but Authorization and APIServer are already gone", func() {
+		// Regression: if Authorization/APIServer are deleted before ClusterAdmin, the finalizer
+		// must still be removed so the namespace can complete termination.
+		env := testEnvWithAPIServerAccess("testdata", "test-05")
+
+		ca := &openmcpv1alpha1.ClusterAdmin{}
+		err := env.Client(testutils.CrateCluster).Get(env.Ctx, types.NamespacedName{Name: "test", Namespace: "test"}, ca)
+		Expect(err).ToNot(HaveOccurred())
+
+		// Simulate finalizer being present and object being deleted.
+		controllerutil.AddFinalizer(ca, openmcpv1alpha1.AuthorizationComponent.Finalizer())
+		err = env.Client(testutils.CrateCluster).Update(env.Ctx, ca)
+		Expect(err).ToNot(HaveOccurred())
+
+		err = env.Client(testutils.CrateCluster).Delete(env.Ctx, ca)
+		Expect(err).ToNot(HaveOccurred())
+
+		req := testing.RequestFromObject(ca)
+		res := env.ShouldReconcile(clusterAdminReconciler, req)
+		testing.ExpectNoRequeue(res)
+
+		// After the finalizer is removed the fake client completes deletion; the object is gone.
+		err = env.Client(testutils.CrateCluster).Get(env.Ctx, client.ObjectKeyFromObject(ca), ca)
+		Expect(errors.IsNotFound(err)).To(BeTrue())
 	})
 })
