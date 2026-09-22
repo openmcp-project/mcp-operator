@@ -14,14 +14,14 @@ require (
 	github.com/apparentlymart/go-cidr v1.1.1
 	github.com/onsi/ginkgo/v2 v2.32.2
 	github.com/onsi/gomega v1.43.0
-	github.com/openmcp-project/cluster-provider-gardener/api v0.16.0
-	github.com/openmcp-project/control-plane-operator v0.5.0
+	github.com/openmcp-project/cluster-provider-gardener/api v0.16.1
+	github.com/openmcp-project/control-plane-operator v0.5.1
 	github.com/openmcp-project/controller-utils v0.33.1
-	github.com/openmcp-project/landscaper-service v1.4.1
+	github.com/openmcp-project/landscaper-service v1.4.2
 	github.com/openmcp-project/mcp-operator/api v0.58.1
-	github.com/openmcp-project/openmcp-operator/api v1.4.0
-	github.com/openmcp-project/openmcp-operator/lib v1.4.0
-	github.com/openmcp-project/service-provider-landscaper v1.3.0
+	github.com/openmcp-project/openmcp-operator/api v1.4.1
+	github.com/openmcp-project/openmcp-operator/lib v1.4.1
+	github.com/openmcp-project/service-provider-landscaper v1.3.1
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.12.1
@@ -38,25 +38,25 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/crossplane/crossplane/apis/v2 v2.3.3 // indirect
+	github.com/crossplane/crossplane/apis/v2 v2.4.1 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/emicklei/go-restful/v3 v3.13.0 // indirect
 	github.com/evanphx/json-patch/v5 v5.9.11 // indirect
-	github.com/fluxcd/helm-controller/api v1.6.3 // indirect
+	github.com/fluxcd/helm-controller/api v1.6.4 // indirect
 	github.com/fluxcd/pkg/apis/acl v0.10.0 // indirect
 	github.com/fluxcd/pkg/apis/kustomize v1.20.0 // indirect
-	github.com/fluxcd/pkg/apis/meta v1.31.0 // indirect
-	github.com/fluxcd/source-controller/api v1.9.4 // indirect
+	github.com/fluxcd/pkg/apis/meta v1.32.0 // indirect
+	github.com/fluxcd/source-controller/api v1.9.5 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
-	github.com/gardener/gardener/pkg/apis v1.149.3 // indirect
+	github.com/gardener/gardener/pkg/apis v1.151.0 // indirect
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/zapr v1.3.0 // indirect
 	github.com/go-openapi/jsonpointer v1.0.0 // indirect
 	github.com/go-openapi/jsonreference v1.0.0 // indirect
 	github.com/go-openapi/swag v0.27.1 // indirect
 	github.com/go-openapi/swag/cmdutils v0.27.1 // indirect
-	github.com/go-openapi/swag/conv v0.27.1 // indirect
+	github.com/go-openapi/swag/conv v0.29.0 // indirect
 	github.com/go-openapi/swag/fileutils v0.27.1 // indirect
 	github.com/go-openapi/swag/jsonutils v0.27.1 // indirect
 	github.com/go-openapi/swag/loading v0.27.1 // indirect
@@ -64,12 +64,12 @@ require (
 	github.com/go-openapi/swag/netutils v0.27.1 // indirect
 	github.com/go-openapi/swag/pools v0.27.1 // indirect
 	github.com/go-openapi/swag/stringutils v0.27.1 // indirect
-	github.com/go-openapi/swag/typeutils v0.27.1 // indirect
+	github.com/go-openapi/swag/typeutils v0.29.0 // indirect
 	github.com/go-openapi/swag/yamlutils v0.27.1 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
 	github.com/google/gnostic-models v0.7.1 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
-	github.com/google/pprof v0.0.0-20260802004507-5106ece31595 // indirect
+	github.com/google/pprof v0.0.0-20260802141513-ef3492d7dac3 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/inconshreveable/mousetrap v1.1.0 // indirect
 	github.com/json-iterator/go v1.1.13-0.20220915233716-71ac16282d12 // indirect
@@ -77,8 +77,8 @@ require (
 	github.com/modern-go/reflect2 v1.0.3-0.20250322232337-35a7c28c31ee // indirect
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/openmcp-project/controller-utils/api v0.33.1 // indirect
-	github.com/openmcp-project/landscaper/apis v1.4.0 // indirect
-	github.com/openmcp-project/landscaper/legacy-component-spec/bindings-go v1.4.0 // indirect
+	github.com/openmcp-project/landscaper/apis v1.4.1 // indirect
+	github.com/openmcp-project/landscaper/legacy-component-spec/bindings-go v1.4.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.24.1 // indirect
 	github.com/prometheus/client_model v0.6.2 // indirect
@@ -103,7 +103,7 @@ require (
 	golang.org/x/time v0.15.0 // indirect
 	golang.org/x/tools v0.50.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.5.0 // indirect
-	google.golang.org/protobuf v1.36.12-0.20260806062936-644d0267c26e // indirect
+	google.golang.org/protobuf v1.36.12 // indirect
 	gopkg.in/evanphx/json-patch.v4 v4.13.0 // indirect
 	gopkg.in/inf.v0 v0.9.1 // indirect
 	k8s.io/klog/v2 v2.140.0 // indirect
