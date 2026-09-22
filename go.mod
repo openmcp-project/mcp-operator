@@ -15,13 +15,13 @@ require (
 	github.com/onsi/ginkgo/v2 v2.32.2
 	github.com/onsi/gomega v1.43.0
 	github.com/openmcp-project/cluster-provider-gardener/api v0.16.1
-	github.com/openmcp-project/control-plane-operator v0.5.0
+	github.com/openmcp-project/control-plane-operator v0.5.1
 	github.com/openmcp-project/controller-utils v0.33.1
 	github.com/openmcp-project/landscaper-service v1.4.2
 	github.com/openmcp-project/mcp-operator/api v0.58.0
 	github.com/openmcp-project/openmcp-operator/api v1.4.1
 	github.com/openmcp-project/openmcp-operator/lib v1.4.1
-	github.com/openmcp-project/service-provider-landscaper v1.3.0
+	github.com/openmcp-project/service-provider-landscaper v1.3.1
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.12.1
@@ -38,14 +38,14 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/crossplane/crossplane/apis/v2 v2.3.3 // indirect
+	github.com/crossplane/crossplane/apis/v2 v2.4.1 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/emicklei/go-restful/v3 v3.13.0 // indirect
 	github.com/evanphx/json-patch/v5 v5.9.11 // indirect
 	github.com/fluxcd/helm-controller/api v1.6.4 // indirect
 	github.com/fluxcd/pkg/apis/acl v0.10.0 // indirect
 	github.com/fluxcd/pkg/apis/kustomize v1.20.0 // indirect
-	github.com/fluxcd/pkg/apis/meta v1.31.0 // indirect
+	github.com/fluxcd/pkg/apis/meta v1.32.0 // indirect
 	github.com/fluxcd/source-controller/api v1.9.5 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.2 // indirect
@@ -56,7 +56,7 @@ require (
 	github.com/go-openapi/jsonreference v1.0.0 // indirect
 	github.com/go-openapi/swag v0.27.1 // indirect
 	github.com/go-openapi/swag/cmdutils v0.27.1 // indirect
-	github.com/go-openapi/swag/conv v0.27.1 // indirect
+	github.com/go-openapi/swag/conv v0.29.0 // indirect
 	github.com/go-openapi/swag/fileutils v0.27.1 // indirect
 	github.com/go-openapi/swag/jsonutils v0.27.1 // indirect
 	github.com/go-openapi/swag/loading v0.27.1 // indirect
@@ -64,7 +64,7 @@ require (
 	github.com/go-openapi/swag/netutils v0.27.1 // indirect
 	github.com/go-openapi/swag/pools v0.27.1 // indirect
 	github.com/go-openapi/swag/stringutils v0.27.1 // indirect
-	github.com/go-openapi/swag/typeutils v0.27.1 // indirect
+	github.com/go-openapi/swag/typeutils v0.29.0 // indirect
 	github.com/go-openapi/swag/yamlutils v0.27.1 // indirect
 	github.com/go-task/slim-sprig/v3 v3.0.0 // indirect
 	github.com/google/gnostic-models v0.7.1 // indirect
