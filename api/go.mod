@@ -4,7 +4,7 @@ go 1.27.1
 
 require (
 	github.com/onsi/ginkgo/v2 v2.33.0
-	github.com/onsi/gomega v1.43.0
+	github.com/onsi/gomega v1.43.1
 	github.com/openmcp-project/controller-utils v0.33.1
 	k8s.io/api v0.37.0
 	k8s.io/apiextensions-apiserver v0.37.0
