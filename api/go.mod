@@ -3,7 +3,7 @@ module github.com/openmcp-project/mcp-operator/api
 go 1.27.1
 
 require (
-	github.com/onsi/ginkgo/v2 v2.32.2
+	github.com/onsi/ginkgo/v2 v2.33.0
 	github.com/onsi/gomega v1.43.0
 	github.com/openmcp-project/controller-utils v0.33.1
 	k8s.io/api v0.37.0
