@@ -14,14 +14,14 @@ require (
 	github.com/apparentlymart/go-cidr v1.1.1
 	github.com/onsi/ginkgo/v2 v2.33.1
 	github.com/onsi/gomega v1.44.0
-	github.com/openmcp-project/cluster-provider-gardener/api v0.16.4
-	github.com/openmcp-project/control-plane-operator v0.5.4
+	github.com/openmcp-project/cluster-provider-gardener/api v0.16.5
+	github.com/openmcp-project/control-plane-operator v0.5.5
 	github.com/openmcp-project/controller-utils v0.33.3
-	github.com/openmcp-project/landscaper-service v1.4.3
+	github.com/openmcp-project/landscaper-service v1.4.4
 	github.com/openmcp-project/mcp-operator/api v0.58.4
-	github.com/openmcp-project/openmcp-operator/api v1.4.3
-	github.com/openmcp-project/openmcp-operator/lib v1.4.3
-	github.com/openmcp-project/service-provider-landscaper v1.3.3
+	github.com/openmcp-project/openmcp-operator/api v1.4.4
+	github.com/openmcp-project/openmcp-operator/lib v1.4.4
+	github.com/openmcp-project/service-provider-landscaper v1.4.0
 	github.com/spf13/cobra v1.10.2
 	github.com/spf13/pflag v1.0.10
 	github.com/stretchr/testify v1.12.1
@@ -38,14 +38,14 @@ require (
 require (
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
-	github.com/crossplane/crossplane/apis/v2 v2.4.2 // indirect
+	github.com/crossplane/crossplane/apis/v2 v2.4.3 // indirect
 	github.com/davecgh/go-spew v1.1.2-0.20180830191138-d8f796af33cc // indirect
 	github.com/emicklei/go-restful/v3 v3.14.0 // indirect
 	github.com/evanphx/json-patch/v5 v5.9.11 // indirect
 	github.com/fluxcd/helm-controller/api v1.6.5 // indirect
 	github.com/fluxcd/pkg/apis/acl v0.10.0 // indirect
 	github.com/fluxcd/pkg/apis/kustomize v1.23.0 // indirect
-	github.com/fluxcd/pkg/apis/meta v1.35.0 // indirect
+	github.com/fluxcd/pkg/apis/meta v1.38.0 // indirect
 	github.com/fluxcd/source-controller/api v1.9.6 // indirect
 	github.com/fsnotify/fsnotify v1.10.1 // indirect
 	github.com/fxamacker/cbor/v2 v2.9.6 // indirect
@@ -78,7 +78,7 @@ require (
 	github.com/munnerz/goautoneg v0.0.0-20191010083416-a7dc8b61c822 // indirect
 	github.com/openmcp-project/controller-utils/api v0.33.3 // indirect
 	github.com/openmcp-project/landscaper/apis v1.4.2 // indirect
-	github.com/openmcp-project/landscaper/legacy-component-spec/bindings-go v1.4.2 // indirect
+	github.com/openmcp-project/landscaper/legacy-component-spec/bindings-go v1.4.3 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_golang v1.25.0 // indirect
 	github.com/prometheus/client_model v0.6.3 // indirect
