@@ -482,24 +482,16 @@ func (ar *AuthenticationReconciler) updateExternalStatus(ctx context.Context, au
 	// try to get access secret
 	accessSecret := getSecretAccessor(auth)
 
-	secretExists := true
 	if err := ar.Client.Get(ctx, client.ObjectKeyFromObject(accessSecret), accessSecret); err != nil {
-		if !apierrors.IsNotFound(err) {
-			return fmt.Errorf("error getting access secret: %w", err)
-		}
-		secretExists = false
+		return fmt.Errorf("error getting access secret: %w", err)
 	}
 
-	if secretExists {
-		auth.Status.UserAccess = &openmcpv1alpha1.SecretReference{
-			NamespacedObjectReference: openmcpv1alpha1.NamespacedObjectReference{
-				Name:      accessSecret.Name,
-				Namespace: accessSecret.Namespace,
-			},
-			Key: kubeconfigSecretValueKey,
-		}
-	} else {
-		auth.Status.UserAccess = nil
+	auth.Status.UserAccess = &openmcpv1alpha1.SecretReference{
+		NamespacedObjectReference: openmcpv1alpha1.NamespacedObjectReference{
+			Name:      accessSecret.Name,
+			Namespace: accessSecret.Namespace,
+		},
+		Key: kubeconfigSecretValueKey,
 	}
 
 	return nil
