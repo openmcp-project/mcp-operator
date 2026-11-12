@@ -15,7 +15,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.34.0
 	github.com/onsi/gomega v1.44.0
 	github.com/openmcp-project/cluster-provider-gardener/api v0.16.5
-	github.com/openmcp-project/control-plane-operator v0.5.6
+	github.com/openmcp-project/control-plane-operator v0.5.7
 	github.com/openmcp-project/controller-utils v0.34.0
 	github.com/openmcp-project/landscaper-service v1.4.5
 	github.com/openmcp-project/mcp-operator/api v0.58.5
