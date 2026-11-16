@@ -15,7 +15,7 @@ require (
 	github.com/onsi/ginkgo/v2 v2.34.0
 	github.com/onsi/gomega v1.44.0
 	github.com/openmcp-project/cluster-provider-gardener/api v0.16.5
-	github.com/openmcp-project/control-plane-operator v0.5.7
+	github.com/openmcp-project/control-plane-operator v0.5.8
 	github.com/openmcp-project/controller-utils v0.34.0
 	github.com/openmcp-project/landscaper-service v1.4.5
 	github.com/openmcp-project/mcp-operator/api v0.58.6
@@ -109,10 +109,10 @@ require (
 	golang.org/x/mod v0.42.0 // indirect
 	golang.org/x/net v0.61.0 // indirect
 	golang.org/x/oauth2 v0.37.0 // indirect
-	golang.org/x/sync v0.24.0 // indirect
+	golang.org/x/sync v0.25.0 // indirect
 	golang.org/x/sys v0.49.0 // indirect
 	golang.org/x/term v0.47.0 // indirect
-	golang.org/x/text v0.43.0 // indirect
+	golang.org/x/text v0.44.0 // indirect
 	golang.org/x/time v0.16.0 // indirect
 	golang.org/x/tools v0.52.0 // indirect
 	gomodules.xyz/jsonpatch/v2 v2.5.0 // indirect
