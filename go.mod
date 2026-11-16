@@ -18,7 +18,7 @@ require (
 	github.com/openmcp-project/control-plane-operator v0.5.7
 	github.com/openmcp-project/controller-utils v0.34.0
 	github.com/openmcp-project/landscaper-service v1.4.5
-	github.com/openmcp-project/mcp-operator/api v0.58.5
+	github.com/openmcp-project/mcp-operator/api v0.58.6
 	github.com/openmcp-project/openmcp-operator/api v1.4.4
 	github.com/openmcp-project/openmcp-operator/lib v1.4.4
 	github.com/openmcp-project/service-provider-landscaper v1.4.0
