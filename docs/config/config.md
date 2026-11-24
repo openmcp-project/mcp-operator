@@ -12,3 +12,6 @@ architecture: # the architecture configuration
 The following fields can be specified:
 - `architecture` _(optional)_
   - The architecture configuration has its own [documentation](../architecture-v2/bridge.md), see there for further details.
+
+The separate API-server provider configuration passed through `--apiserver-config`
+can optionally supply [default audit logging for v1 Gardener MCPs](default-auditlogging.md).
