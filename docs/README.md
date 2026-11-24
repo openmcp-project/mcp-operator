@@ -8,6 +8,7 @@
 ## Configuration
 
 - [Configuration](config/config.md)
+- [Default audit logging for v1 Gardener MCPs](config/default-auditlogging.md)
 
 ## Controllers
 
