@@ -43,6 +43,10 @@ const (
 // For the k8s version, there is a special logic in place which prevents downgrades and allows upgrades.
 func (gc *GardenerConnector) Shoot_v1beta1_from_APIServer_v1alpha1(ctx context.Context, as *openmcpv1alpha1.APIServer, sh *gardenv1beta1.Shoot) error {
 	log := logging.FromContextOrPanic(ctx).WithName("ShootConversion")
+	auditLog, err := gc.resolveAuditLog(as)
+	if err != nil {
+		return fmt.Errorf("error resolving audit log configuration: %w", err)
+	}
 
 	lc := ""
 	if as.Spec.Internal != nil && as.Spec.Internal.GardenerConfig != nil {
@@ -191,7 +195,7 @@ func (gc *GardenerConnector) Shoot_v1beta1_from_APIServer_v1alpha1(ctx context.C
 	addOIDCExtension(log, sh)
 
 	// add all audit log configurations
-	if as.Spec.GardenerConfig != nil && as.Spec.GardenerConfig.AuditLog != nil {
+	if auditLog != nil {
 		log.Debug("Adding audit log configuration to shoot")
 		sh.Spec.Kubernetes.KubeAPIServer.AuditConfig = &gardenv1beta1.AuditConfig{
 			AuditPolicy: &gardenv1beta1.AuditPolicy{
@@ -201,15 +205,15 @@ func (gc *GardenerConnector) Shoot_v1beta1_from_APIServer_v1alpha1(ctx context.C
 			},
 		}
 
-		err := addAuditLogServiceExtension(sh, as)
+		err := addAuditLogServiceExtension(sh, auditLog.AuditLogConfig)
 		if err != nil {
 			return err
 		}
 		addAuditLogCredentialResource(sh)
 	}
 
-	// remove all audit log configurations when nothing is configured in the ManagedControlPlane
-	if as.Spec.GardenerConfig == nil || as.Spec.GardenerConfig.AuditLog == nil {
+	// Remove audit logging only when neither the MCP nor the operator provides it.
+	if auditLog == nil {
 		sh.Spec.Kubernetes.KubeAPIServer.AuditConfig = nil
 		removeAuditLogServiceExtension(sh)
 		removeAuditLogCredentialResource(sh)
@@ -320,13 +324,13 @@ func addOIDCExtension(log logging.Logger, sh *gardenv1beta1.Shoot) {
 }
 
 // addAuditLogServiceExtension adds the audit log service extension to the shoot spec if it is not already present.
-func addAuditLogServiceExtension(sh *gardenv1beta1.Shoot, as *openmcpv1alpha1.APIServer) error {
+func addAuditLogServiceExtension(sh *gardenv1beta1.Shoot, auditLog *openmcpv1alpha1.AuditLogConfig) error {
 	m := map[string]string{
 		"apiVersion":          "service.auditlog.extensions.gardener.cloud/v1alpha1",
 		"kind":                "AuditlogConfig",
-		"type":                as.Spec.GardenerConfig.AuditLog.Type,
-		"tenantID":            as.Spec.GardenerConfig.AuditLog.TenantID,
-		"serviceURL":          as.Spec.GardenerConfig.AuditLog.ServiceURL,
+		"type":                auditLog.Type,
+		"tenantID":            auditLog.TenantID,
+		"serviceURL":          auditLog.ServiceURL,
 		"secretReferenceName": "auditlog-credentials",
 	}
 	raw, err := json.Marshal(m)

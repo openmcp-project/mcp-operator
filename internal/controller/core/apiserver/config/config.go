@@ -28,11 +28,15 @@ type CommonConfig struct {
 	// AdminServiceAccountName is the name of the serviceaccount used for the admin access.
 	// Defaults to 'admin'.
 	AdminServiceAccountName *string `json:"adminServiceAccountName,omitempty"`
+	// DefaultAuditLog is the operator-controlled Gardener fallback. Explicit MCP
+	// audit logging takes precedence; nil retains the existing removal behavior.
+	DefaultAuditLog *DefaultAuditLogConfiguration `json:"defaultAuditLog,omitempty"`
 }
 
 type CompletedCommonConfig struct {
 	ServiceAccountNamespace string
 	AdminServiceAccountName string
+	DefaultAuditLog         *DefaultAuditLogConfiguration
 }
 
 // CompletedAPIServerProviderConfiguration is a helper struct. It contains the original configuration,
@@ -88,12 +92,18 @@ func Validate(cfg *APIServerProviderConfiguration) error {
 }
 
 func (cc *CommonConfig) validate() field.ErrorList {
-	// currently nothing to validate, might change in the future
-	return nil
+	return cc.DefaultAuditLog.validate(field.NewPath("defaultAuditLog"))
 }
 
 func (cc *CommonConfig) complete() (*CompletedCommonConfig, error) {
+	if err := cc.validate().ToAggregate(); err != nil {
+		return nil, err
+	}
 	res := &CompletedCommonConfig{}
+	if cc.DefaultAuditLog != nil {
+		defaultAuditLog := *cc.DefaultAuditLog
+		res.DefaultAuditLog = &defaultAuditLog
+	}
 
 	res.ServiceAccountNamespace = openmcpv1alpha1.SystemNamespace
 	if cc.ServiceAccountNamespace != nil {

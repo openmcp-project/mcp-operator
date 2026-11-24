@@ -270,11 +270,9 @@ func (gc *GardenerConnector) HandleDelete(ctx context.Context, as *openmcpv1alph
 		return ctrl.Result{}, nil, gardenerConditions(false, cconst.ReasonConfigurationProblem, errr.Error()), openmcperrors.WithReason(errr, cconst.ReasonConfigurationProblem)
 	}
 
-	if as.Spec.GardenerConfig != nil {
-		as.Spec.GardenerConfig.AuditLog = nil
-	}
-	// delete the Audit Log resources
-	if _, err := gc.reconcileAuditLogResources(ctx, as, sh.Name, crateClient, gls, gcfg); err != nil {
+	// Deletion must clean up generated resources even when a default is configured.
+	// Do not resolve the fallback or modify the APIServer spec during cleanup.
+	if err := gc.deleteAuditLogResources(ctx, sh.Name, gls, gcfg); err != nil {
 		return ctrl.Result{}, nil, gardenerConditions(false, cconst.ReasonAuditLogProblem, err.Error()), err
 
 	}
@@ -319,22 +317,25 @@ func isShootReady(sh *gardenv1beta1.Shoot) (bool, string) {
 	return true, ""
 }
 
-func isAuditLogEnabled(as *openmcpv1alpha1.APIServer) bool {
-	return as.Spec.GardenerConfig != nil && as.Spec.GardenerConfig.AuditLog != nil
-}
-
 type AuditLogAnnotations map[string]string
 
 // reconcileAuditLogResources reconciles the audit log resources for the given shoot in the Garden cluster.
 // If the content of the audit log resources in the Crate cluster has changed, this function will return the annotations that are needed to be set on the shoot.
 // Otherwise, the annotations will be nil.
 func (gc *GardenerConnector) reconcileAuditLogResources(ctx context.Context, as *openmcpv1alpha1.APIServer, shootName string, crateClient client.Client, gls *apiserverconfig.CompletedGardenerLandscape, gcfg *apiserverconfig.CompletedGardenerConfiguration) (AuditLogAnnotations, openmcperrors.ReasonableError) {
-	if isAuditLogEnabled(as) {
-		resultPolicy, err := gc.createOrUpdateAuditLogPolicy(ctx, as, shootName, crateClient, gls, gcfg)
+	auditLog, err := gc.resolveAuditLog(as)
+	if err != nil {
+		return nil, openmcperrors.WithReason(err, cconst.ReasonConfigurationProblem)
+	}
+	if auditLog != nil {
+		if crateClient == nil {
+			return nil, openmcperrors.WithReason(fmt.Errorf("crate client is required for audit logging"), cconst.ReasonConfigurationProblem)
+		}
+		resultPolicy, err := gc.createOrUpdateAuditLogPolicy(ctx, auditLog, shootName, crateClient, gls, gcfg)
 		if err != nil {
 			return nil, openmcperrors.WithReason(err, cconst.ReasonGardenClusterInteractionProblem)
 		}
-		resultCreds, err := gc.createOrUpdateAuditLogCredentials(ctx, as, shootName, crateClient, gls, gcfg)
+		resultCreds, err := gc.createOrUpdateAuditLogCredentials(ctx, auditLog, shootName, crateClient, gls, gcfg)
 		if err != nil {
 			return nil, openmcperrors.WithReason(err, cconst.ReasonGardenClusterInteractionProblem)
 		}
@@ -343,21 +344,26 @@ func (gc *GardenerConnector) reconcileAuditLogResources(ctx context.Context, as 
 				constants.GardenerOperation: constants.GardenerOperationReconcile,
 			}, nil
 		}
-	} else {
-		if err := gc.deleteAuditLogPolicy(ctx, shootName, gls, gcfg); err != nil {
-			return nil, openmcperrors.WithReason(err, cconst.ReasonGardenClusterInteractionProblem)
-		}
-		if err := gc.deleteAuditLogCredentials(ctx, shootName, gls, gcfg); err != nil {
-			return nil, openmcperrors.WithReason(err, cconst.ReasonGardenClusterInteractionProblem)
-		}
+	} else if err := gc.deleteAuditLogResources(ctx, shootName, gls, gcfg); err != nil {
+		return nil, err
 	}
 	return nil, nil
 }
 
+func (gc *GardenerConnector) deleteAuditLogResources(ctx context.Context, shootName string, gls *apiserverconfig.CompletedGardenerLandscape, gcfg *apiserverconfig.CompletedGardenerConfiguration) openmcperrors.ReasonableError {
+	if err := gc.deleteAuditLogPolicy(ctx, shootName, gls, gcfg); err != nil {
+		return openmcperrors.WithReason(err, cconst.ReasonGardenClusterInteractionProblem)
+	}
+	if err := gc.deleteAuditLogCredentials(ctx, shootName, gls, gcfg); err != nil {
+		return openmcperrors.WithReason(err, cconst.ReasonGardenClusterInteractionProblem)
+	}
+	return nil
+}
+
 // createOrUpdateAuditLogPolicy creates or updates the audit log policy ConfigMap for the given shoot.
-func (gc *GardenerConnector) createOrUpdateAuditLogPolicy(ctx context.Context, as *openmcpv1alpha1.APIServer, shootName string, crateClient client.Client, gls *apiserverconfig.CompletedGardenerLandscape, gcfg *apiserverconfig.CompletedGardenerConfiguration) (controllerutil.OperationResult, error) {
+func (gc *GardenerConnector) createOrUpdateAuditLogPolicy(ctx context.Context, auditLog *resolvedAuditLog, shootName string, crateClient client.Client, gls *apiserverconfig.CompletedGardenerLandscape, gcfg *apiserverconfig.CompletedGardenerConfiguration) (controllerutil.OperationResult, error) {
 	cmCrate := &corev1.ConfigMap{}
-	err := crateClient.Get(ctx, types.NamespacedName{Name: as.Spec.GardenerConfig.AuditLog.PolicyRef.Name, Namespace: as.Namespace}, cmCrate)
+	err := crateClient.Get(ctx, types.NamespacedName{Name: auditLog.PolicyRef.Name, Namespace: auditLog.policyNamespace}, cmCrate)
 	if err != nil {
 		return "", err
 	}
@@ -375,9 +381,9 @@ func (gc *GardenerConnector) createOrUpdateAuditLogPolicy(ctx context.Context, a
 }
 
 // createOrUpdateAuditLogCredentials creates or updates the audit log credentials Secret for the given shoot.
-func (gc *GardenerConnector) createOrUpdateAuditLogCredentials(ctx context.Context, as *openmcpv1alpha1.APIServer, shootName string, crateClient client.Client, gls *apiserverconfig.CompletedGardenerLandscape, gcfg *apiserverconfig.CompletedGardenerConfiguration) (controllerutil.OperationResult, error) {
+func (gc *GardenerConnector) createOrUpdateAuditLogCredentials(ctx context.Context, auditLog *resolvedAuditLog, shootName string, crateClient client.Client, gls *apiserverconfig.CompletedGardenerLandscape, gcfg *apiserverconfig.CompletedGardenerConfiguration) (controllerutil.OperationResult, error) {
 	secretCrate := &corev1.Secret{}
-	err := crateClient.Get(ctx, types.NamespacedName{Name: as.Spec.GardenerConfig.AuditLog.SecretRef.Name, Namespace: as.Namespace}, secretCrate)
+	err := crateClient.Get(ctx, types.NamespacedName{Name: auditLog.SecretRef.Name, Namespace: auditLog.secretNamespace}, secretCrate)
 	if err != nil {
 		return "", err
 	}
