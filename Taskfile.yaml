@@ -40,6 +40,12 @@ includes:
       ENVTEST_REQUIRED: "true"
 
 tasks:
+  set-version:
+    cmds:
+    - task: release:set-version
+      vars:
+        CLI_ARGS: '{{.CLI_ARGS}}'
+
   generate:code: # overwrites shared code task to add external API fetching
     desc: "  Generate code (mainly DeepCopy functions) and fetches external APIs."
     aliases:
